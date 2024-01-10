@@ -1,0 +1,21 @@
+.main-image-container {
+    width: 100%;
+    height: 25vh; /* Zwiększamy wysokość kontenera */
+    overflow: hidden;
+    position: relative;
+}
+
+.main-image {
+    width: 100%; /* Szerokość obrazu dopasowana do szerokości kontenera */
+    height: auto; /* Wysokość obrazu automatycznie dopasowuje się do zachowania proporcji */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Wyśrodkowanie obrazu */
+}
+
+.navigation-buttons {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
