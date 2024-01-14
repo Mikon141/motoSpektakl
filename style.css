@@ -14,8 +14,23 @@
     transform: translate(-50%, -50%); /* Wyśrodkowanie obrazu */
 }
 
-.navigation-buttons {
-    text-align: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
+.navigation-buttons .row {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.navigation-buttons .col {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.custom-btn {
+    margin-bottom: 10px; /* Dostosowuje odstęp między przyciskami */
+    border-radius: 0; /* Usuwa zaokrąglenie krawędzi przycisku */
+}
+
+@media (min-width: 768px) {
+    .custom-btn {
+        margin-bottom: 15px; /* Większy odstęp na większych ekranach */
+    }
 }
