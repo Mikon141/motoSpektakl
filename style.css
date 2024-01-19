@@ -1,3 +1,7 @@
+:root {
+    --main-color: #505050;
+}
+
 .main-image-container {
     width: 100%;
     height: 25vh; /* Zwiększamy wysokość kontenera */
@@ -25,8 +29,32 @@
 }
 
 .custom-btn {
-    margin-bottom: 10px; /* Dostosowuje odstęp między przyciskami */
-    border-radius: 0; /* Usuwa zaokrąglenie krawędzi przycisku */
+    background-color: #505050; /* Zmiana koloru tła */
+    color: white; /* Kolor tekstu */
+    font-weight: bold; /* Pogrubienie tekstu */
+    text-transform: uppercase; /* Tekst wielkimi literami */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Dodanie cienia */
+    transition: all 0.3s ease; /* Animacja przejścia dla efektów najechania */
+    border-radius: 0;
+    border-color: #505050;
+}
+
+.custom-btn:hover, .custom-btn:focus {
+    background-color: #393838; /* Ciemniejszy kolor tła przy najechaniu */
+    border-color: #505050;
+    color: #fff; /* Kolor tekstu przy najechaniu */
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2); /* Zwiększenie cienia przy najechaniu */
+}
+
+.header-title {
+    background-color: #505050; /* Kolor tła, taki sam jak dla .btn-primary */
+    color: white; /* Kolor tekstu */
+    padding: .375rem .75rem; /* Padding, podobny do przycisków */
+    border-radius: .25rem; /* Zaokrąglenie rogów, jak w przyciskach */
+    text-align: center;
+    font-weight: bold; /* Pogrubienie tekstu */
+    letter-spacing: 5px;
+    /* Możesz dodać więcej stylów, aby dopasować do wyglądu przycisków */
 }
 
 @media (min-width: 768px) {
@@ -34,3 +62,22 @@
         margin-bottom: 15px; /* Większy odstęp na większych ekranach */
     }
 }
+
+@media (max-width: 400px) {
+    .header-title {
+        font-size: smaller; /* mniejszy rozmiar tekstu w nagłówku */
+    }
+    
+    header {
+        padding: 5px 0; /* mniejszy padding nagłówka */
+    }
+
+    .main-image {
+        max-width: 100%;
+        height: auto; /* responsywność obrazu */
+    }
+
+    /* Tutaj możesz dodać więcej stylów specyficznych dla urządzeń mobilnych */
+}
+
+
