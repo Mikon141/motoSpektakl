@@ -9,36 +9,32 @@
     <!-- Zewnętrzny plik CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="flex flex-col min-h-screen">
     <header style="background-color: var(--main-color); padding: 10px 0;">
         <div class="container">
-            <h1 class="header-title">MOTOSPEKTAKL</h1>
+            <a href="/"><h1 class="header-title">MOTOSPEKTAKL</h1></a>
             <!-- Tutaj możesz dodać inne elementy nagłówka, jeśli są potrzebne -->
         </div>
     </header>
     <!-- Sekcja z obrazem -->
-    <div class="main-image-container">
-        <img src="img/main.jpg" class="img-fluid main-image" alt="Główne zdjęcie">
-    </div>
+    <div class="main-image-container"></div>
 
     <!-- Przyciski nawigacyjne -->
-<div class="row navigation-buttons text-center">
-    <div class="col">
-        <a href="blog.html" class="btn btn-primary btn-block custom-btn">Blog</a>
+    <div class="flex items-stretch text-center">
+        <a href="blog.html" class="custom-btn flex-1 py-2 px-3 flex items-center justify-center">Blog</a>
+        <a href="forum.html" class="custom-btn flex-1 py-2 px-3 flex items-center justify-center">Forum</a>
+        <a href="account.html" class="custom-btn flex-1 py-2 px-3 flex items-center justify-center">Moje Konto</a>
     </div>
-    <div class="col">
-        <a href="forum.html" class="btn btn-primary btn-block custom-btn">Forum</a>
-    </div>
-    <div class="col">
-        <a href="account.html" class="btn btn-primary btn-block custom-btn">Moje Konto</a>
-    </div>
-</div>
 
 
     <!-- Treść bloga -->
     <div class="blog-content container mt-4">
         <h1>Witamy na Blogu Motoryzacyjnym</h1>
         <!-- Tutaj będzie treść bloga -->
+    </div>
+
+    <div class="flex-1">
+        <!-- Must be always empty -->
     </div>
 
     <!-- Stopka strony -->
