@@ -135,3 +135,21 @@ body {
     background: rgb(0,0,0);
 background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(4,8,42,1) 11%, rgba(7,9,94,1) 86%, rgba(0,212,255,1) 100%);
 }
+
+.blog-content {
+    margin-top: 2rem;
+}
+
+.blog-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.blog-content article {
+    margin-bottom: 2rem;
+}
+
+.blog-content article h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+}
