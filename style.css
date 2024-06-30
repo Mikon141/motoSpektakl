@@ -153,3 +153,181 @@ background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(4,8,42,1) 11%, rgba(7,9
     font-size: 1.75rem;
     margin-bottom: 1rem;
 }
+
+.forum-content {
+    margin-top: 2rem;
+}
+
+.forum-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.forum-content .thread {
+    margin-bottom: 2rem;
+}
+
+.forum-content .thread h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+}
+
+.forum-content .thread a {
+    color: var(--main-color);
+    text-decoration: none;
+}
+
+.forum-content .thread a:hover {
+    text-decoration: underline;
+}
+
+:root {
+    --main-color: #505050;
+}
+
+.main-image-container {
+    width: 100vw;
+    height: 43vw;
+    overflow: hidden;
+    position: relative;
+    background: url("img/main.jpg");
+    background-position: center;
+    background-size: cover;
+}
+
+.main-image {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.navigation-buttons .row {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.navigation-buttons .col {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.custom-btn {
+    background-color: #505050;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border-radius: 0;
+    border-color: #505050;
+}
+
+.custom-btn:hover, .custom-btn:focus {
+    background-color: #393838;
+    border-color: #505050;
+    color: #fff;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.header-title {
+    background-color: #505050;
+    color: white;
+    padding: .375rem .75rem;
+    border-radius: .25rem;
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 5px;
+}
+
+@media (min-width: 768px) {
+    .custom-btn {
+        margin-bottom: 15px;
+    }
+}
+
+@media (max-width: 400px) {
+    .header-title {
+        font-size: smaller;
+    }
+    
+    header {
+        padding: 5px 0;
+    }
+
+    .main-image {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+.flex {
+    display: flex;
+}
+
+.items-stretch {
+    align-items: stretch;
+}
+
+.h-full {
+    height: 100%;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.block {
+    display: block;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.min-h-screen {
+    min-height: 100vh;
+}
+
+body {
+    background: rgb(0,0,0);
+    background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(4,8,42,1) 11%, rgba(7,9,94,1) 86%, rgba(0,212,255,1) 100%);
+}
+
+.account-content {
+    margin-top: 2rem;
+}
+
+.account-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-control {
+    padding: .5rem .75rem;
+    font-size: 1rem;
+    border-radius: .25rem;
+}
+
+.btn-link {
+    color: var(--main-color);
+    text-decoration: none;
+}
+
+.btn-link:hover {
+    text-decoration: underline;
+}
