@@ -1,190 +1,21 @@
 :root {
     --main-color: #505050;
-}
-
-.main-image-container {
-    width: 100vw;
-    height: 43vw; /* Zwiększamy wysokość kontenera */
-    overflow: hidden;
-    position: relative;
-
-    background: url("img/main.jpg");
-    background-position: center;
-    background-size: cover;
-}
-
-.main-image {
-    width: 100%; /* Szerokość obrazu dopasowana do szerokości kontenera */
-    height: auto; /* Wysokość obrazu automatycznie dopasowuje się do zachowania proporcji */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* Wyśrodkowanie obrazu */
-}
-
-.navigation-buttons .row {
-    margin-right: 0;
-    margin-left: 0;
-}
-
-.navigation-buttons .col {
-    padding-right: 0;
-    padding-left: 0;
-}
-
-.custom-btn {
-    background-color: #505050; /* Zmiana koloru tła */
-    color: white; /* Kolor tekstu */
-    font-weight: bold; /* Pogrubienie tekstu */
-    text-transform: uppercase; /* Tekst wielkimi literami */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Dodanie cienia */
-    transition: all 0.3s ease; /* Animacja przejścia dla efektów najechania */
-    border-radius: 0;
-    border-color: #505050;
-}
-
-.custom-btn:hover, .custom-btn:focus {
-    background-color: #393838; /* Ciemniejszy kolor tła przy najechaniu */
-    border-color: #505050;
-    color: #fff; /* Kolor tekstu przy najechaniu */
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2); /* Zwiększenie cienia przy najechaniu */
-}
-
-.header-title {
-    background-color: #505050; /* Kolor tła, taki sam jak dla .btn-primary */
-    color: white; /* Kolor tekstu */
-    padding: .375rem .75rem; /* Padding, podobny do przycisków */
-    border-radius: .25rem; /* Zaokrąglenie rogów, jak w przyciskach */
-    text-align: center;
-    font-weight: bold; /* Pogrubienie tekstu */
-    letter-spacing: 5px;
-    /* Możesz dodać więcej stylów, aby dopasować do wyglądu przycisków */
-}
-
-@media (min-width: 768px) {
-    .custom-btn {
-        margin-bottom: 15px; /* Większy odstęp na większych ekranach */
-    }
-}
-
-@media (max-width: 400px) {
-    .header-title {
-        font-size: smaller; /* mniejszy rozmiar tekstu w nagłówku */
-    }
-    
-    header {
-        padding: 5px 0; /* mniejszy padding nagłówka */
-    }
-
-    .main-image {
-        max-width: 100%;
-        height: auto; /* responsywność obrazu */
-    }
-
-    /* Tutaj możesz dodać więcej stylów specyficznych dla urządzeń mobilnych */
-}
-
-
-.flex {
-    display: flex;
-}
-
-.items-stretch {
-    align-items: stretch;
-}
-
-.h-full {
-    height: 100%;
-}
-
-.flex-1 {
-    flex: 1;
-}
-/* 
-.py-3 {
-    padding-top: .75rem;
-    padding-bottom: .75rem;
-}
-
-.py-2 {
-    padding-top: .5rem;
-    padding-bottom: .5rem;
-} */
-
-.block {
-    display: block;
-}
-
-.items-center {
-    align-items: center;
-}
-
-.justify-center {
-    justify-content: center;
-}
-
-.flex-col {
-    flex-direction: column;
-}
-
-.min-h-screen {
-    min-height: 100vh;
+    --background-color: #263238; /* Dokładny kolor tła z obrazka */
+    --button-color: #e9522f; /* Kolor przycisków i nagłówka */
 }
 
 body {
-    background: rgb(0,0,0);
-background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(4,8,42,1) 11%, rgba(7,9,94,1) 86%, rgba(0,212,255,1) 100%);
+    background: var(--background-color);
+    font-family: Arial, sans-serif; /* Upewniamy się, że czcionka jest jednolita */
 }
 
-.blog-content {
-    margin-top: 2rem;
+/* Footer style */
+.footer {
+    background-color: var(--button-color) !important;
+    color: white;
 }
 
-.blog-content h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.blog-content article {
-    margin-bottom: 2rem;
-}
-
-.blog-content article h2 {
-    font-size: 1.75rem;
-    margin-bottom: 1rem;
-}
-
-.forum-content {
-    margin-top: 2rem;
-}
-
-.forum-content h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.forum-content .thread {
-    margin-bottom: 2rem;
-}
-
-.forum-content .thread h2 {
-    font-size: 1.75rem;
-    margin-bottom: 1rem;
-}
-
-.forum-content .thread a {
-    color: var(--main-color);
-    text-decoration: none;
-}
-
-.forum-content .thread a:hover {
-    text-decoration: underline;
-}
-
-:root {
-    --main-color: #505050;
-}
-
+/* Pozostałe style */
 .main-image-container {
     width: 100vw;
     height: 43vw;
@@ -215,31 +46,33 @@ background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(4,8,42,1) 11%, rgba(7,9
 }
 
 .custom-btn {
-    background-color: #505050;
-    color: white;
+    background-color: var(--button-color) !important; /* Zmiana koloru tła przycisków */
+    color: black !important; /* Kolor tekstu */
     font-weight: bold;
     text-transform: uppercase;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     border-radius: 0;
-    border-color: #505050;
+    border-color: var(--button-color) !important; /* Zmiana koloru obramowania przycisków */
+    text-decoration: none !important; /* Usuwamy podkreślenie */
 }
 
 .custom-btn:hover, .custom-btn:focus {
-    background-color: #393838;
-    border-color: #505050;
-    color: #fff;
+    background-color: #c74327 !important; /* Ciemniejszy kolor tła przy najechaniu */
+    border-color: #c74327 !important;
+    color: black !important; /* Kolor tekstu przy najechaniu */
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 }
 
 .header-title {
-    background-color: #505050;
-    color: white;
+    background-color: var(--button-color); /* Zmiana koloru nagłówka */
+    color: white; /* Kolor tekstu */
     padding: .375rem .75rem;
     border-radius: .25rem;
     text-align: center;
     font-weight: bold;
     letter-spacing: 5px;
+    text-decoration: none !important; /* Usuwamy podkreślenie */
 }
 
 @media (min-width: 768px) {
@@ -299,9 +132,56 @@ background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(4,8,42,1) 11%, rgba(7,9
     min-height: 100vh;
 }
 
-body {
-    background: rgb(0,0,0);
-    background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(4,8,42,1) 11%, rgba(7,9,94,1) 86%, rgba(0,212,255,1) 100%);
+.blog-content, .forum-content, .account-content {
+    background: var(--background-color);
+    padding: 20px;
+    border-radius: 8px;
+    color: white; /* Dodajemy kolor tekstu, aby był widoczny na ciemnym tle */
+}
+
+.blog-content {
+    margin-top: 2rem;
+}
+
+.blog-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.blog-content article {
+    margin-bottom: 2rem;
+}
+
+.blog-content article h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+}
+
+.forum-content {
+    margin-top: 2rem;
+}
+
+.forum-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.forum-content .thread {
+    margin-bottom: 2rem;
+}
+
+.forum-content .thread h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+}
+
+.forum-content .thread a {
+    color: var(--main-color);
+    text-decoration: none;
+}
+
+.forum-content .thread a:hover {
+    text-decoration: underline;
 }
 
 .account-content {
@@ -315,6 +195,8 @@ body {
 
 .form-group {
     margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .form-control {
