@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Blog Motoryzacyjny</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Zewnętrzny plik CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="flex flex-col min-h-screen">
+    <header style="background-color: var(--button-color); padding: 10px 0;"> <!-- Zmiana koloru tła nagłówka -->
+        <div class="container">
+            <a href="/"><h1 class="header-title">MOTOSPEKTAKL</h1></a>
+            <!-- Tutaj możesz dodać inne elementy nagłówka, jeśli są potrzebne -->
+        </div>
+    </header>
+    <!-- Sekcja z obrazem -->
+    <div class="main-image-container"></div>
+
+    <!-- Przyciski nawigacyjne -->
+    <div class="flex items-stretch text-center navigation-buttons">
+        <a href="{% url 'blog' %}" class="custom-btn flex-1 py-2 px-3 flex items-center justify-center">Blog</a>
+        <a href="{% url 'forum' %}" class="custom-btn flex-1 py-2 px-3 flex items-center justify-center">Forum</a>
+        <a href="{% url 'account' %}" class="custom-btn flex-1 py-2 px-3 flex items-center justify-center">Moje Konto</a>
+    </div>
+
+    <!-- Treść bloga -->
+    <div class="blog-content container mt-4">
+        <h1>Witamy na Blogu Motoryzacyjnym</h1>
+        <!-- Tutaj będzie treść bloga -->
+    </div>
+
+    <div class="flex-1">
+        <!-- Must be always empty -->
+    </div>
+
+    <!-- Stopka strony -->
+    <footer class="footer mt-auto py-3 text-center">
+        <div class="container">
+            <span>&copy; 2024 Blog Motoryzacyjny</span>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
