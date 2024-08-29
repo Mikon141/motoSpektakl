@@ -206,7 +206,7 @@ body {
 }
 
 .btn-link {
-    color: var(--main-color);
+    color: white;
     text-decoration: none;
 }
 
