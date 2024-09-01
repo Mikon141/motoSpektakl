@@ -16,24 +16,36 @@ body {
     margin-top: 30px; /* Dodanie marginesu do stopki */
 }
 
-/* Pozostałe style */
 .main-image-container {
-    width: 100vw;
-    height: 43vw;
-    overflow: hidden;
+    width: 100%;
+    height: 30vw; /* Zmniejszenie wysokości kontenera, aby obraz był bardziej kompaktowy */
     position: relative;
-    background: url("../images/main.jpg");  /* Przechodzimy do katalogu nadrzędnego i potem do images/ */
-    background-position: center;
-    background-size: cover;
+    overflow: hidden;
+    background-image: url("../images/main.jpg");
+    background-size: cover; /* Obraz wypełnia cały kontener */
+    background-position: center center; /* Wyśrodkowanie tła */
 }
 
-.main-image {
-    width: 100%;
-    height: auto;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.navigation-buttons {
+    display: flex;
+    justify-content: space-around;
+    background-color: #e9522f;
+    padding: 0; /* Wyłączamy wewnętrzne odstępy */
+}
+
+.navigation-buttons a {
+    flex: 1; /* Każdy przycisk zajmuje równą część szerokości */
+    text-align: center;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 20px 0; /* Odstępy wewnętrzne w pionie */
+    transition: background-color 0.3s ease; /* Płynne przejście dla koloru tła */
+}
+
+.navigation-buttons a:hover {
+    background-color: #c74327; /* Ciemniejszy kolor podczas hovera */
+    color: white;
 }
 
 .navigation-buttons .row {
@@ -74,6 +86,22 @@ body {
     font-weight: bold;
     letter-spacing: 5px;
     text-decoration: none !important; /* Usuwamy podkreślenie */
+    transition: color 0.3s ease; /* Płynne przejście dla zmiany koloru tekstu */
+}
+
+.header-title:hover {
+    color: #c74327; /* Przyciemnienie koloru tekstu podczas hovera */
+    text-decoration: none; /* Zapewnienie, że podkreślenie nie pojawi się podczas hovera */
+}
+
+header a {
+    text-decoration: none !important; /* Usunięcie podkreślenia dla wszystkich linków w nagłówku */
+    color: inherit; /* Dziedziczenie koloru z rodzica */
+}
+
+header a:hover {
+    color: #c74327; /* Przyciemnienie koloru tekstu podczas hovera */
+    text-decoration: none !important; /* Upewnienie się, że podkreślenie nie pojawi się podczas hovera */
 }
 
 @media (min-width: 768px) {
@@ -292,6 +320,7 @@ body {
         padding-right: 10px; /* Przywrócenie prawego paddingu na większych ekranach */
     }
 }
+
 /* Stylizacja kontenera logowania na stronie account.html */
 .account-content {
     max-width: 600px; /* Maksymalna szerokość formularza na większych ekranach */
