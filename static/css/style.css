@@ -86,6 +86,22 @@ body {
     font-weight: bold;
     letter-spacing: 5px;
     text-decoration: none !important; /* Usuwamy podkreślenie */
+    transition: color 0.3s ease; /* Płynne przejście dla zmiany koloru tekstu */
+}
+
+.header-title:hover {
+    color: #c74327; /* Przyciemnienie koloru tekstu podczas hovera */
+    text-decoration: none; /* Zapewnienie, że podkreślenie nie pojawi się podczas hovera */
+}
+
+header a {
+    text-decoration: none !important; /* Usunięcie podkreślenia dla wszystkich linków w nagłówku */
+    color: inherit; /* Dziedziczenie koloru z rodzica */
+}
+
+header a:hover {
+    color: #c74327; /* Przyciemnienie koloru tekstu podczas hovera */
+    text-decoration: none !important; /* Upewnienie się, że podkreślenie nie pojawi się podczas hovera */
 }
 
 @media (min-width: 768px) {
@@ -304,6 +320,7 @@ body {
         padding-right: 10px; /* Przywrócenie prawego paddingu na większych ekranach */
     }
 }
+
 /* Stylizacja kontenera logowania na stronie account.html */
 .account-content {
     max-width: 600px; /* Maksymalna szerokość formularza na większych ekranach */

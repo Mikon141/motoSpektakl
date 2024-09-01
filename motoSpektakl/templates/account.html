@@ -20,11 +20,10 @@
     <!-- Sekcja z obrazem -->
     <div class="main-image-container"></div>
 
-    <!-- Przyciski nawigacyjne -->
-    <div class="flex items-stretch text-center navigation-buttons">
-        <a href="{% url 'blog' %}" class="custom-btn flex-1 py-2 px-3 flex items-center justify-center">Blog</a>
-        <a href="{% url 'forum' %}" class="custom-btn flex-1 py-2 px-3 flex items-center justify-center">Forum</a>
-        <a href="{% url 'account' %}" class="custom-btn flex-1 py-2 px-3 flex items-center justify-center">Moje Konto</a>
+    <div class="navigation-buttons">
+        <a href="{% url 'blog' %}">BLOG</a>
+        <a href="{% url 'forum' %}">FORUM</a>
+        <a href="{% url 'account' %}">MOJE KONTO</a>
     </div>
 
     <!-- Treść logowania -->
