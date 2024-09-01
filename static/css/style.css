@@ -143,57 +143,188 @@ body {
 }
 
 /* Wyśrodkowanie i stylizacja nagłówków */
-.blog-content h1,
-.forum-content h1,
 .account-content h1,
 .register-container h2 {
     text-align: center;
     color: white;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto 20px; /* Wyśrodkowanie i dodanie dolnego marginesu */
 }
 
 /* Stylizacja form-group i form-control */
-.blog-content .form-group,
-.forum-content .form-group,
 .account-content .form-group,
 .register-container .form-group {
     margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
-    padding-left: 15px;  /* Dodanie lewego paddingu wewnątrz grupy form */
-    padding-right: 15px; /* Dodanie prawego paddingu wewnątrz grupy form */
+    padding-left: 10px;  /* Dodanie lewego paddingu */
+    padding-right: 10px; /* Dodanie prawego paddingu */
 }
 
-.blog-content .form-control,
-.forum-content .form-control,
 .account-content .form-control,
 .register-container .form-control {
-    width: calc(100% - 30px); /* Ustawienie szerokości form na 100% minus padding */
-    padding: .5rem .75rem;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
     font-size: 1rem;
     border-radius: 4px;
     border: 1px solid #ccc;
+    box-sizing: border-box; /* Ustawienie box-sizing, aby padding był wliczony w szerokość */
 }
 
 /* Stylizacja przycisków */
-.blog-content .btn-primary,
-.forum-content .btn-primary,
 .account-content .btn-primary,
 .register-container .btn-primary {
-    width: calc(100% - 30px); /* Ustawienie szerokości przycisków na 100% minus padding */
-    margin: 10px auto; /* Wyśrodkowanie przycisków */
-    padding: .5rem .75rem;
+    width: 100%; /* Dopasowanie szerokości przycisków do inputów */
+    max-width: 100%; /* Zapewnienie, że przyciski nie będą większe niż inputy */
+    margin: 10px 0; /* Dodanie marginesu górnego i dolnego */
+    padding: 0.5rem 0.75rem;
     display: block;
+    box-sizing: border-box; /* Ustawienie box-sizing, aby padding był wliczony w szerokość */
+}
+
+/* Usunięcie dodatkowych klas z przycisków */
+.btn-primary {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px 0;
 }
 
 /* Zapewnienie odpowiednich marginesów w widokach mobilnych */
 @media (max-width: 768px) {
-    .blog-content,
-    .forum-content,
     .account-content,
     .register-container {
-        margin-left: 20px;   /* Dodanie lewego marginesu */
-        margin-right: 20px;  /* Dodanie prawego marginesu */
+        margin: 20px;   /* Margines wokół całej sekcji */
+        padding: 15px;
+    }
+}
+
+/* Stylizacja form-group i form-control z równymi paddingami */
+.account-content .form-group,
+.register-container .form-group {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    padding: 0 10%;  /* Równy padding z lewej i prawej strony w procentach */
+}
+
+.account-content .form-control,
+.register-container .form-control {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* Stylizacja przycisków z równymi paddingami */
+.account-content .btn-primary,
+.register-container .btn-primary {
+    width: 100%; /* Dopasowanie szerokości przycisków do inputów */
+    margin: 10px 0;
+    padding: 0.5rem 0.75rem;
+    display: block;
+    box-sizing: border-box;
+    padding: 0 10%; /* Równy padding z lewej i prawej strony w procentach */
+}
+
+/* Zapewnienie odpowiednich marginesów w widokach mobilnych */
+@media (max-width: 768px) {
+    .account-content,
+    .register-container {
+        margin: 20px auto; /* Automatyczne marginesy po bokach */
+        padding: 0;
+    }
+}
+
+/* Stylizacja nagłówka "Zarejestruj się" */
+.register-container h2 {
+    text-align: center;
+    color: white;
+    margin: 0 0 20px 0; /* Margines dolny dla odstępu od inputów */
+    font-size: 2rem; /* Rozmiar czcionki */
+    line-height: 1.2; /* Wysokość linii */
+}
+
+/* Wyśrodkowanie całego kontenera formularza */
+.register-container {
+    margin: 0 auto;
+    padding: 0 10%;
+    max-width: 600px; /* Ustalona szerokość dla kontenera */
+}
+
+/* Stylizacja kontenera formularza rejestracji */
+.register-container {
+    max-width: 600px; /* Maksymalna szerokość formularza na większych ekranach */
+    margin: 0 auto;   /* Wyśrodkowanie formularza */
+    padding: 0 20px;  /* Dodatkowy padding na mniejszych ekranach */
+}
+
+/* Dostosowanie nagłówka */
+.register-container h2 {
+    text-align: center;
+    color: white;
+    margin-bottom: 20px;
+}
+
+/* Stylizacja form-group i form-control */
+.register-container .form-group,
+.account-content .form-group {
+    margin-bottom: 1rem;
+    padding-left: 0;  /* Wyłączenie lewego paddingu */
+    padding-right: 0; /* Wyłączenie prawego paddingu */
+}
+
+/* Skalowanie na większych ekranach */
+@media (min-width: 768px) {
+    .register-container {
+        padding: 0; /* Zmniejszenie paddingu na większych ekranach */
+    }
+
+    .register-container h2 {
+        font-size: 2rem; /* Dopasowanie rozmiaru czcionki nagłówka */
+    }
+
+    .register-container .form-group {
+        padding-left: 10px;  /* Przywrócenie lewego paddingu na większych ekranach */
+        padding-right: 10px; /* Przywrócenie prawego paddingu na większych ekranach */
+    }
+}
+/* Stylizacja kontenera logowania na stronie account.html */
+.account-content {
+    max-width: 600px; /* Maksymalna szerokość formularza na większych ekranach */
+    margin: 0 auto;   /* Wyśrodkowanie formularza */
+    padding: 0 20px;  /* Dodatkowy padding na mniejszych ekranach */
+}
+
+/* Stylizacja nagłówka */
+.account-content h1 {
+    text-align: center;
+    color: white;
+    margin-bottom: 20px;
+}
+
+/* Stylizacja form-group i form-control */
+.account-content .form-group {
+    margin-bottom: 1rem;
+    padding-left: 0;  /* Wyłączenie lewego paddingu */
+    padding-right: 0; /* Wyłączenie prawego paddingu */
+}
+
+/* Skalowanie na większych ekranach */
+@media (min-width: 768px) {
+    .account-content {
+        padding: 0; /* Zmniejszenie paddingu na większych ekranach */
+    }
+
+    .account-content h1 {
+        font-size: 2rem; /* Dopasowanie rozmiaru czcionki nagłówka */
+    }
+
+    .account-content .form-group {
+        padding-left: 10px;  /* Przywrócenie lewego paddingu na większych ekranach */
+        padding-right: 10px; /* Przywrócenie prawego paddingu na większych ekranach */
     }
 }
