@@ -11,3 +11,6 @@ def blog(request):
 
 def forum(request):
     return render(request, 'forum.html')
+
+def register(request):
+    return render(request, 'register.html')

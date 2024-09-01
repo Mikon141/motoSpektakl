@@ -4,7 +4,7 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Moje Konto - Logowanie</title>
+    <title>Moje Konto - Rejestracja</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <!-- Zewnętrzny plik CSS -->
@@ -27,21 +27,28 @@
         <a href="{% url 'account' %}" class="custom-btn flex-1 py-2 px-3 flex items-center justify-center">Moje Konto</a>
     </div>
 
-    <!-- Treść logowania -->
-    <div class="account-content container mt-4">
-        <h1>Zaloguj się</h1>
-        <form>
+    <!-- Formularz rejestracji -->
+    <div class="account-content container mt-4"> <!-- Zmiana na account-content -->
+        <h2>Zarejestruj się</h2>
+        <form method="post" action="{% url 'register' %}">
+            {% csrf_token %}
             <div class="form-group">
                 <label for="email">Adres e-mail</label>
-                <input type="email" class="form-control" id="email" placeholder="Wprowadź e-mail">
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="login">Login (Nick)</label>
+                <input type="text" id="login" name="login" class="form-control" required>
             </div>
             <div class="form-group">
                 <label for="password">Hasło</label>
-                <input type="password" class="form-control" id="password" placeholder="Wprowadź hasło">
+                <input type="password" id="password" name="password" class="form-control" required>
             </div>
-            <button type="submit" class="btn btn-primary">Zaloguj się</button>
-            <a href="{% url 'register' %}" class="btn btn-primary">Zarejestruj się</a>
-            <a href="{% url 'password_reset' %}" class="btn btn-link">Zapomniałem hasła</a>
+            <div class="form-group">
+                <label for="confirm-password">Potwierdź hasło</label>
+                <input type="password" id="confirm-password" name="confirm-password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Zarejestruj się</button>
         </form>
     </div>
 

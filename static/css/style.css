@@ -13,6 +13,7 @@ body {
 .footer {
     background-color: var(--button-color) !important;
     color: white;
+    margin-top: 30px; /* Dodanie marginesu do stopki */
 }
 
 /* Pozostałe style */
@@ -132,84 +133,67 @@ body {
     min-height: 100vh;
 }
 
-.blog-content, .forum-content, .account-content {
+.blog-content, .forum-content, .account-content, .register-container {
     background: var(--background-color);
     padding: 20px;
     border-radius: 8px;
     color: white; /* Dodajemy kolor tekstu, aby był widoczny na ciemnym tle */
+    margin: 50px auto; /* Dodaje margines wokół, aby elementy nie nachodziły na header ani footer */
+    max-width: 600px; /* Ustalona maksymalna szerokość dla lepszej czytelności na dużych ekranach */
 }
 
-.blog-content {
-    margin-top: 2rem;
+/* Wyśrodkowanie i stylizacja nagłówków */
+.blog-content h1,
+.forum-content h1,
+.account-content h1,
+.register-container h2 {
+    text-align: center;
+    color: white;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.blog-content h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.blog-content article {
-    margin-bottom: 2rem;
-}
-
-.blog-content article h2 {
-    font-size: 1.75rem;
-    margin-bottom: 1rem;
-}
-
-.forum-content {
-    margin-top: 2rem;
-}
-
-.forum-content h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.forum-content .thread {
-    margin-bottom: 2rem;
-}
-
-.forum-content .thread h2 {
-    font-size: 1.75rem;
-    margin-bottom: 1rem;
-}
-
-.forum-content .thread a {
-    color: var(--main-color);
-    text-decoration: none;
-}
-
-.forum-content .thread a:hover {
-    text-decoration: underline;
-}
-
-.account-content {
-    margin-top: 2rem;
-}
-
-.account-content h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.form-group {
+/* Stylizacja form-group i form-control */
+.blog-content .form-group,
+.forum-content .form-group,
+.account-content .form-group,
+.register-container .form-group {
     margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
+    padding-left: 15px;  /* Dodanie lewego paddingu wewnątrz grupy form */
+    padding-right: 15px; /* Dodanie prawego paddingu wewnątrz grupy form */
 }
 
-.form-control {
+.blog-content .form-control,
+.forum-content .form-control,
+.account-content .form-control,
+.register-container .form-control {
+    width: calc(100% - 30px); /* Ustawienie szerokości form na 100% minus padding */
     padding: .5rem .75rem;
     font-size: 1rem;
-    border-radius: .25rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
 }
 
-.btn-link {
-    color: white;
-    text-decoration: none;
+/* Stylizacja przycisków */
+.blog-content .btn-primary,
+.forum-content .btn-primary,
+.account-content .btn-primary,
+.register-container .btn-primary {
+    width: calc(100% - 30px); /* Ustawienie szerokości przycisków na 100% minus padding */
+    margin: 10px auto; /* Wyśrodkowanie przycisków */
+    padding: .5rem .75rem;
+    display: block;
 }
 
-.btn-link:hover {
-    text-decoration: underline;
+/* Zapewnienie odpowiednich marginesów w widokach mobilnych */
+@media (max-width: 768px) {
+    .blog-content,
+    .forum-content,
+    .account-content,
+    .register-container {
+        margin-left: 20px;   /* Dodanie lewego marginesu */
+        margin-right: 20px;  /* Dodanie prawego marginesu */
+    }
 }
