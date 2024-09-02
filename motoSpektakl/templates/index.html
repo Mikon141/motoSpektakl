@@ -4,7 +4,7 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Blog Motoryzacyjny</title>
+    <title>{% block title %}Blog Motoryzacyjny{% endblock %}</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <!-- Zewnętrzny plik CSS -->
@@ -26,10 +26,12 @@
         <a href="{% url 'account' %}">MOJE KONTO</a>
     </div>
 
-    <!-- Treść bloga -->
+    <!-- Miejsce na treść podstron -->
     <div class="blog-content container mt-4">
+        {% block content %}
         <h1>Witamy na Blogu Motoryzacyjnym</h1>
         <!-- Tutaj będzie treść bloga -->
+        {% endblock %}
     </div>
 
     <div class="flex-1">

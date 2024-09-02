@@ -357,3 +357,28 @@ header a:hover {
         padding-right: 10px; /* Przywrócenie prawego paddingu na większych ekranach */
     }
 }
+
+.auth-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #2c3e50; /* Przyciemnione tło, zgodnie ze screenem */
+    border-radius: 5px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+}
