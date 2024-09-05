@@ -70,10 +70,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Konfiguracja SMTP dla Gmaila
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = 'motospektakl@gmail.com'  # Twój adres Gmail
+EMAIL_HOST_PASSWORD = 'nkvumvoplsfhnixa'  # Wprowadź tutaj wygenerowane hasło aplikacji
+DEFAULT_FROM_EMAIL = 'motospektakl@gmail.com'  # Adres, z którego będą wysyłane e-maile
+
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 DEBUG = True
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

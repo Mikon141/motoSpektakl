@@ -11,11 +11,16 @@ urlpatterns = [
     path('account/', views.account, name='account'),
     path('blog/', views.blog, name='blog'),
     path('forum/', views.forum, name='forum'),
+
+    # Ścieżki związane z resetowaniem hasła
     path('account/password_reset/', auth_views.PasswordResetView.as_view(template_name='reset_password.html'), name='password_reset'),
-    path('account/password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='reset_password_sent.html'), name='password_reset_done'),
-    path('account/reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='reset_password_confirm.html'), name='password_reset_confirm'),
-    path('raccount/eset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='reset_password_complete.html'), name='password_reset_complete'),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='reset_password_sent.html'), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='reset_password_confirm.html'), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='reset_password_complete.html'), name='password_reset_complete'),
+
+    # Ścieżki rejestracji i aktywacji konta
     path('account/register/', views.register, name='register'),  # Widok dla rejestracji
+    path('activate/<uidb64>/<token>/', views.activate, name='activate'),  # Widok aktywacji konta
 ]
 
 # Obsługa plików statycznych w trybie deweloperskim
