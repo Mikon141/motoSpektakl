@@ -405,3 +405,13 @@ header a:hover {
     background-color: #f2dede;
     border-color: #ebccd1;
 }
+
+.helptext {
+    color: #ccc;  /* Dostosuj kolor do reszty strony */
+    font-size: 0.9em;
+}
+
+.errorlist {
+    color: red;  /* Kolor błędów */
+    font-weight: bold;
+}

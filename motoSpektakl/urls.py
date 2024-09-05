@@ -8,7 +8,7 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('account/', views.account, name='account'),
+    path('account/', views.account, name='account'),  # Widok logowania (formularz)
     path('blog/', views.blog, name='blog'),
     path('forum/', views.forum, name='forum'),
 
@@ -21,6 +21,9 @@ urlpatterns = [
     # Ścieżki rejestracji i aktywacji konta
     path('account/register/', views.register, name='register'),  # Widok dla rejestracji
     path('activate/<uidb64>/<token>/', views.activate, name='activate'),  # Widok aktywacji konta
+
+    # Ścieżka logowania
+    path('login/', auth_views.LoginView.as_view(template_name='account.html'), name='login'),  # Zmieniamy login.html na account.html
 ]
 
 # Obsługa plików statycznych w trybie deweloperskim

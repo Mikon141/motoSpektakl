@@ -87,12 +87,12 @@ def activate(request, uidb64, token):
     if user is not None:
         if user.is_active:
             messages.info(request, 'Twoje konto jest już aktywne. Możesz się zalogować.')
-            return redirect('login')
+            return redirect('login')  # Przekierowanie na stronę logowania
         elif default_token_generator.check_token(user, token):
             user.is_active = True
             user.save()
             messages.success(request, 'Twoje konto zostało aktywowane. Możesz się teraz zalogować.')
-            return redirect('login')
+            return redirect('account')  # Przekierowanie na stronę konta po aktywacji
         else:
             messages.error(request, 'Link aktywacyjny jest nieprawidłowy lub wygasł.')
             return redirect('register')

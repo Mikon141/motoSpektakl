@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     {% load static %}
+    {% load widget_tweaks %} <!-- Ładowanie widget_tweaks do obsługi filtrów formularza -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Moje Konto - Rejestracja</title>
@@ -11,15 +12,12 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body class="flex flex-col min-h-screen">
-    <header style="background-color: var(--button-color); padding: 10px 0;"> <!-- Zmiana koloru tła nagłówka -->
+    <header style="background-color: var(--button-color); padding: 10px 0;">
         <div class="container">
             <a href="/"><h1 class="header-title">MOTOSPEKTAKL</h1></a>
-            <!-- Tutaj możesz dodać inne elementy nagłówka, jeśli są potrzebne -->
         </div>
     </header>
-    <div class="main-image-container">
-        <!-- Obraz jako tło, więc brak tagu <img> -->
-    </div>
+    <div class="main-image-container"></div>
     
     <div class="navigation-buttons">
         <a href="{% url 'blog' %}">BLOG</a>
@@ -27,26 +25,40 @@
         <a href="{% url 'account' %}">MOJE KONTO</a>
     </div>
 
+    <!-- Wyświetlanie wiadomości -->
+    <div class="container mt-4">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
     <!-- Formularz rejestracji -->
-    <div class="register-container account-content container mt-4"> <!-- Dodana klasa register-container -->
+    <div class="register-container account-content container mt-4">
         <h2>Zarejestruj się</h2>
         <form method="post" action="{% url 'register' %}">
             {% csrf_token %}
+            <!-- Użycie django-widget-tweaks do dodania klas Bootstrap -->
             <div class="form-group">
-                <label for="email">Adres e-mail</label>
-                <input type="email" id="email" name="email" class="form-control" required>
+                <label for="id_username">Nazwa użytkownika:</label>
+                {{ form.username|add_class:"form-control" }}
             </div>
             <div class="form-group">
-                <label for="login">Login (Nick)</label>
-                <input type="text" id="login" name="login" class="form-control" required>
+                <label for="id_email">Adres e-mail:</label>
+                {{ form.email|add_class:"form-control" }}
             </div>
             <div class="form-group">
-                <label for="password">Hasło</label>
-                <input type="password" id="password" name="password" class="form-control" required>
+                <label for="id_password1">Hasło:</label>
+                {{ form.password1|add_class:"form-control" }}
             </div>
             <div class="form-group">
-                <label for="confirm-password">Potwierdź hasło</label>
-                <input type="password" id="confirm-password" name="confirm-password" class="form-control" required>
+                <label for="id_password2">Potwierdź hasło:</label>
+                {{ form.password2|add_class:"form-control" }}
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Zarejestruj się</button>
@@ -54,11 +66,8 @@
         </form>
     </div>
 
-    <div class="flex-1">
-        <!-- Must be always empty -->
-    </div>
+    <div class="flex-1"></div>
 
-    <!-- Stopka strony -->
     <footer class="footer mt-auto py-3 text-center">
         <div class="container">
             <span>&copy; 2024 Blog Motoryzacyjny</span>
