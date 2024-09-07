@@ -3,6 +3,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 STATIC_URL = '/static/'
+LOGIN_REDIRECT_URL = '/account/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 SECRET_KEY = 'z@y&-d$qbs!vw800y4a@7x=oe09)=!^=r3nh55(($i^7m_@nb9'

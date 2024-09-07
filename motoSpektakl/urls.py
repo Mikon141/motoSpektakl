@@ -23,7 +23,8 @@ urlpatterns = [
     path('activate/<uidb64>/<token>/', views.activate, name='activate'),  # Widok aktywacji konta
 
     # Ścieżka logowania
-    path('login/', auth_views.LoginView.as_view(template_name='account.html'), name='login'),  # Zmieniamy login.html na account.html
+    path('login/', views.login_view, name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
 ]
 
 # Obsługa plików statycznych w trybie deweloperskim

@@ -21,17 +21,20 @@
     <div class="navigation-buttons">
         <a href="{% url 'blog' %}">BLOG</a>
         <a href="{% url 'forum' %}">FORUM</a>
-        <a href="{% url 'account' %}">MOJE KONTO</a>
+        <a id="account-link" href="{% url 'account' %}">MOJE KONTO</a>
     </div>
-
+    {% if user.is_authenticated %}
+    <h1>Witaj, {{ user.username }}</h1>
+    <a href="{% url 'logout' %}" class="btn btn-primary">Wyloguj się</a>
+{% else %}
     <!-- Treść logowania -->
     <div class="account-content container mt-4">
         <h1>Zaloguj się</h1>
         <form action="{% url 'login' %}" method="post">
             {% csrf_token %}
             <div class="form-group">
-                <label for="email">Adres e-mail</label>
-                <input type="email" class="form-control" id="email" placeholder="Wprowadź e-mail" name="username">
+                <label for="login">Login lub adres e-mail</label>
+                <input type="text" class="form-control" id="login" placeholder="Wprowadź login lub adres e-mail" name="username">
             </div>
             <div class="form-group">
                 <label for="password">Hasło</label>
@@ -48,7 +51,7 @@
             <a href="{% url 'password_reset' %}" class="btn btn-link">Zapomniałem hasła</a>
         </div>
     </div>
-
+{% endif %}
     <div class="flex-1">
         <!-- Must be always empty -->
     </div>
@@ -62,6 +65,7 @@
     <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.amazonaws.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="{% static 'js/account_actions.js' %}"></script>
 </body>
 </html>

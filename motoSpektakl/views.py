@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from .forms import RegisterForm
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -99,3 +99,38 @@ def activate(request, uidb64, token):
     else:
         messages.error(request, 'Link aktywacyjny jest nieprawidłowy.')
         return redirect('register')
+
+# Logowanie za pomocą loginu lub adresu e-mail
+def login_view(request):
+    if request.method == 'POST':
+        login_input = request.POST.get('username')  # Może być loginem lub adresem e-mail
+        password = request.POST.get('password')
+        
+        logger.info(f"Login attempt for: {login_input}")
+        
+        # Sprawdzamy, czy login_input to e-mail czy login
+        try:
+            validate_email(login_input)
+            # Jeśli to e-mail, znajdź użytkownika po adresie e-mail
+            user = User.objects.get(email=login_input)
+            username = user.username  # Pobieramy nazwę użytkownika powiązaną z e-mailem
+        except ValidationError:
+            # Jeśli to nie jest e-mail, zakładamy, że to login
+            username = login_input
+        except User.DoesNotExist:
+            username = None
+            logger.error(f"User not found for: {login_input}")
+        
+        # Autoryzacja użytkownika
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            logger.info(f"User authenticated: {username}")
+            login(request, user)
+            logger.info(f"User {username} logged in successfully")
+            return redirect('account')  # Przekierowanie na stronę konta po zalogowaniu
+        else:
+            logger.error(f"Authentication failed for: {login_input}")
+            return render(request, 'account.html', {'error': 'Nieprawidłowe dane logowania'})
+    
+    return render(request, 'account.html')
