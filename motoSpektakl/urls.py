@@ -25,6 +25,9 @@ urlpatterns = [
     # Ścieżka logowania
     path('login/', views.login_view, name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
+
+    path('edit_profile/', views.edit_profile, name='edit_profile'),
+    path('change_password/', views.change_password, name='change_password'),
 ]
 
 # Obsługa plików statycznych w trybie deweloperskim

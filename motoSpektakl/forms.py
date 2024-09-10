@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
 
 class RegisterForm(UserCreationForm):
@@ -28,3 +28,21 @@ class RegisterForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+# Formularz do edycji profilu
+class EditProfileForm(UserChangeForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name']
+        labels = {
+            'username': 'Login',
+            'email': 'Adres e-mail',
+            'first_name': 'Imię',
+            'last_name': 'Nazwisko',
+        }
+
+# Formularz do zmiany hasła
+class EditPasswordForm(PasswordChangeForm):
+    class Meta:
+        model = User
+        fields = ['old_password', 'new_password1', 'new_password2']
