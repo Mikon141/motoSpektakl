@@ -31,14 +31,19 @@ class RegisterForm(UserCreationForm):
 
 # Formularz do edycji profilu
 class EditProfileForm(UserChangeForm):
+    profile_picture = forms.ImageField(required=False, label="Zdjęcie profilowe")
+    description = forms.CharField(widget=forms.Textarea(attrs={'rows': 3}), required=False, label="Opis użytkownika")
+    vehicle = forms.CharField(max_length=100, required=False, label="Pojazd użytkownika")
+
     class Meta:
         model = User
-        fields = ['username', 'email', 'first_name', 'last_name']
+        fields = ['username', 'email', 'profile_picture', 'description', 'vehicle']
         labels = {
             'username': 'Login',
             'email': 'Adres e-mail',
-            'first_name': 'Imię',
-            'last_name': 'Nazwisko',
+            'profile_picture': 'Zdjęcie profilowe',
+            'description': 'Opis użytkownika',
+            'vehicle': 'Pojazd użytkownika',
         }
 
 # Formularz do zmiany hasła

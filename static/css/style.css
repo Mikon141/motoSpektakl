@@ -415,3 +415,33 @@ header a:hover {
     color: red;  /* Kolor błędów */
     font-weight: bold;
 }
+
+.container {
+    max-width: 600px;
+}
+
+.btn-primary {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    margin-bottom: 10px;  /* Odstęp między przyciskami */
+    font-weight: bold;
+    border-radius: 0;
+    border: none;
+    background-color: #007bff;  /* Niebieski kolor */
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Ciemnoniebieski hover */
+    color: white;
+}
+
+.footer {
+    margin-top: 30px;
+    background-color: var(--button-color) !important;  /* Powrót do domyślnego koloru przycisków */
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}

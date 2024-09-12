@@ -6,6 +6,10 @@ STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/account/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
+# Konfiguracja obsługi mediów (zdjęcia profilowe)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 SECRET_KEY = 'z@y&-d$qbs!vw800y4a@7x=oe09)=!^=r3nh55(($i^7m_@nb9'
 ALLOWED_HOSTS = []
 

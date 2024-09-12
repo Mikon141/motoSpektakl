@@ -30,6 +30,10 @@ urlpatterns = [
     path('change_password/', views.change_password, name='change_password'),
 ]
 
+# Obsługa plików multimedialnych (zdjęcia profilowe)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 # Obsługa plików statycznych w trybie deweloperskim
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
