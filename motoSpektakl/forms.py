@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
 
 class RegisterForm(UserCreationForm):
@@ -28,3 +28,26 @@ class RegisterForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+# Formularz do edycji profilu
+class EditProfileForm(UserChangeForm):
+    profile_picture = forms.ImageField(required=False, label="Zdjęcie profilowe")
+    description = forms.CharField(widget=forms.Textarea(attrs={'rows': 3}), required=False, label="Opis użytkownika")
+    vehicle = forms.CharField(max_length=100, required=False, label="Pojazd użytkownika")
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'profile_picture', 'description', 'vehicle']
+        labels = {
+            'username': 'Login',
+            'email': 'Adres e-mail',
+            'profile_picture': 'Zdjęcie profilowe',
+            'description': 'Opis użytkownika',
+            'vehicle': 'Pojazd użytkownika',
+        }
+
+# Formularz do zmiany hasła
+class EditPasswordForm(PasswordChangeForm):
+    class Meta:
+        model = User
+        fields = ['old_password', 'new_password1', 'new_password2']

@@ -415,3 +415,41 @@ header a:hover {
     color: red;  /* Kolor błędów */
     font-weight: bold;
 }
+
+/* Przyciski */
+.btn-primary {
+    background-color: var(--blue);
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    font-weight: bold;
+    text-align: center;
+}
+
+.btn-primary:hover {
+    background-color: #0062cc; /* Ciemniejszy niebieski */
+}
+
+/* Dla sekcji przycisków */
+.btn-wrapper {
+    margin-bottom: 20px;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+    background-color: #007bff; /* Kolor niebieski, taki jak inne przyciski */
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+    background-color: #0056b3; /* Ciemniejszy niebieski na hover */
+}
+
+input[type="file"] {
+    color: white; /* Zmiana koloru napisu "Nie wybrano pliku" */
+}

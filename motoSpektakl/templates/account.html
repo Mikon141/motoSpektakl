@@ -23,35 +23,52 @@
         <a href="{% url 'forum' %}">FORUM</a>
         <a id="account-link" href="{% url 'account' %}">MOJE KONTO</a>
     </div>
-    {% if user.is_authenticated %}
-    <h1>Witaj, {{ user.username }}</h1>
-    <a href="{% url 'logout' %}" class="btn btn-primary">Wyloguj się</a>
-{% else %}
-    <!-- Treść logowania -->
-    <div class="account-content container mt-4">
-        <h1>Zaloguj się</h1>
-        <form action="{% url 'login' %}" method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="login">Login lub adres e-mail</label>
-                <input type="text" class="form-control" id="login" placeholder="Wprowadź login lub adres e-mail" name="username">
+
+    <!-- Dodanie sekcji dla wiadomości poniżej nawigacji -->
+    <div class="container mt-4">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
             </div>
-            <div class="form-group">
-                <label for="password">Hasło</label>
-                <input type="password" class="form-control" id="password" placeholder="Wprowadź hasło" name="password">
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Zaloguj się</button>
-            </div>
-        </form>
-        <div class="form-group">
-            <a href="{% url 'register' %}" class="btn btn-primary">Zarejestruj się</a>
-        </div>
-        <div class="form-group">
-            <a href="{% url 'password_reset' %}" class="btn btn-link">Zapomniałem hasła</a>
-        </div>
+        {% endif %}
     </div>
-{% endif %}
+
+    {% if user.is_authenticated %}
+        <h1>Witaj, {{ user.username }}</h1>
+        <a href="{% url 'edit_profile' %}" class="btn btn-primary mt-3">Edytuj Profil</a>
+        <a href="{% url 'change_password' %}" class="btn btn-primary mt-3">Zmień Hasło</a>
+        <a href="{% url 'logout' %}" class="btn btn-primary mt-3">Wyloguj się</a>
+    {% else %}
+        <!-- Treść logowania -->
+        <div class="account-content container mt-4">
+            <h1>Zaloguj się</h1>
+            <form action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="login">Login lub adres e-mail</label>
+                    <input type="text" class="form-control" id="login" placeholder="Wprowadź login lub adres e-mail" name="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Hasło</label>
+                    <input type="password" class="form-control" id="password" placeholder="Wprowadź hasło" name="password">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Zaloguj się</button>
+                </div>
+            </form>
+            <div class="form-group">
+                <a href="{% url 'register' %}" class="btn btn-primary">Zarejestruj się</a>
+            </div>
+            <div class="form-group">
+                <a href="{% url 'password_reset' %}" class="btn btn-link">Zapomniałem hasła</a>
+            </div>
+        </div>
+    {% endif %}
+
     <div class="flex-1">
         <!-- Must be always empty -->
     </div>

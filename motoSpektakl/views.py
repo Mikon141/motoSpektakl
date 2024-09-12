@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
-from .forms import RegisterForm
+from django.contrib.auth import login, authenticate, update_session_auth_hash
+from .forms import RegisterForm, EditProfileForm, EditPasswordForm
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.conf import settings
@@ -14,6 +14,7 @@ from django.contrib import messages
 from smtplib import SMTPException
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from django.contrib.auth.decorators import login_required
 import logging
 
 # Logger do logowania błędów
@@ -101,12 +102,12 @@ def activate(request, uidb64, token):
         return redirect('register')
 
 # Logowanie za pomocą loginu lub adresu e-mail
+from django.contrib import messages
+
 def login_view(request):
     if request.method == 'POST':
         login_input = request.POST.get('username')  # Może być loginem lub adresem e-mail
         password = request.POST.get('password')
-        
-        logger.info(f"Login attempt for: {login_input}")
         
         # Sprawdzamy, czy login_input to e-mail czy login
         try:
@@ -119,18 +120,44 @@ def login_view(request):
             username = login_input
         except User.DoesNotExist:
             username = None
-            logger.error(f"User not found for: {login_input}")
         
         # Autoryzacja użytkownika
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
-            logger.info(f"User authenticated: {username}")
             login(request, user)
-            logger.info(f"User {username} logged in successfully")
             return redirect('account')  # Przekierowanie na stronę konta po zalogowaniu
         else:
-            logger.error(f"Authentication failed for: {login_input}")
-            return render(request, 'account.html', {'error': 'Nieprawidłowe dane logowania'})
+            # Dodanie komunikatu o błędzie
+            messages.error(request, 'Login, adres e-mail lub hasło są nieprawidłowe.')
     
     return render(request, 'account.html')
+
+# Edycja profilu
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Twój profil został zaktualizowany.')
+            return redirect('edit_profile')
+    else:
+        form = EditProfileForm(instance=request.user)
+
+    return render(request, 'edit_profile.html', {'form': form})
+
+# Zmiana hasła
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = EditPasswordForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Ważne, aby użytkownik nie musiał się logować ponownie po zmianie hasła
+            messages.success(request, 'Hasło zostało zmienione pomyślnie.')
+            return redirect('edit_profile')
+    else:
+        form = EditPasswordForm(request.user)
+
+    return render(request, 'change_password.html', {'form': form})
