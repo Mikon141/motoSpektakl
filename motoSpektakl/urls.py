@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 from django.urls import path
 from . import views  # Import widoków z lokalnej aplikacji
 from django.contrib.auth import views as auth_views
+from .views import CustomPasswordResetConfirmView  # Dodajemy nasz widok resetu hasła
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -15,7 +16,7 @@ urlpatterns = [
     # Ścieżki związane z resetowaniem hasła
     path('account/password_reset/', auth_views.PasswordResetView.as_view(template_name='reset_password.html'), name='password_reset'),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='reset_password_sent.html'), name='password_reset_done'),
-    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='reset_password_confirm.html'), name='password_reset_confirm'),
+    path('reset/<uidb64>/<token>/', CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),  # Używamy niestandardowego widoku
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='reset_password_complete.html'), name='password_reset_complete'),
 
     # Ścieżki rejestracji i aktywacji konta

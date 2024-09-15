@@ -25,9 +25,21 @@
         <a id="account-link" href="{% url 'account' %}">MOJE KONTO</a>
     </div>
 
+    <!-- Obsługa wiadomości -->
+    {% if messages %}
+    <div class="container mt-4">
+        {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
     <div class="container mt-5">
         <h1 class="text-center text-white">Edytuj swój profil</h1>
 
+        <!-- Twój formularz -->
         <form method="POST" enctype="multipart/form-data" class="form-horizontal">
             {% csrf_token %}
             <div class="form-group">
@@ -41,29 +53,29 @@
                 {{ form.email|add_class:"form-control" }}
             </div>
 
-            <!-- Nowe pole: Zdjęcie profilowe -->
             <div class="form-group">
                 <label for="profile_picture" class="text-white">Zdjęcie profilowe:</label>
                 {{ form.profile_picture|add_class:"form-control-file" }}
             </div>
 
-            <!-- Nowe pole: Opis użytkownika -->
             <div class="form-group">
                 <label for="description" class="text-white">Opis użytkownika:</label>
                 {{ form.description|add_class:"form-control" }}
             </div>
 
-            <!-- Nowe pole: Pojazd użytkownika -->
             <div class="form-group">
                 <label for="vehicle" class="text-white">Pojazd użytkownika:</label>
                 {{ form.vehicle|add_class:"form-control" }}
             </div>
+
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+            </div>
         </form>
-        <!-- Zaktualizowane przyciski -->
+        
         <div class="btn-wrapper">
             <a href="{% url 'change_password' %}" class="btn btn-primary">Zmień hasło</a>
             <a href="{% url 'account' %}" class="btn btn-primary">Wróć do profilu</a>
-            <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
         </div>
     </div>
 
@@ -73,7 +85,6 @@
         </div>
     </footer>
 
-    <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.amazonaws.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
