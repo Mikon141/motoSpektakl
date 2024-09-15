@@ -453,3 +453,63 @@ input[type="file"]::-webkit-file-upload-button:hover {
 input[type="file"] {
     color: white; /* Zmiana koloru napisu "Nie wybrano pliku" */
 }
+
+.auth-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #2e3b4e; /* Opcjonalne tło dla formularza */
+    border-radius: 8px;
+}
+
+.auth-container h2 {
+    color: white;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    color: white;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.errorlist {
+    display: none; /* Ukrywamy domyślne błędy wyświetlane pod polami */
+}
+
+.alert-danger {
+    display: block;
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}

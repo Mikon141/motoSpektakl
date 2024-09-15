@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, update_session_auth_hash
+from django.contrib.auth.views import PasswordResetConfirmView
 from .forms import RegisterForm, EditProfileForm, EditPasswordForm
 from django.contrib.auth.models import User
+from django.contrib.auth import views as auth_views
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -20,16 +22,19 @@ import logging
 # Logger do logowania błędów
 logger = logging.getLogger(__name__)
 
-# Strony główne
+# Widok dla strony głównej (index)
 def index(request):
     return render(request, 'index.html')
 
+# Widok strony konta użytkownika
 def account(request):
     return render(request, 'account.html')
 
+# Widok bloga
 def blog(request):
     return render(request, 'blog.html')
 
+# Widok forum
 def forum(request):
     return render(request, 'forum.html')
 
@@ -69,9 +74,7 @@ def register(request):
                 logger.error(f"Błąd wysyłania e-maila: {e}")
                 messages.error(request, 'Wystąpił problem podczas wysyłania e-maila aktywacyjnego.')
         else:
-            print(form.errors)  # Wyświetl błędy w konsoli
             messages.error(request, 'Formularz zawiera błędy. Proszę sprawdzić dane.')
-            return render(request, "register.html", {"form": form})
     else:
         form = RegisterForm()
 
@@ -102,8 +105,6 @@ def activate(request, uidb64, token):
         return redirect('register')
 
 # Logowanie za pomocą loginu lub adresu e-mail
-from django.contrib import messages
-
 def login_view(request):
     if request.method == 'POST':
         login_input = request.POST.get('username')  # Może być loginem lub adresem e-mail
@@ -112,25 +113,19 @@ def login_view(request):
         # Sprawdzamy, czy login_input to e-mail czy login
         try:
             validate_email(login_input)
-            # Jeśli to e-mail, znajdź użytkownika po adresie e-mail
             user = User.objects.get(email=login_input)
-            username = user.username  # Pobieramy nazwę użytkownika powiązaną z e-mailem
-        except ValidationError:
-            # Jeśli to nie jest e-mail, zakładamy, że to login
+            username = user.username
+        except (ValidationError, User.DoesNotExist):
             username = login_input
-        except User.DoesNotExist:
-            username = None
         
-        # Autoryzacja użytkownika
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
             login(request, user)
-            return redirect('account')  # Przekierowanie na stronę konta po zalogowaniu
+            return redirect('account')
         else:
-            # Dodanie komunikatu o błędzie
             messages.error(request, 'Login, adres e-mail lub hasło są nieprawidłowe.')
-    
+
     return render(request, 'account.html')
 
 # Edycja profilu
@@ -142,6 +137,8 @@ def edit_profile(request):
             form.save()
             messages.success(request, 'Twój profil został zaktualizowany.')
             return redirect('edit_profile')
+        else:
+            messages.error(request, 'Wystąpiły błędy w formularzu. Sprawdź swoje dane.')
     else:
         form = EditProfileForm(instance=request.user)
 
@@ -154,10 +151,21 @@ def change_password(request):
         form = EditPasswordForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
-            update_session_auth_hash(request, user)  # Ważne, aby użytkownik nie musiał się logować ponownie po zmianie hasła
+            update_session_auth_hash(request, user)
             messages.success(request, 'Hasło zostało zmienione pomyślnie.')
             return redirect('edit_profile')
+        else:
+            for field, errors in form.errors.items():
+                if 'old_password' in field:
+                    messages.error(request, 'Stare hasło jest nieprawidłowe.')
     else:
         form = EditPasswordForm(request.user)
 
     return render(request, 'change_password.html', {'form': form})
+
+class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
+    template_name = 'reset_password_confirm.html'  # Upewnij się, że używasz swojego szablonu
+
+    def form_invalid(self, form):
+        # Wyciąganie błędów z formularza i przenoszenie ich do sekcji messages
+        return super().form_invalid(form)

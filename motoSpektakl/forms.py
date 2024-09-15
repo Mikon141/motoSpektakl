@@ -1,12 +1,13 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.models import User
 
+# Formularz rejestracji
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True, label="Adres e-mail")
     
     class Meta:
-        model = User
+        model = User  # Poprawka: import modelu User
         fields = ['username', 'email', 'password1', 'password2']
         labels = {
             'username': 'Nazwa użytkownika',
@@ -14,20 +15,13 @@ class RegisterForm(UserCreationForm):
             'password1': 'Hasło',
             'password2': 'Potwierdź hasło',
         }
-    
+
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
-        self.fields['username'].label = "Nazwa użytkownika"
-        self.fields['email'].label = "Adres e-mail"
-        self.fields['password1'].label = "Hasło"
-        self.fields['password2'].label = "Potwierdź hasło"
-    
-    def save(self, commit=True):
-        user = super(RegisterForm, self).save(commit=False)
-        user.is_active = False  # Użytkownik będzie nieaktywny do momentu aktywacji
-        if commit:
-            user.save()
-        return user
+        self.fields['username'].widget.attrs.update({'class': 'form-control'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control'})
+        self.fields['password1'].widget.attrs.update({'class': 'form-control'})
+        self.fields['password2'].widget.attrs.update({'class': 'form-control'})
 
 # Formularz do edycji profilu
 class EditProfileForm(UserChangeForm):
@@ -36,7 +30,7 @@ class EditProfileForm(UserChangeForm):
     vehicle = forms.CharField(max_length=100, required=False, label="Pojazd użytkownika")
 
     class Meta:
-        model = User
+        model = User  # Poprawka: model User
         fields = ['username', 'email', 'profile_picture', 'description', 'vehicle']
         labels = {
             'username': 'Login',
@@ -46,8 +40,33 @@ class EditProfileForm(UserChangeForm):
             'vehicle': 'Pojazd użytkownika',
         }
 
+    def __init__(self, *args, **kwargs):
+        super(EditProfileForm, self).__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'class': 'form-control'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control'})
+        self.fields['profile_picture'].widget.attrs.update({'class': 'form-control-file'})
+        self.fields['description'].widget.attrs.update({'class': 'form-control'})
+        self.fields['vehicle'].widget.attrs.update({'class': 'form-control'})
+
 # Formularz do zmiany hasła
 class EditPasswordForm(PasswordChangeForm):
     class Meta:
-        model = User
+        model = User  # Poprawka: model User
         fields = ['old_password', 'new_password1', 'new_password2']
+
+    def __init__(self, *args, **kwargs):
+        super(EditPasswordForm, self).__init__(*args, **kwargs)
+        self.fields['old_password'].widget.attrs.update({'class': 'form-control'})
+        self.fields['new_password1'].widget.attrs.update({'class': 'form-control'})
+        self.fields['new_password2'].widget.attrs.update({'class': 'form-control'})
+
+# Formularz do resetowania hasła
+class ResetPasswordForm(SetPasswordForm):
+    class Meta:
+        model = User  # Poprawka: model User
+        fields = ['new_password1', 'new_password2']
+
+    def __init__(self, *args, **kwargs):
+        super(ResetPasswordForm, self).__init__(*args, **kwargs)
+        self.fields['new_password1'].widget.attrs.update({'class': 'form-control'})
+        self.fields['new_password2'].widget.attrs.update({'class': 'form-control'})

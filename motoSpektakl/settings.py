@@ -85,7 +85,8 @@ EMAIL_HOST_USER = 'motospektakl@gmail.com'  # Twój adres Gmail
 EMAIL_HOST_PASSWORD = 'nkvumvoplsfhnixa'  # Wprowadź tutaj wygenerowane hasło aplikacji
 DEFAULT_FROM_EMAIL = 'motospektakl@gmail.com'  # Adres, z którego będą wysyłane e-maile
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pl'
+USE_I18N = True
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
