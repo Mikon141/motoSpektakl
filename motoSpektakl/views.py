@@ -17,6 +17,8 @@ from smtplib import SMTPException
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import user_passes_test
 import logging
 
 # Logger do logowania błędów
@@ -39,11 +41,21 @@ def forum(request):
     return render(request, 'forum.html')
 
 # Rejestracja użytkownika
+# Rejestracja użytkownika
 def register(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
+            
+            # Przypisanie roli admina dla wybranego użytkownika
+            if user.email == "tobimm7@gmail.com":
+                user.is_superuser = True
+                user.is_staff = True
+            else:
+                user.is_superuser = False
+                user.is_staff = False
+
             user.is_active = False  # Konto nieaktywne, dopóki nie zostanie aktywowane
             user.save()
 
@@ -169,3 +181,14 @@ class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
     def form_invalid(self, form):
         # Wyciąganie błędów z formularza i przenoszenie ich do sekcji messages
         return super().form_invalid(form)
+
+
+# Sprawdza, czy użytkownik jest administratorem
+def is_admin(user):
+    return user.is_superuser
+
+# Widok zarządzania użytkownikami, dostępny tylko dla admina
+@user_passes_test(is_admin)
+def account_management(request):
+    users = User.objects.all()  # Pobieranie wszystkich użytkowników
+    return render(request, 'account_management.html', {'users': users})
