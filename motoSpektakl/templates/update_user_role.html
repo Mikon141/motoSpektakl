@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Zarządzanie rolami</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Zmień rolę użytkownika: {{ user.username }}</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="role">Wybierz nową rolę:</label>
+                <select name="role" id="role" class="form-control">
+                    <option value="user">Użytkownik</option>
+                    <option value="moderator">Moderator</option>
+                    <option value="admin">Administrator</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Zapisz</button>
+        </form>
+        <a href="{% url 'account_management' %}" class="btn btn-secondary mt-3">Powrót</a>
+    </div>
+</body>
+</html>

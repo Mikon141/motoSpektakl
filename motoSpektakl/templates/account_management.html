@@ -12,6 +12,11 @@
     <div class="container mt-5">
         <h1>Zarządzanie użytkownikami</h1>
 
+        <!-- Formularz wyszukiwania użytkowników -->
+        <form method="GET" action="{% url 'account_management' %}">
+            <input type="text" name="search" placeholder="Wyszukaj użytkowników..." class="form-control mb-3">
+        </form>
+
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -19,6 +24,7 @@
                     <th>Login</th>
                     <th>E-mail</th>
                     <th>Administrator</th>
+                    <th>Aktywne konto</th>
                     <th>Akcje</th>
                 </tr>
             </thead>
@@ -29,9 +35,18 @@
                     <td>{{ user.username }}</td>
                     <td>{{ user.email }}</td>
                     <td>{{ user.is_superuser }}</td>
+                    <td>{{ user.is_active }}</td>
                     <td>
-                        <a href="#" class="btn btn-danger">Usuń</a>
-                        <!-- Możesz dodać więcej akcji, np. zmiana roli -->
+                        <!-- Zmiana ról -->
+                        <a href="{% url 'update_user_role' user.id %}" class="btn btn-secondary">Zmień rolę</a>
+
+                        <!-- Blokowanie/Odblokowywanie konta -->
+                        <a href="{% url 'toggle_user_activation' user.id %}" class="btn btn-info">
+                            {% if user.is_active %} Zablokuj {% else %} Odblokuj {% endif %}
+                        </a>
+
+                        <!-- Usuwanie użytkownika -->
+                        <a href="#" onclick="if(confirm('Czy na pewno chcesz usunąć tego użytkownika?')){window.location.href='{% url 'delete_user' user.id %}'}" class="btn btn-danger">Usuń</a>
                     </td>
                 </tr>
                 {% endfor %}
