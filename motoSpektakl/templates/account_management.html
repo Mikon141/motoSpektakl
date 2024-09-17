@@ -23,6 +23,7 @@
                     <th>ID</th>
                     <th>Login</th>
                     <th>E-mail</th>
+                    <th>Rola</th> <!-- Nowa kolumna -->
                     <th>Administrator</th>
                     <th>Aktywne konto</th>
                     <th>Akcje</th>
@@ -34,6 +35,15 @@
                     <td>{{ user.id }}</td>
                     <td>{{ user.username }}</td>
                     <td>{{ user.email }}</td>
+                    <td>
+                        {% if user.is_superuser %}
+                            Administrator
+                        {% elif user.groups.all.0.name == "Moderator" %}
+                            Moderator
+                        {% else %}
+                            Użytkownik
+                        {% endif %}
+                    </td> <!-- Wyświetlanie roli użytkownika -->
                     <td>{{ user.is_superuser }}</td>
                     <td>{{ user.is_active }}</td>
                     <td>

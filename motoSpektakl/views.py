@@ -257,3 +257,17 @@ def toggle_user_activation(request, user_id):
         messages.success(request, f"Konto użytkownika {user.username} zostało zablokowane.")
     
     return redirect('account_management')
+
+# Utworzenie grup, jeśli jeszcze nie istnieją
+def create_default_groups():
+    group_names = ['Admin', 'Moderator', 'User']
+    for group_name in group_names:
+        Group.objects.get_or_create(name=group_name)
+
+# Wywołaj tę funkcję w odpowiednim miejscu, np. w widoku głównym
+create_default_groups()
+
+def account_management(request):
+    search_query = request.GET.get('search', '')
+    users = User.objects.filter(username__icontains=search_query)  # Możliwość filtrowania użytkowników
+    return render(request, 'account_management.html', {'users': users})
