@@ -1,0 +1,25 @@
+/* Specyficzny styl dla przycisków na stronie account.html */
+.btn-primary {
+    width: auto;
+    max-width: 200px;
+    margin: 10px auto;
+    display: block;
+}
+
+/* Stylizacja nagłówka "Witaj użytkowniku" */
+.account-content h1 {
+    text-align: center;
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+/* Wyrównanie przycisków */
+.account-content .btn-primary {
+    width: 200px;
+    margin: 15px auto;
+    padding: 10px 20px;
+    text-align: center;
+    display: block;
+}

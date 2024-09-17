@@ -19,6 +19,7 @@ from django.core.validators import validate_email
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.models import Group
 import logging
 
 # Logger do logowania błędów
@@ -40,7 +41,6 @@ def blog(request):
 def forum(request):
     return render(request, 'forum.html')
 
-# Rejestracja użytkownika
 # Rejestracja użytkownika
 def register(request):
     if request.method == "POST":
@@ -182,7 +182,6 @@ class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
         # Wyciąganie błędów z formularza i przenoszenie ich do sekcji messages
         return super().form_invalid(form)
 
-
 # Sprawdza, czy użytkownik jest administratorem
 def is_admin(user):
     return user.is_superuser
@@ -190,5 +189,85 @@ def is_admin(user):
 # Widok zarządzania użytkownikami, dostępny tylko dla admina
 @user_passes_test(is_admin)
 def account_management(request):
-    users = User.objects.all()  # Pobieranie wszystkich użytkowników
+    search_query = request.GET.get('search', '')
+    users = User.objects.filter(username__icontains=search_query)  # Możliwość filtrowania użytkowników
+    return render(request, 'account_management.html', {'users': users})
+
+# Promowanie lub degradowanie użytkownika do/z roli admina
+@user_passes_test(is_admin)
+def toggle_admin(request, user_id):
+    user = User.objects.get(id=user_id)
+    user.is_superuser = not user.is_superuser
+    user.is_staff = user.is_superuser
+    user.save()
+    return redirect('account_management')
+
+# Aktywowanie lub dezaktywowanie konta użytkownika
+@user_passes_test(is_admin)
+def toggle_active(request, user_id):
+    user = User.objects.get(id=user_id)
+    user.is_active = not user.is_active
+    user.save()
+    return redirect('account_management')
+
+# Usuwanie użytkownika
+@user_passes_test(is_admin)
+def delete_user(request, user_id):
+    user = User.objects.get(id=user_id)
+    user.delete()
+    return redirect('account_management')
+
+@login_required
+@user_passes_test(is_admin)
+def update_user_role(request, user_id):
+    user = User.objects.get(pk=user_id)
+    
+    if request.method == 'POST':
+        new_role = request.POST.get('role')
+        
+        # Usuwamy użytkownika ze wszystkich grup i dodajemy do nowej
+        user.groups.clear()
+        if new_role == 'admin':
+            group = Group.objects.get(name='Admin')
+        elif new_role == 'moderator':
+            group = Group.objects.get(name='Moderator')
+        else:
+            group = Group.objects.get(name='User')
+        
+        user.groups.add(group)
+        user.save()
+        
+        messages.success(request, f"Rola użytkownika {user.username} została zmieniona na {new_role}.")
+        return redirect('account_management')
+
+    return render(request, 'update_user_role.html', {'user': user})
+
+@login_required
+@user_passes_test(is_admin)
+def toggle_user_activation(request, user_id):
+    user = User.objects.get(pk=user_id)
+    
+    # Odwracamy status aktywności użytkownika
+    user.is_active = not user.is_active
+    user.save()
+    
+    if user.is_active:
+        messages.success(request, f"Konto użytkownika {user.username} zostało odblokowane.")
+    else:
+        messages.success(request, f"Konto użytkownika {user.username} zostało zablokowane.")
+    
+    return redirect('account_management')
+
+# Utworzenie grup, jeśli jeszcze nie istnieją
+def create_default_groups():
+    group_names = ['Admin', 'Moderator', 'User']
+    for group_name in group_names:
+        Group.objects.get_or_create(name=group_name)
+
+# Wywołaj tę funkcję w odpowiednim miejscu, np. w widoku głównym
+create_default_groups()
+
+def account_management(request):
+    search_query = request.GET.get('search', '')
+    users = User.objects.filter(username__icontains=search_query)  # Możliwość filtrowania użytkowników
     return render(request, 'account_management.html', {'users': users})

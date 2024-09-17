@@ -9,9 +9,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <!-- Zewnętrzny plik CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/account_styles.css' %}">
 </head>
 <body class="flex flex-col min-h-screen">
-    <header style="background-color: var(--button-color); padding: 10px 0;"> <!-- Zmiana koloru tła nagłówka -->
+    <header style="background-color: var(--button-color); padding: 10px 0;">
         <div class="container">
             <a href="/"><h1 class="header-title">MOTOSPEKTAKL</h1></a>
         </div>
@@ -38,15 +39,16 @@
     </div>
 
     {% if user.is_authenticated %}
-        <h1>Witaj, {{ user.username }}</h1>
-        <a href="{% url 'edit_profile' %}" class="btn btn-primary mt-3">Edytuj Profil</a>
-        <a href="{% url 'change_password' %}" class="btn btn-primary mt-3">Zmień Hasło</a>
-        <a href="{% url 'logout' %}" class="btn btn-primary mt-3">Wyloguj się</a>
+        <div class="account-content">
+            <h1>Witaj, {{ user.username }}</h1>
+            <a href="{% url 'edit_profile' %}" class="btn btn-primary mt-3">Edytuj Profil</a>
+            <a href="{% url 'change_password' %}" class="btn btn-primary mt-3">Zmień Hasło</a>
+            <a href="{% url 'logout' %}" class="btn btn-primary mt-3">Wyloguj się</a>
         
-        {% if user.is_superuser %}
-            <a href="{% url 'account_management' %}" class="btn btn-primary mt-3">Zarządzanie użytkownikami</a>
-        {% endif %}
-        
+            {% if user.is_superuser %}
+                <a href="{% url 'account_management' %}" class="btn btn-primary mt-3">Zarządzanie użytkownikami</a>
+            {% endif %}
+        </div>
     {% else %}
         <!-- Treść logowania -->
         <div class="account-content container mt-4">
@@ -74,10 +76,6 @@
         </div>
     {% endif %}
 
-    <div class="flex-1">
-        <!-- Must be always empty -->
-    </div>
-
     <footer class="footer mt-auto py-3 text-center">
         <div class="container">
             <span>&copy; 2024 Blog Motoryzacyjny</span>
@@ -87,7 +85,7 @@
     <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.amazonaws.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="{% static 'js/account_actions.js' %}"></script>
 </body>
 </html>

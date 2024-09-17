@@ -31,6 +31,11 @@ urlpatterns = [
     path('change_password/', views.change_password, name='change_password'),
 
     path('account_management/', views.account_management, name='account_management'),
+    path('toggle_admin/<int:user_id>/', views.toggle_admin, name='toggle_admin'),
+    path('toggle_active/<int:user_id>/', views.toggle_active, name='toggle_active'),
+    path('delete_user/<int:user_id>/', views.delete_user, name='delete_user'),
+    path('account_management/update_role/<int:user_id>/', views.update_user_role, name='update_user_role'),
+    path('account_management/toggle_activation/<int:user_id>/', views.toggle_user_activation, name='toggle_user_activation'),
 ]
 
 # Obsługa plików multimedialnych (zdjęcia profilowe)

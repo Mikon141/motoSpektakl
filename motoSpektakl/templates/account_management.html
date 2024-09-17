@@ -12,13 +12,20 @@
     <div class="container mt-5">
         <h1>Zarządzanie użytkownikami</h1>
 
+        <!-- Formularz wyszukiwania użytkowników -->
+        <form method="GET" action="{% url 'account_management' %}">
+            <input type="text" name="search" placeholder="Wyszukaj użytkowników..." class="form-control mb-3">
+        </form>
+
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Login</th>
                     <th>E-mail</th>
+                    <th>Rola</th> <!-- Nowa kolumna -->
                     <th>Administrator</th>
+                    <th>Aktywne konto</th>
                     <th>Akcje</th>
                 </tr>
             </thead>
@@ -28,10 +35,28 @@
                     <td>{{ user.id }}</td>
                     <td>{{ user.username }}</td>
                     <td>{{ user.email }}</td>
-                    <td>{{ user.is_superuser }}</td>
                     <td>
-                        <a href="#" class="btn btn-danger">Usuń</a>
-                        <!-- Możesz dodać więcej akcji, np. zmiana roli -->
+                        {% if user.is_superuser %}
+                            Administrator
+                        {% elif user.groups.all.0.name == "Moderator" %}
+                            Moderator
+                        {% else %}
+                            Użytkownik
+                        {% endif %}
+                    </td> <!-- Wyświetlanie roli użytkownika -->
+                    <td>{{ user.is_superuser }}</td>
+                    <td>{{ user.is_active }}</td>
+                    <td>
+                        <!-- Zmiana ról -->
+                        <a href="{% url 'update_user_role' user.id %}" class="btn btn-secondary">Zmień rolę</a>
+
+                        <!-- Blokowanie/Odblokowywanie konta -->
+                        <a href="{% url 'toggle_user_activation' user.id %}" class="btn btn-info">
+                            {% if user.is_active %} Zablokuj {% else %} Odblokuj {% endif %}
+                        </a>
+
+                        <!-- Usuwanie użytkownika -->
+                        <a href="#" onclick="if(confirm('Czy na pewno chcesz usunąć tego użytkownika?')){window.location.href='{% url 'delete_user' user.id %}'}" class="btn btn-danger">Usuń</a>
                     </td>
                 </tr>
                 {% endfor %}
