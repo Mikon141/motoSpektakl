@@ -20,6 +20,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import Group
+from django.shortcuts import render, get_object_or_404
+from .models import Post
+from .forms import PostForm
 import logging
 
 # Logger do logowania błędów
@@ -271,3 +274,27 @@ def account_management(request):
     search_query = request.GET.get('search', '')
     users = User.objects.filter(username__icontains=search_query)  # Możliwość filtrowania użytkowników
     return render(request, 'account_management.html', {'users': users})
+
+# Widok bloga - lista postów
+def blog(request):
+    posts = Post.objects.all().order_by('-created_at')
+    return render(request, 'blog.html', {'posts': posts})
+
+# Widok szczegółowy dla jednego postu
+def blog_detail(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    return render(request, 'blog_detail.html', {'post': post})
+
+# Tworzenie nowego posta
+@login_required
+def blog_create(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect('blog_list')
+    else:
+        form = PostForm()
+    return render(request, 'blog_create.html', {'form': form})

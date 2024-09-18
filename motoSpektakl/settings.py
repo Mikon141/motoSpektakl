@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
+    'motoSpektakl',
     # Dodaj swoje aplikacje tutaj
 ]
 

@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.models import User
+from .models import Post
 
 # Formularz rejestracji
 class RegisterForm(UserCreationForm):
@@ -70,3 +71,8 @@ class ResetPasswordForm(SetPasswordForm):
         super(ResetPasswordForm, self).__init__(*args, **kwargs)
         self.fields['new_password1'].widget.attrs.update({'class': 'form-control'})
         self.fields['new_password2'].widget.attrs.update({'class': 'form-control'})
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content']

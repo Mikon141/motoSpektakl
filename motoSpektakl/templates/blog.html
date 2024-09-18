@@ -14,32 +14,39 @@
     <header style="background-color: var(--button-color); padding: 10px 0;"> <!-- Zmiana koloru tła nagłówka -->
         <div class="container">
             <a href="/"><h1 class="header-title">MOTOSPEKTAKL</h1></a>
-            <!-- Tutaj możesz dodać inne elementy nagłówka, jeśli są potrzebne -->
         </div>
     </header>
-<!-- Sekcja z obrazem -->
-<div class="main-image-container"></div>
 
-<div class="navigation-buttons">
-    <a href="{% url 'blog' %}">BLOG</a>
-    <a href="{% url 'forum' %}">FORUM</a>
-    <a href="{% url 'account' %}">MOJE KONTO</a>
-</div>
+    <!-- Sekcja z obrazem -->
+    <div class="main-image-container"></div>
+
+    <!-- Nawigacja -->
+    <div class="navigation-buttons">
+        <a href="{% url 'blog' %}">BLOG</a>
+        <a href="{% url 'forum' %}">FORUM</a>
+        <a href="{% url 'account' %}">MOJE KONTO</a>
+    </div>
 
     <!-- Treść bloga -->
     <div class="blog-content container mt-4">
         <h1>Witamy na Blogu Motoryzacyjnym</h1>
-        <!-- Tutaj będzie treść bloga -->
+
+        <!-- Lista postów -->
+        {% for post in posts %}
         <article>
-            <h2>Tytuł pierwszego posta</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet accumsan risus. Donec non lacus vel ipsum bibendum fermentum.</p>
+            <h2>{{ post.title }}</h2>
+            <p>Autor: {{ post.author.username }}</p>
+            <p>Data: {{ post.created_at }}</p>
+            <p>{{ post.content|slice:200 }}...</p>  <!-- Wyświetlamy tylko pierwsze 200 znaków -->
+            <a href="{% url 'blog_detail' post.id %}">Czytaj więcej</a>
         </article>
-        <!-- Dodaj więcej artykułów tutaj -->
+        {% empty %}
+        <p>Brak postów do wyświetlenia.</p>
+        {% endfor %}
     </div>
 
-    <div class="flex-1">
-        <!-- Must be always empty -->
-    </div>
+    <!-- Pusty flex dla wyrównania -->
+    <div class="flex-1"></div>
 
     <!-- Stopka strony -->
     <footer class="footer mt-auto py-3 bg-light text-center">
