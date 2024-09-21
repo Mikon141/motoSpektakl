@@ -275,9 +275,9 @@ def account_management(request):
     users = User.objects.filter(username__icontains=search_query)  # Możliwość filtrowania użytkowników
     return render(request, 'account_management.html', {'users': users})
 
-# Widok bloga - lista postów
 def blog(request):
     posts = Post.objects.all().order_by('-created_at')
+    print(posts)  # Sprawdzenie, czy posty są pobierane
     return render(request, 'blog.html', {'posts': posts})
 
 # Widok szczegółowy dla jednego postu

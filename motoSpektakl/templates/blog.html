@@ -11,45 +11,45 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body class="flex flex-col min-h-screen">
-    <header style="background-color: var(--button-color); padding: 10px 0;"> <!-- Zmiana koloru tła nagłówka -->
+    <header style="background-color: var(--button-color); padding: 10px 0;">
         <div class="container">
             <a href="/"><h1 class="header-title">MOTOSPEKTAKL</h1></a>
         </div>
     </header>
 
-    <!-- Sekcja z obrazem -->
     <div class="main-image-container"></div>
 
-    <!-- Nawigacja -->
     <div class="navigation-buttons">
         <a href="{% url 'blog' %}">BLOG</a>
         <a href="{% url 'forum' %}">FORUM</a>
         <a href="{% url 'account' %}">MOJE KONTO</a>
     </div>
 
-    <!-- Treść bloga -->
-    <div class="blog-content container mt-4">
-        <h1>Witamy na Blogu Motoryzacyjnym</h1>
-
-        <!-- Lista postów -->
-        {% for post in posts %}
-        <article>
-            <h2>{{ post.title }}</h2>
-            <p>Autor: {{ post.author.username }}</p>
-            <p>Data: {{ post.created_at }}</p>
-            <p>{{ post.content|slice:200 }}...</p>  <!-- Wyświetlamy tylko pierwsze 200 znaków -->
-            <a href="{% url 'blog_detail' post.id %}">Czytaj więcej</a>
-        </article>
-        {% empty %}
-        <p>Brak postów do wyświetlenia.</p>
-        {% endfor %}
+    <!-- Wyświetlanie postów -->
+    <div class="container mt-4">
+        <div class="row">
+            {% for post in posts %}
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm" onclick="window.location.href='{% url 'blog_detail' post.id %}'" style="cursor: pointer;">
+                    {% if post.image %}
+                        <img class="card-img-top" src="{{ post.image.url }}" alt="Zdjęcie postu">
+                    {% else %}
+                        <img class="card-img-top" src="{% static 'images/default_image.png' %}" alt="Brak zdjęcia">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p><strong>Kategoria:</strong> {{ post.get_category_display }}</p> <!-- Wyświetlanie kategorii postu -->
+                        <a href="{% url 'blog_detail' post.id %}" class="btn btn-primary">Czytaj więcej</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p>Brak postów do wyświetlenia.</p>
+            {% endfor %}
+        </div>
     </div>
 
-    <!-- Pusty flex dla wyrównania -->
-    <div class="flex-1"></div>
-
-    <!-- Stopka strony -->
-    <footer class="footer mt-auto py-3 bg-light text-center">
+    <footer class="footer mt-auto py-3 text-center">
         <div class="container">
             <span>&copy; 2024 Blog Motoryzacyjny</span>
         </div>
