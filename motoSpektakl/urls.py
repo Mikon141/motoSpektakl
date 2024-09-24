@@ -10,8 +10,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('account/', views.account, name='account'),  # Widok logowania (formularz)
-    path('blog/', views.blog, name='blog'),  # Ścieżka do widoku bloga
-    path('blog/<int:post_id>/', blog_detail, name='blog_detail'),  # Szczegóły postu
+    path('blog/', views.blog, name='blog'),
+    path('blog/<int:post_id>/', views.blog_detail, name='blog_detail'),
     path('blog/create/', blog_create, name='blog_create'),  # Tworzenie postu
     path('forum/', views.forum, name='forum'),
 

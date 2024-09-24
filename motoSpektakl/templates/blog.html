@@ -7,8 +7,8 @@
     <title>Blog Motoryzacyjny</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <!-- Zewnętrzny plik CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/blog_styles.css' %}">
 </head>
 <body class="flex flex-col min-h-screen">
     <header style="background-color: var(--button-color); padding: 10px 0;">
@@ -25,10 +25,19 @@
         <a href="{% url 'account' %}">MOJE KONTO</a>
     </div>
 
+    <!-- Filtry kategorii -->
+    <div class="container mt-4">
+        <h5>Filtruj według kategorii:</h5>
+        <a href="{% url 'blog' %}?category=nowości" class="btn btn-outline-primary">Nowości motoryzacyjne</a>
+        <a href="{% url 'blog' %}?category=recenzje" class="btn btn-outline-primary">Recenzje pojazdów</a>
+        <a href="{% url 'blog' %}?category=poradniki" class="btn btn-outline-primary">Poradniki techniczne</a>
+        <a href="{% url 'blog' %}?category=historie" class="btn btn-outline-primary">Moje prywatne historie</a>
+    </div>
+
     <!-- Wyświetlanie postów -->
     <div class="container mt-4">
         <div class="row">
-            {% for post in posts %}
+            {% for post in page_obj %}
             <div class="col-md-4">
                 <div class="card mb-4 shadow-sm" onclick="window.location.href='{% url 'blog_detail' post.id %}'" style="cursor: pointer;">
                     {% if post.image %}
@@ -49,13 +58,35 @@
         </div>
     </div>
 
+    <!-- Paginacja -->
+    <div class="container mt-4">
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if category %}&category={{ category }}{% endif %}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+                <li class="page-item disabled"><a class="page-link">Strona {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}</a></li>
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if category %}&category={{ category }}{% endif %}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
     <footer class="footer mt-auto py-3 text-center">
         <div class="container">
             <span>&copy; 2024 Blog Motoryzacyjny</span>
         </div>
     </footer>
 
-    <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

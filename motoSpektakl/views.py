@@ -21,6 +21,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import Group
 from django.shortcuts import render, get_object_or_404
+from django.core.paginator import Paginator
+from .models import Post
 from .models import Post
 from .forms import PostForm
 import logging
@@ -276,9 +278,22 @@ def account_management(request):
     return render(request, 'account_management.html', {'users': users})
 
 def blog(request):
+    category = request.GET.get('category')  # Pobieramy kategorię z parametrów URL
     posts = Post.objects.all().order_by('-created_at')
-    print(posts)  # Sprawdzenie, czy posty są pobierane
-    return render(request, 'blog.html', {'posts': posts})
+    
+    if category:
+        posts = posts.filter(category=category)  # Filtrujemy posty według kategorii
+
+    paginator = Paginator(posts, 3)  # Paginacja - 3 posty na stronę
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'blog.html', {'page_obj': page_obj, 'category': category})
+
+# Widok szczegółowy dla jednego postu
+def blog_detail(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    return render(request, 'blog_detail.html', {'post': post})
 
 # Widok szczegółowy dla jednego postu
 def blog_detail(request, post_id):

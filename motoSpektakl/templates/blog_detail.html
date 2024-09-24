@@ -18,6 +18,13 @@
 
     <div class="main-image-container"></div>
 
+    <!-- Pasek nawigacyjny przeniesiony pod obraz -->
+    <div class="navigation-buttons">
+        <a href="{% url 'blog' %}">BLOG</a>
+        <a href="{% url 'forum' %}">FORUM</a>
+        <a href="{% url 'account' %}">MOJE KONTO</a>
+    </div>
+
     <div class="container mt-4">
         <h1>{{ post.title }}</h1>
         {% if post.image %}

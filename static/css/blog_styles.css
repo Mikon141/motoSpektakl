@@ -1,0 +1,31 @@
+/* Zmiana stylu dla btn-outline-primary */
+.btn-outline-primary {
+    background-color: #007bff; /* Niebieskie tło */
+    color: white; /* Biały tekst */
+    border-color: #007bff; /* Niebieskie obramowanie */
+}
+
+/* Styl hover dla btn-outline-primary */
+.btn-outline-primary:hover {
+    background-color: #0056b3; /* Ciemniejszy niebieski na hover */
+    border-color: #0056b3; /* Zmiana koloru obramowania na hover */
+    color: white; /* Upewnienie się, że tekst pozostaje biały */
+}
+
+/* Jeszcze bardziej specyficzne selektory */
+.navigation-buttons a.btn-outline-primary:hover,
+.card-body a.btn-outline-primary:hover {
+    background-color: #0056b3 !important;
+    border-color: #0056b3 !important;
+    color: white !important;
+}
+
+/* Zmiana koloru tekstu na biały dla "Filtruj według kategorii" */
+h5 {
+    color: white;
+}
+
+/* Zmieniamy kolor tytułów w kartach postów na czarny */
+.card .card-title {
+    color: black !important;
+}
