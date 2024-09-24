@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ post.title }}</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="flex flex-col min-h-screen">
+    <header style="background-color: var(--button-color); padding: 10px 0;">
+        <div class="container">
+            <a href="/"><h1 class="header-title">MOTOSPEKTAKL</h1></a>
+        </div>
+    </header>
+
+    <div class="main-image-container"></div>
+
+    <!-- Pasek nawigacyjny przeniesiony pod obraz -->
+    <div class="navigation-buttons">
+        <a href="{% url 'blog' %}">BLOG</a>
+        <a href="{% url 'forum' %}">FORUM</a>
+        <a href="{% url 'account' %}">MOJE KONTO</a>
+    </div>
+
+    <div class="container mt-4">
+        <h1>{{ post.title }}</h1>
+        {% if post.image %}
+        <img src="{{ post.image.url }}" class="img-fluid" alt="{{ post.title }}">
+        {% endif %}
+        <p>{{ post.content }}</p>
+        <a href="{% url 'blog' %}" class="btn btn-primary">Powrót do bloga</a>
+    </div>
+
+    <div class="flex-1"></div>
+
+    <footer class="footer mt-auto py-3 text-center">
+        <div class="container">
+            <span>&copy; 2024 Blog Motoryzacyjny</span>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

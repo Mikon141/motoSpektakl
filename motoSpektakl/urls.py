@@ -4,13 +4,15 @@ from django.conf.urls.static import static
 from django.urls import path
 from . import views  # Import widoków z lokalnej aplikacji
 from django.contrib.auth import views as auth_views
-from .views import CustomPasswordResetConfirmView  # Dodajemy nasz widok resetu hasła
+from .views import CustomPasswordResetConfirmView, blog, blog_detail, blog_create  # Poprawiony import
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('account/', views.account, name='account'),  # Widok logowania (formularz)
     path('blog/', views.blog, name='blog'),
+    path('blog/<int:post_id>/', views.blog_detail, name='blog_detail'),
+    path('blog/create/', blog_create, name='blog_create'),  # Tworzenie postu
     path('forum/', views.forum, name='forum'),
 
     # Ścieżki związane z resetowaniem hasła
