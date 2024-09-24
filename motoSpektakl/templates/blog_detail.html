@@ -8,6 +8,19 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* Zmniejszamy rozmiar zdjęcia i wyśrodkowujemy */
+        .post-image {
+            display: block;
+            max-width: 50%; /* Zmniejszamy rozmiar obrazu do 50% */
+            margin: 20px auto; /* Wyśrodkowanie obrazu */
+        }
+
+        /* Biały kolor tytułu i treści */
+        h1, p {
+            color: white; /* Zmiana koloru tekstu na biały */
+        }
+    </style>
 </head>
 <body class="flex flex-col min-h-screen">
     <header style="background-color: var(--button-color); padding: 10px 0;">
@@ -18,7 +31,6 @@
 
     <div class="main-image-container"></div>
 
-    <!-- Pasek nawigacyjny przeniesiony pod obraz -->
     <div class="navigation-buttons">
         <a href="{% url 'blog' %}">BLOG</a>
         <a href="{% url 'forum' %}">FORUM</a>
@@ -28,7 +40,7 @@
     <div class="container mt-4">
         <h1>{{ post.title }}</h1>
         {% if post.image %}
-        <img src="{{ post.image.url }}" class="img-fluid" alt="{{ post.title }}">
+        <img src="{{ post.image.url }}" class="img-fluid post-image" alt="{{ post.title }}">
         {% endif %}
         <p>{{ post.content }}</p>
         <a href="{% url 'blog' %}" class="btn btn-primary">Powrót do bloga</a>

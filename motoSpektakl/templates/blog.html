@@ -28,10 +28,25 @@
     <!-- Filtry kategorii -->
     <div class="container mt-4">
         <h5>Filtruj według kategorii:</h5>
-        <a href="{% url 'blog' %}?category=nowości" class="btn btn-outline-primary">Nowości motoryzacyjne</a>
-        <a href="{% url 'blog' %}?category=recenzje" class="btn btn-outline-primary">Recenzje pojazdów</a>
-        <a href="{% url 'blog' %}?category=poradniki" class="btn btn-outline-primary">Poradniki techniczne</a>
-        <a href="{% url 'blog' %}?category=historie" class="btn btn-outline-primary">Moje prywatne historie</a>
+        <div class="d-flex flex-wrap mb-2">
+            <a href="{% url 'blog' %}?category=nowości" class="btn btn-outline-primary flex-fill mb-2 mr-2">Nowości motoryzacyjne</a>
+            <a href="{% url 'blog' %}?category=recenzje" class="btn btn-outline-primary flex-fill mb-2 mr-2">Recenzje pojazdów</a>
+            <a href="{% url 'blog' %}?category=poradniki" class="btn btn-outline-primary flex-fill mb-2 mr-2">Poradniki techniczne</a>
+            <a href="{% url 'blog' %}?category=historie" class="btn btn-outline-primary flex-fill mb-2 mr-2">Moje prywatne historie</a>
+        </div>
+
+        <!-- Wyszukiwarka -->
+        <form method="GET" action="{% url 'blog' %}">
+            <div class="form-group">
+                <input type="text" name="search" class="form-control" placeholder="Szukaj artykułów..." value="{{ search_query|default_if_none:'' }}">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Szukaj</button>
+        </form>
+
+        <!-- Sprawdzenie, czy jest aktywne wyszukiwanie -->
+        {% if search_query %}
+            <p class="mt-3" style="color: white;">Wyniki wyszukiwania dla: <strong>{{ search_query }}</strong></p>
+        {% endif %}
     </div>
 
     <!-- Wyświetlanie postów -->
@@ -47,13 +62,13 @@
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ post.title }}</h5>
-                        <p><strong>Kategoria:</strong> {{ post.get_category_display }}</p> <!-- Wyświetlanie kategorii postu -->
+                        <p><strong>Kategoria:</strong> {{ post.get_category_display }}</p>
                         <a href="{% url 'blog_detail' post.id %}" class="btn btn-primary">Czytaj więcej</a>
                     </div>
                 </div>
             </div>
             {% empty %}
-            <p>Brak postów do wyświetlenia.</p>
+            <p style="color: white;">Brak postów do wyświetlenia.</p>
             {% endfor %}
         </div>
     </div>

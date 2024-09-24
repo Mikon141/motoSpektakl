@@ -22,6 +22,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import Group
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
+from django.db.models import Q  # Importowanie narzędzia do wyszukiwania
 from .models import Post
 from .models import Post
 from .forms import PostForm
@@ -313,3 +314,25 @@ def blog_create(request):
     else:
         form = PostForm()
     return render(request, 'blog_create.html', {'form': form})
+
+def blog(request):
+    category = request.GET.get('category')  # Pobieranie kategorii z URL
+    search_query = request.GET.get('search')  # Pobieranie zapytania wyszukiwania z URL
+
+    posts = Post.objects.all().order_by('-created_at')
+
+    # Filtrujemy według kategorii, jeśli jest podana
+    if category:
+        posts = posts.filter(category=category)
+    
+    # Filtrujemy według zapytania wyszukiwania, jeśli jest podane
+    if search_query:
+        posts = posts.filter(
+            Q(title__icontains=search_query) | Q(content__icontains=search_query)
+        )
+
+    paginator = Paginator(posts, 3)  # Paginacja - 3 posty na stronę
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'blog.html', {'page_obj': page_obj, 'category': category, 'search_query': search_query})
