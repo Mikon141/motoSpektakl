@@ -1,139 +1,29 @@
-/* Globalne ustawienia dla kontenerów i formularzy */
-.account-content,
+/* Ustawienie szerokości głównego kontenera dla sekcji logowania */
 .auth-container,
+.account-content,
 .register-container {
-    max-width: 600px; /* Ustalenie maksymalnej szerokości kontenera */
-    width: 100%; /* Dopasowanie do szerokości */
-    margin: 0 auto; /* Wyśrodkowanie kontenera */
+    width: 100%; /* Pełna szerokość */
+    max-width: 600px; /* Delikatne zwiększenie maksymalnej szerokości */
+    margin: 0 auto; /* Wyśrodkowanie sekcji */
+    padding: 15px; /* Dodatkowy padding */
+    box-sizing: border-box; /* Uwzględnienie paddingu w szerokości */
 }
 
-/* Stylowanie inputów, aby były jednakowe w całej aplikacji */
-.account-content .form-control,
-.auth-container .form-control,
-.register-container .form-control {
-    width: 100%;
-    max-width: 600px; /* Maksymalna szerokość inputów */
-    margin: 0 auto 15px auto; /* Dodanie marginesów i wyśrodkowanie */
-    padding: 12px;
-    font-size: 16px;
-}
-
-/* Stylowanie przycisków, aby pasowały do inputów */
-.account-content .btn-primary,
+/* Ustawienie szerokości przycisków i inputów wewnątrz kontenera */
 .auth-container .btn-primary,
+.account-content .btn-primary,
 .register-container .btn-primary,
-.btn-primary {
-    width: 100%; /* Ustawienie szerokości na 100% */
-    max-width: 600px; /* Ustawienie maksymalnej szerokości */
-    padding: 12px; /* Dodanie paddingu */
-    margin: 15px auto; /* Dodanie marginesów */
-    font-size: 16px;
-    font-weight: bold;
+.auth-container .form-control,
+.account-content .form-control,
+.register-container .form-control {
+    width: 100%; /* Pełna szerokość */
+    max-width: 600px; /* Zwiększenie maksymalnej szerokości */
+    margin: 10px auto; /* Środkowanie i dodanie marginesu */
     display: block; /* Wyświetlanie jako blok */
     text-align: center; /* Wyśrodkowanie tekstu */
 }
 
-/* Dodatkowe ustawienia dla przycisków po zalogowaniu */
+/* Upewnienie się, że przyciski są dostosowane do zwiększonej szerokości */
 .account-content .btn-primary {
-    background-color: #007bff; /* Kolor tła */
-    color: white; /* Kolor tekstu */
-    border: none; /* Usunięcie obramowania */
-    padding: 12px; /* Ustawienie paddingu */
-}
-
-/* Hover dla przycisków po zalogowaniu */
-.account-content .btn-primary:hover {
-    background-color: #0056b3; /* Kolor tła przy hover */
-    color: white;
-}
-
-/* Hover i focus dla globalnych przycisków */
-.btn-primary:hover,
-.btn-primary:focus {
-    background-color: #0056b3;
-    color: white;
-}
-
-/* Stylizacja nagłówków */
-.account-content h1,
-.auth-container h1,
-.register-container h1 {
-    text-align: center;
-    color: white;
-    margin-bottom: 20px;
-}
-
-/* Stylizacja kontenerów logowania i rejestracji */
-.auth-container,
-.register-container {
-    padding: 20px;
-    border-radius: 8px;
-    background-color: var(--background-color); /* Ustawienie koloru tła */
-}
-
-/* Stylizacja przycisków w nagłówku */
-.navigation-buttons a {
-    width: 100%;
-    max-width: 600px;
-    display: block;
-    padding: 15px 20px;
-    margin: 15px auto;
-    background-color: #e9522f; /* Kolor przycisków */
-    color: white;
-    font-weight: bold;
-    text-align: center;
-}
-
-/* Stylizacja przycisków w nagłówku przy hover */
-.navigation-buttons a:hover {
-    background-color: #c74327;
-    color: white;
-}
-
-/* Wyrównanie marginesów i paddingów */
-h1,
-h5,
-p {
-    margin: 20px auto;
-    padding: 0;
-}
-
-/* Stylizacja dla kontenera wiadomości */
-.messages {
-    max-width: 600px;
-    margin: 20px auto;
-}
-
-/* Stylizacja alertów */
-.alert {
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 4px;
-}
-
-.alert-success {
-    background-color: #d4edda;
-    border-color: #c3e6cb;
-    color: #155724;
-}
-
-.alert-danger {
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
-    color: #721c24;
-}
-
-/* Stylizacja dla strony logowania */
-.auth-container h1 {
-    font-size: 2rem;
-    margin: 20px auto;
-    text-align: center;
-}
-
-/* Usunięcie odstępów i marginesów */
-form,
-div,
-section {
-    padding: 0;
-    margin: 0;
+    padding: 12px 20px; /* Dopasowanie paddingu dla mniejszych przycisków */
 }

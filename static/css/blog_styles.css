@@ -55,6 +55,7 @@ body {
     margin: 15px auto; /* Margines */
     display: block;
     text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 /* Hover efekt dla przycisków */
@@ -62,6 +63,19 @@ body {
 .auth-container .btn-primary:hover,
 .register-container .btn-primary:hover {
     background-color: var(--hover-color); /* Zmiana koloru na hover */
+}
+
+/* Stylowanie dla przycisków .btn-outline-primary */
+.btn-outline-primary {
+    background-color: var(--primary-color); /* Ustawienie domyślnego niebieskiego koloru */
+    color: var(--text-color); /* Biały tekst */
+    border: 1px solid var(--primary-color); /* Dopasowanie obramowania do koloru przycisku */
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--hover-color); /* Zmiana koloru na hover */
+    border-color: var(--hover-color); /* Dopasowanie obramowania do hovera */
+    color: var(--text-color); /* Utrzymanie białego tekstu */
 }
 
 /* Stylowanie linków */
@@ -110,9 +124,16 @@ input[type="file"]::-webkit-file-upload-button {
     background-color: var(--primary-color);
     color: var(--text-color);
     cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Hover efekt dla przycisku w input file */
 input[type="file"]::-webkit-file-upload-button:hover {
     background-color: var(--hover-color);
+    color: var(--text-color); /* Utrzymanie białego koloru tekstu */
+}
+
+/* Zmiana koloru tekstu nagłówków h5 na biały */
+.container h5 {
+    color: var(--text-color); /* Biały kolor */
 }
