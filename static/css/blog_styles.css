@@ -29,3 +29,19 @@ h5 {
 .card .card-title {
     color: black !important;
 }
+/* Stylowanie przycisków sortowania, aby były spójne z kategoriami */
+.btn-sort {
+    background-color: #007bff !important;
+    border-color: #007bff !important;
+    color: #ffffff !important;
+    margin: 0 5px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.btn-sort:hover {
+    background-color: #0056b3 !important;
+    border-color: #0056b3 !important;
+}

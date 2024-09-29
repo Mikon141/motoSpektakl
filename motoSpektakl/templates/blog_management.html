@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zarządzanie Blogiem</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        /* Stylizacja tabeli i strony */
+        body {
+            background-color: #fff; /* Białe tło */
+            color: #333; /* Kolor tekstu */
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        .table thead th {
+            background-color: #f8f9fa; /* Tło nagłówków tabeli */
+        }
+
+        .table tbody tr:hover {
+            background-color: #f1f1f1; /* Kolor tła podczas najechania */
+        }
+
+        .btn {
+            font-size: 0.875rem;
+            margin: 0 5px;
+        }
+
+        .table td, .table th {
+            vertical-align: middle; /* Wyśrodkowanie tekstu w pionie */
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-bar input {
+            max-width: 300px;
+        }
+
+        .back-btn {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Zarządzanie Blogiem</h2>
+        
+        <!-- Wyszukiwarka postów -->
+        <div class="search-bar">
+            <input type="text" class="form-control" placeholder="Wyszukaj posty...">
+        </div>
+
+        <!-- Tabela postów -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tytuł</th>
+                    <th>Autor</th>
+                    <th>Kategoria</th>
+                    <th>Data Publikacji</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                <tr>
+                    <td>{{ post.id }}</td>
+                    <td>{{ post.title }}</td>
+                    <td>{{ post.author.username }}</td>
+                    <td>{{ post.get_category_display }}</td>
+                    <td>{{ post.created_at|date:"d M Y" }}</td>
+                    <td>
+                        <a href="{% url 'blog_detail' post.id %}" class="btn btn-info">Podgląd</a>
+                        <a href="{% url 'edit_post' post.id %}" class="btn btn-warning">Edytuj</a>
+                        <a href="{% url 'delete_post' post.id %}" class="btn btn-danger" onclick="return confirm('Czy na pewno chcesz usunąć ten post?');">Usuń</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">Brak postów do wyświetlenia.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Przycisk powrotu do konta -->
+        <div class="text-center back-btn">
+            <a href="{% url 'account' %}" class="btn btn-primary">Powrót do konta</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

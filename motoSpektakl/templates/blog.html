@@ -28,25 +28,17 @@
     <!-- Filtry kategorii -->
     <div class="container mt-4">
         <h5>Filtruj według kategorii:</h5>
-        <div class="d-flex flex-wrap mb-2">
-            <a href="{% url 'blog' %}?category=nowości" class="btn btn-outline-primary flex-fill mb-2 mr-2">Nowości motoryzacyjne</a>
-            <a href="{% url 'blog' %}?category=recenzje" class="btn btn-outline-primary flex-fill mb-2 mr-2">Recenzje pojazdów</a>
-            <a href="{% url 'blog' %}?category=poradniki" class="btn btn-outline-primary flex-fill mb-2 mr-2">Poradniki techniczne</a>
-            <a href="{% url 'blog' %}?category=historie" class="btn btn-outline-primary flex-fill mb-2 mr-2">Moje prywatne historie</a>
-        </div>
+        <a href="{% url 'blog' %}?category=nowości" class="btn btn-outline-primary">Nowości motoryzacyjne</a>
+        <a href="{% url 'blog' %}?category=recenzje" class="btn btn-outline-primary">Recenzje pojazdów</a>
+        <a href="{% url 'blog' %}?category=poradniki" class="btn btn-outline-primary">Poradniki techniczne</a>
+        <a href="{% url 'blog' %}?category=historie" class="btn btn-outline-primary">Moje prywatne historie</a>
+    </div>
 
-        <!-- Wyszukiwarka -->
-        <form method="GET" action="{% url 'blog' %}">
-            <div class="form-group">
-                <input type="text" name="search" class="form-control" placeholder="Szukaj artykułów..." value="{{ search_query|default_if_none:'' }}">
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Szukaj</button>
-        </form>
-
-        <!-- Sprawdzenie, czy jest aktywne wyszukiwanie -->
-        {% if search_query %}
-            <p class="mt-3" style="color: white;">Wyniki wyszukiwania dla: <strong>{{ search_query }}</strong></p>
-        {% endif %}
+    <!-- Sortowanie postów -->
+    <div class="container mt-4">
+        <h5>Sortuj według:</h5>
+        <a href="{% url 'blog' %}?sort_order=oldest{% if category %}&category={{ category }}{% endif %}" class="btn btn-outline-primary btn-sort {% if sort_order == 'oldest' %}active{% endif %}">Od najstarszych</a>
+        <a href="{% url 'blog' %}?sort_order=newest{% if category %}&category={{ category }}{% endif %}" class="btn btn-outline-primary btn-sort {% if sort_order == 'newest' %}active{% endif %}">Od najnowszych</a>
     </div>
 
     <!-- Wyświetlanie postów -->
@@ -63,6 +55,8 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ post.title }}</h5>
                         <p><strong>Kategoria:</strong> {{ post.get_category_display }}</p>
+                        <p><strong>Autor:</strong> {{ post.author.username }}</p>
+                        <p><strong>Data publikacji:</strong> {{ post.created_at|date:"d M Y" }}</p>
                         <a href="{% url 'blog_detail' post.id %}" class="btn btn-primary">Czytaj więcej</a>
                     </div>
                 </div>
@@ -79,7 +73,7 @@
             <ul class="pagination justify-content-center">
                 {% if page_obj.has_previous %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if category %}&category={{ category }}{% endif %}" aria-label="Previous">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if category %}&category={{ category }}{% endif %}&sort_order={{ sort_order }}" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
@@ -87,7 +81,7 @@
                 <li class="page-item disabled"><a class="page-link">Strona {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}</a></li>
                 {% if page_obj.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if category %}&category={{ category }}{% endif %}" aria-label="Next">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if category %}&category={{ category }}{% endif %}&sort_order={{ sort_order }}" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>

@@ -13,6 +13,13 @@ urlpatterns = [
     path('blog/', views.blog, name='blog'),
     path('blog/<int:post_id>/', views.blog_detail, name='blog_detail'),
     path('blog/create/', blog_create, name='blog_create'),  # Tworzenie postu
+    path('blog/<int:post_id>/like/', views.add_vote, {'vote_type': 'like'}, name='post_like'),
+    path('blog/<int:post_id>/dislike/', views.add_vote, {'vote_type': 'dislike'}, name='post_dislike'),
+    
+    # Ścieżki edytowania i usuwania postów
+    path('blog/<int:post_id>/edit/', views.edit_post, name='edit_post'),
+    path('blog/<int:post_id>/delete/', views.delete_post, name='delete_post'),
+
     path('forum/', views.forum, name='forum'),
 
     # Ścieżki związane z resetowaniem hasła
@@ -38,6 +45,13 @@ urlpatterns = [
     path('delete_user/<int:user_id>/', views.delete_user, name='delete_user'),
     path('account_management/update_role/<int:user_id>/', views.update_user_role, name='update_user_role'),
     path('account_management/toggle_activation/<int:user_id>/', views.toggle_user_activation, name='toggle_user_activation'),
+
+    # Panel zarządzania blogiem
+    path('blog_management/', views.blog_management, name='blog_management'),
+
+    # Ścieżki edytowania i usuwania komentarzy
+    path('comment/edit/<int:comment_id>/', views.comment_edit, name='comment_edit'),
+    path('comment/delete/<int:comment_id>/', views.comment_delete, name='comment_delete'),
 ]
 
 # Obsługa plików multimedialnych (zdjęcia profilowe)
