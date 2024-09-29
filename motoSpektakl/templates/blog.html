@@ -37,8 +37,8 @@
     <!-- Sortowanie postów -->
     <div class="container mt-4">
         <h5>Sortuj według:</h5>
-        <a href="{% url 'blog' %}?sort_order=oldest{% if category %}&category={{ category }}{% endif %}" class="btn btn-outline-primary btn-sort {% if sort_order == 'oldest' %}active{% endif %}">Od najstarszych</a>
-        <a href="{% url 'blog' %}?sort_order=newest{% if category %}&category={{ category }}{% endif %}" class="btn btn-outline-primary btn-sort {% if sort_order == 'newest' %}active{% endif %}">Od najnowszych</a>
+        <a href="{% url 'blog' %}?sort_order=oldest{% if category %}&category={{ category }}{% endif %}" class="btn btn-outline-primary btn-sort {% if sort_order == 'oldest' %}active{% endif %}" style="text-transform: capitalize;">Od najstarszych</a>
+        <a href="{% url 'blog' %}?sort_order=newest{% if category %}&category={{ category }}{% endif %}" class="btn btn-outline-primary btn-sort {% if sort_order == 'newest' %}active{% endif %}" style="text-transform: capitalize;">Od najnowszych</a>
     </div>
 
     <!-- Wyświetlanie postów -->

@@ -1,47 +1,118 @@
-/* Zmiana stylu dla btn-outline-primary */
-.btn-outline-primary {
-    background-color: #007bff; /* Niebieskie tło */
-    color: white; /* Biały tekst */
-    border-color: #007bff; /* Niebieskie obramowanie */
+/* Ustawienia globalne */
+:root {
+    --primary-color: #007bff; /* Kolor podstawowy */
+    --hover-color: #0056b3; /* Kolor przycisków na hover */
+    --text-color: #ffffff; /* Kolor tekstu */
+    --background-color: #263238; /* Kolor tła */
+    --button-width: 400px; /* Szerokość przycisków */
+    --padding: 12px; /* Padding dla elementów */
 }
 
-/* Styl hover dla btn-outline-primary */
-.btn-outline-primary:hover {
-    background-color: #0056b3; /* Ciemniejszy niebieski na hover */
-    border-color: #0056b3; /* Zmiana koloru obramowania na hover */
-    color: white; /* Upewnienie się, że tekst pozostaje biały */
+/* Stylowanie ciała strony */
+body {
+    background: var(--background-color);
+    font-family: Arial, sans-serif;
+    margin: 0;
 }
 
-/* Jeszcze bardziej specyficzne selektory */
-.navigation-buttons a.btn-outline-primary:hover,
-.card-body a.btn-outline-primary:hover {
-    background-color: #0056b3 !important;
-    border-color: #0056b3 !important;
-    color: white !important;
+/* Stylowanie kontenerów */
+.account-content,
+.auth-container,
+.register-container {
+    max-width: var(--button-width); /* Stała szerokość kontenerów */
+    margin: 50px auto; /* Wyśrodkowanie */
+    padding: 20px;
+    background-color: var(--background-color);
+    border-radius: 8px;
+    color: var(--text-color);
 }
 
-/* Zmiana koloru tekstu na biały dla "Filtruj według kategorii" */
-h5 {
-    color: white;
+/* Stylowanie inputów */
+.account-content .form-control,
+.auth-container .form-control,
+.register-container .form-control {
+    width: 100%; /* Pełna szerokość */
+    max-width: var(--button-width); /* Stała szerokość */
+    padding: var(--padding);
+    margin: 15px auto; /* Marginesy */
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-/* Zmieniamy kolor tytułów w kartach postów na czarny */
-.card .card-title {
-    color: black !important;
-}
-/* Stylowanie przycisków sortowania, aby były spójne z kategoriami */
-.btn-sort {
-    background-color: #007bff !important;
-    border-color: #007bff !important;
-    color: #ffffff !important;
-    margin: 0 5px;
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-transform: uppercase;
+/* Stylowanie przycisków */
+.account-content .btn-primary,
+.auth-container .btn-primary,
+.register-container .btn-primary {
+    width: 100%; /* Pełna szerokość */
+    max-width: var(--button-width); /* Stała szerokość */
+    padding: var(--padding);
+    background-color: var(--primary-color);
+    color: var(--text-color);
     font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 15px auto; /* Margines */
+    display: block;
+    text-align: center;
 }
 
-.btn-sort:hover {
-    background-color: #0056b3 !important;
-    border-color: #0056b3 !important;
+/* Hover efekt dla przycisków */
+.account-content .btn-primary:hover,
+.auth-container .btn-primary:hover,
+.register-container .btn-primary:hover {
+    background-color: var(--hover-color); /* Zmiana koloru na hover */
+}
+
+/* Stylowanie linków */
+.account-content a,
+.auth-container a,
+.register-container a {
+    text-decoration: none;
+    color: var(--primary-color);
+    margin: 15px auto;
+    display: block;
+    text-align: center;
+}
+
+/* Stylowanie nagłówków */
+.account-content h1,
+.auth-container h2,
+.register-container h2 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: var(--text-color);
+}
+
+/* Stylowanie alertów */
+.alert {
+    max-width: var(--button-width); /* Stała szerokość */
+    margin: 15px auto;
+    padding: var(--padding);
+    border-radius: 4px;
+}
+
+/* Input typu plik */
+input[type="file"] {
+    width: 100%;
+    max-width: var(--button-width);
+    padding: var(--padding);
+    margin: 15px auto;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Nadpisanie stylu przycisku w input file */
+input[type="file"]::-webkit-file-upload-button {
+    padding: var(--padding);
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+/* Hover efekt dla przycisku w input file */
+input[type="file"]::-webkit-file-upload-button:hover {
+    background-color: var(--hover-color);
 }
