@@ -8,17 +8,13 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/blog_styles.css' %}">
     <style>
-        /* Zmniejszamy rozmiar zdjęcia i wyśrodkowujemy */
-        .post-image {
-            display: block;
-            max-width: 50%; /* Zmniejszamy rozmiar obrazu do 50% */
-            margin: 20px auto; /* Wyśrodkowanie obrazu */
-        }
-
-        /* Biały kolor tytułu i treści */
-        h1, p {
-            color: white; /* Zmiana koloru tekstu na biały */
+        /* Dodatkowe style dla zdjęcia */
+        .img-fluid {
+            max-width: 50%; /* Zmniejszamy obraz do 50% szerokości */
+            display: block; /* Wyświetlamy obraz jako blokowy element */
+            margin: 0 auto; /* Wyśrodkowanie obrazu */
         }
     </style>
 </head>
@@ -31,22 +27,73 @@
 
     <div class="main-image-container"></div>
 
+    <!-- Przyciski nawigacyjne -->
     <div class="navigation-buttons">
         <a href="{% url 'blog' %}">BLOG</a>
         <a href="{% url 'forum' %}">FORUM</a>
         <a href="{% url 'account' %}">MOJE KONTO</a>
     </div>
 
+    <!-- Szczegółowy widok postu -->
     <div class="container mt-4">
-        <h1>{{ post.title }}</h1>
+        <h1 style="color:white">{{ post.title }}</h1>
+        <!-- Informacje o autorze, dacie publikacji i liczbie komentarzy -->
+        <div class="post-details" style="color:white; font-size: 1.2rem; margin-bottom: 20px;">
+            <p><strong>Autor:</strong> {{ post.author.username }}</p>
+            <p><strong>Data publikacji:</strong> {{ post.created_at|date:"d M Y" }}</p>
+            <p><strong>Liczba komentarzy:</strong> {{ comments.count }}</p>
+        </div>
+
+        <!-- Zdjęcie postu -->
         {% if post.image %}
-        <img src="{{ post.image.url }}" class="img-fluid post-image" alt="{{ post.title }}">
+        <img src="{{ post.image.url }}" class="img-fluid" alt="{{ post.title }}">
         {% endif %}
-        <p>{{ post.content }}</p>
+
+        <!-- Treść postu -->
+        <p style="color:white">{{ post.content }}</p>
+
+        <!-- Przycisk do bloga -->
         <a href="{% url 'blog' %}" class="btn btn-primary">Powrót do bloga</a>
+
+        <!-- Przyciski głosowania -->
+        {% if user.is_authenticated %}
+        <div class="vote-buttons mt-4">
+            <a href="{% url 'post_like' post.id %}" class="btn btn-success">Fajne ({{ post.likes }})</a>
+            <a href="{% url 'post_dislike' post.id %}" class="btn btn-danger">Nie fajne ({{ post.dislikes }})</a>
+        </div>
+        {% else %}
+        <p style="color:white">Musisz być zalogowany, aby ocenić post.</p>
+        {% endif %}
     </div>
 
-    <div class="flex-1"></div>
+    <!-- Sekcja komentarzy -->
+    <div class="container mt-4">
+        <h4 style="color:white">Komentarze:</h4>
+        <div class="mb-4">
+            {% for comment in comments %}
+            <div class="comment mb-3 p-3 bg-light">
+                <strong>{{ comment.author.username }}</strong> napisał(a):
+                <p>{{ comment.content }}</p>
+                <small>{{ comment.created_at }}</small>
+            </div>
+            {% empty %}
+            <p style="color:white">Brak komentarzy. Bądź pierwszym, który skomentuje!</p>
+            {% endfor %}
+        </div>
+
+        <!-- Formularz dodawania komentarzy -->
+        {% if user.is_authenticated %}
+        <h4 style="color:white">Twój komentarz:</h4>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.non_field_errors }} <!-- Wyświetla błędy formularza -->
+            {{ form.content }} <!-- Wyświetlamy pole formularza bez etykiety -->
+            <button type="submit" class="btn btn-primary">Dodaj komentarz</button>
+        </form>
+        {% else %}
+        <p style="color:white">Musisz być zalogowany, aby dodać komentarz.</p>
+        {% endif %}
+    </div>
 
     <footer class="footer mt-auto py-3 text-center">
         <div class="container">

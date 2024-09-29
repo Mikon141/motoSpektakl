@@ -1,8 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, update_session_auth_hash
 from django.contrib.auth.views import PasswordResetConfirmView
-from .forms import RegisterForm, EditProfileForm, EditPasswordForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.auth import views as auth_views
 from django.core.mail import send_mail
 from django.conf import settings
@@ -16,16 +15,15 @@ from django.contrib import messages
 from smtplib import SMTPException
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth.models import Group
-from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator
 from django.db.models import Q  # Importowanie narzędzia do wyszukiwania
-from .models import Post
-from .models import Post
-from .forms import PostForm
+from .models import Post, Comment
+from .forms import PostForm, CommentForm
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Post, Comment, Vote
+from .forms import RegisterForm, EditProfileForm, EditPasswordForm
 import logging
 
 # Logger do logowania błędów
@@ -279,27 +277,51 @@ def account_management(request):
     return render(request, 'account_management.html', {'users': users})
 
 def blog(request):
-    category = request.GET.get('category')  # Pobieramy kategorię z parametrów URL
-    posts = Post.objects.all().order_by('-created_at')
-    
-    if category:
-        posts = posts.filter(category=category)  # Filtrujemy posty według kategorii
+    category = request.GET.get('category')  # Pobranie wybranej kategorii z URL
+    sort_order = request.GET.get('sort_order')  # Pobranie wybranego porządku sortowania z URL
 
-    paginator = Paginator(posts, 3)  # Paginacja - 3 posty na stronę
+    posts = Post.objects.all()
+
+    # Filtrowanie według kategorii, jeśli podano
+    if category:
+        posts = posts.filter(category=category)
+
+    # Sortowanie według wybranej opcji
+    if sort_order == 'oldest':
+        posts = posts.order_by('created_at')  # Sortuj od najstarszych
+    else:  # Default lub gdy sort_order == 'newest'
+        posts = posts.order_by('-created_at')  # Sortuj od najnowszych
+
+    # Paginacja - 3 posty na stronę
+    paginator = Paginator(posts, 3)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'blog.html', {'page_obj': page_obj, 'category': category})
+    context = {
+        'page_obj': page_obj,
+        'category': category,
+        'sort_order': sort_order,
+    }
 
-# Widok szczegółowy dla jednego postu
+    return render(request, 'blog.html', context)
+
 def blog_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    return render(request, 'blog_detail.html', {'post': post})
+    comments = post.comments.all()  # Pobieramy wszystkie komentarze dla danego posta
+    
+    # Obsługa dodawania komentarza
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+            return redirect('blog_detail', post_id=post.id)
+    else:
+        form = CommentForm()
 
-# Widok szczegółowy dla jednego postu
-def blog_detail(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
-    return render(request, 'blog_detail.html', {'post': post})
+    return render(request, 'blog_detail.html', {'post': post, 'comments': comments, 'form': form})
 
 # Tworzenie nowego posta
 @login_required
@@ -315,24 +337,142 @@ def blog_create(request):
         form = PostForm()
     return render(request, 'blog_create.html', {'form': form})
 
-def blog(request):
-    category = request.GET.get('category')  # Pobieranie kategorii z URL
-    search_query = request.GET.get('search')  # Pobieranie zapytania wyszukiwania z URL
+def post_like(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    post.likes += 1
+    post.save()
+    return redirect('blog_detail', post_id=post.id)
 
-    posts = Post.objects.all().order_by('-created_at')
+def post_dislike(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    post.dislikes += 1
+    post.save()
+    return redirect('blog_detail', post_id=post.id)
 
-    # Filtrujemy według kategorii, jeśli jest podana
-    if category:
-        posts = posts.filter(category=category)
-    
-    # Filtrujemy według zapytania wyszukiwania, jeśli jest podane
-    if search_query:
-        posts = posts.filter(
-            Q(title__icontains=search_query) | Q(content__icontains=search_query)
-        )
+@login_required
+def add_vote(request, post_id, vote_type):
+    post = get_object_or_404(Post, id=post_id)
+    existing_vote = Vote.objects.filter(post=post, user=request.user).first()
 
-    paginator = Paginator(posts, 3)  # Paginacja - 3 posty na stronę
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    # Sprawdzamy, czy użytkownik już zagłosował
+    if existing_vote:
+        # Jeśli istnieje głos i użytkownik zagłosował na coś innego, aktualizujemy
+        if existing_vote.vote_type != vote_type:
+            if vote_type == 'like':
+                post.add_like()
+                post.remove_dislike()
+            else:
+                post.add_dislike()
+                post.remove_like()
+            existing_vote.vote_type = vote_type
+            existing_vote.save()
+    else:
+        # Jeśli nie ma istniejącego głosu, dodajemy nowy głos
+        Vote.objects.create(post=post, user=request.user, vote_type=vote_type)
+        if vote_type == 'like':
+            post.add_like()
+        else:
+            post.add_dislike()
 
-    return render(request, 'blog.html', {'page_obj': page_obj, 'category': category, 'search_query': search_query})
+    return redirect('blog_detail', post_id=post_id)
+
+# Widok dla panelu administracyjnego (admin_panel)
+@login_required
+@user_passes_test(lambda user: user.is_staff or user.is_superuser)  # Tylko admin i moderator mogą mieć dostęp
+def admin_panel(request):
+    posts = Post.objects.all()
+    comments = Comment.objects.all()
+    return render(request, 'admin_panel.html', {'posts': posts, 'comments': comments})
+
+# Widok edytowania komentarza
+@login_required
+def comment_edit(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    # Sprawdzenie, czy użytkownik jest autorem komentarza lub adminem
+    if request.user != comment.author and not request.user.is_staff:
+        return HttpResponse("Nie masz uprawnień do edytowania tego komentarza.", status=403)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            return redirect('blog_detail', post_id=comment.post.id)
+    else:
+        form = CommentForm(instance=comment)
+    return render(request, 'edit_comment.html', {'form': form, 'comment': comment})
+
+# Widok usuwania komentarza
+@login_required
+def comment_delete(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    # Sprawdzenie, czy użytkownik jest autorem komentarza lub adminem
+    if request.user != comment.author and not request.user.is_staff:
+        return HttpResponse("Nie masz uprawnień do usunięcia tego komentarza.", status=403)
+
+    post_id = comment.post.id
+    comment.delete()
+    return redirect('blog_detail', post_id=post_id)
+
+from django.shortcuts import render
+from django.contrib.admin.views.decorators import staff_member_required
+
+@staff_member_required
+def blog_management(request):
+    posts = Post.objects.all()  # Pobierz wszystkie posty
+    comments = Comment.objects.all()  # Pobierz wszystkie komentarze
+    return render(request, 'blog_management.html', {'posts': posts, 'comments': comments})
+
+
+@staff_member_required
+def edit_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('blog_detail', post_id=post.id)
+    else:
+        form = PostForm(instance=post)
+
+    return render(request, 'edit_post.html', {'form': form, 'post': post})
+
+@staff_member_required
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    post.delete()
+    return redirect('blog_management')
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.admin.views.decorators import staff_member_required
+from .models import Post
+from .forms import PostForm
+
+# Widok edycji postu
+@staff_member_required
+def edit_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('blog_detail', post_id=post.id)
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'edit_post.html', {'form': form, 'post': post})
+
+# Widok usuwania postu
+@staff_member_required
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    post.delete()
+    return redirect('blog_management')
+
+from django.contrib.admin.views.decorators import staff_member_required
+from django.shortcuts import render, get_object_or_404
+from .models import Post
+
+@staff_member_required
+def blog_management(request):
+    posts = Post.objects.all()
+    return render(request, 'blog_management.html', {'posts': posts})

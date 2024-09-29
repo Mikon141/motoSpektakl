@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.models import User
 from .models import Post
+from django import forms
+from .models import Comment
 
 # Formularz rejestracji
 class RegisterForm(UserCreationForm):
@@ -76,3 +78,14 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'content']
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }
+        labels = {
+            'content': 'Twój komentarz',
+        }

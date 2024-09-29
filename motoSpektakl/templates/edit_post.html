@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edytuj Post</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #fff; /* Białe tło */
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            margin-top: 40px;
+            max-width: 600px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            font-size: 1rem;
+            margin: 5px;
+        }
+
+        .btn-primary, .btn-secondary {
+            width: 100%; /* Przycisk na całą szerokość */
+            margin-bottom: 10px; /* Odstęp między przyciskami */
+        }
+
+        .back-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            color: #fff;
+            background-color: #6c757d;
+            border: none;
+            padding: 10px;
+            margin-top: 20px;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Edytuj Post</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="title">Tytuł:</label>
+                <input type="text" id="title" name="title" class="form-control" value="{{ post.title }}" required>
+            </div>
+            <div class="form-group">
+                <label for="content">Treść:</label>
+                <textarea id="content" name="content" rows="10" class="form-control" required>{{ post.content }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="category">Kategoria:</label>
+                <select id="category" name="category" class="form-control">
+                    {% for key, value in post.CATEGORY_CHOICES %}
+                        <option value="{{ key }}" {% if post.category == key %}selected{% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="image">Obecne zdjęcie:</label><br>
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="Zdjęcie postu" class="img-fluid mb-3" style="max-width: 100%;">
+                {% else %}
+                    <p>Brak zdjęcia</p>
+                {% endif %}
+                <label for="image">Zmień zdjęcie:</label>
+                <input type="file" id="image" name="image" class="form-control">
+            </div>
+
+            <!-- Przycisk zapisywania zmian -->
+            <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+
+            <!-- Przycisk anulowania -->
+            <a href="{% url 'blog_management' %}" class="back-btn">Anuluj</a>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
