@@ -476,3 +476,16 @@ from .models import Post
 def blog_management(request):
     posts = Post.objects.all()
     return render(request, 'blog_management.html', {'posts': posts})
+
+# motoSpektakl/views.py
+
+# Widok główny forum
+def forum(request):
+    return render(request, 'forum.html')
+
+# Widok szczegółów wątku forum
+def forum_detail(request, thread_id):
+    # Tu można dodać logikę do pobierania szczegółów wątku z bazy danych
+    # Na razie zwrócimy tylko prosty placeholder
+    context = {'thread_id': thread_id}
+    return render(request, 'forum_detail.html', context)
