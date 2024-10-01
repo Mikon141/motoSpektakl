@@ -591,3 +591,35 @@ def add_comment(request, thread_id):
             ForumComment.objects.create(content=content, author=request.user, thread=thread)
             return redirect('forum_detail', thread_id=thread.id)
     return redirect('forum_detail', thread_id=thread.id)
+
+
+@login_required
+def comment_delete(request, comment_id):
+    comment = get_object_or_404(ForumComment, id=comment_id)
+    # Sprawdzenie, czy użytkownik jest autorem komentarza lub adminem
+    if request.user != comment.author and not request.user.is_staff:
+        messages.error(request, "Nie masz uprawnień do usunięcia tego komentarza.")
+        return redirect('forum_detail', thread_id=comment.thread.id)
+
+    thread_id = comment.thread.id  # Zapisujemy `thread_id`, ponieważ `comment` zostanie usunięty
+    comment.delete()
+    messages.success(request, "Komentarz został pomyślnie usunięty.")
+    return redirect('forum_detail', thread_id=thread_id)
+
+@login_required
+def comment_edit(request, comment_id):
+    comment = get_object_or_404(ForumComment, id=comment_id)
+    # Sprawdzenie, czy użytkownik jest autorem komentarza lub adminem
+    if request.user != comment.author and not request.user.is_staff:
+        messages.error(request, "Nie masz uprawnień do edytowania tego komentarza.")
+        return redirect('forum_detail', thread_id=comment.thread.id)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Komentarz został zaktualizowany.")
+            return redirect('forum_detail', thread_id=comment.thread.id)
+    else:
+        form = CommentForm(instance=comment)
+    return render(request, 'edit_comment.html', {'form': form, 'comment': comment})
