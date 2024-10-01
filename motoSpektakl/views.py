@@ -24,6 +24,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Post, ForumComment, ForumThread, ForumVote
 from .forms import RegisterForm, EditProfileForm, EditPasswordForm
+from .models import PostVote, ForumVote
 import logging
 
 # Logger do logowania błędów
@@ -352,11 +353,10 @@ def post_dislike(request, post_id):
 @login_required
 def add_vote(request, post_id, vote_type):
     post = get_object_or_404(Post, id=post_id)
-    existing_vote = Vote.objects.filter(post=post, user=request.user).first()
-
+    existing_vote = PostVote.objects.filter(post=post, user=request.user).first()
+    
     # Sprawdzamy, czy użytkownik już zagłosował
     if existing_vote:
-        # Jeśli istnieje głos i użytkownik zagłosował na coś innego, aktualizujemy
         if existing_vote.vote_type != vote_type:
             if vote_type == 'like':
                 post.add_like()
@@ -367,14 +367,13 @@ def add_vote(request, post_id, vote_type):
             existing_vote.vote_type = vote_type
             existing_vote.save()
     else:
-        # Jeśli nie ma istniejącego głosu, dodajemy nowy głos
-        Vote.objects.create(post=post, user=request.user, vote_type=vote_type)
+        PostVote.objects.create(post=post, user=request.user, vote_type=vote_type)
         if vote_type == 'like':
             post.add_like()
         else:
             post.add_dislike()
 
-    return redirect('blog_detail', post_id=post_id)
+    return redirect('blog_detail', post_id=post.id)
 
 # Widok dla panelu administracyjnego (admin_panel)
 @login_required
