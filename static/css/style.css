@@ -513,3 +513,19 @@ input[type="file"] {
     font-weight: bold;
     margin-top: 10px;
 }
+.social-icons {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.social-icon {
+    font-size: 24px;
+    color: white;
+    transition: transform 0.3s ease;
+}
+
+.social-icon:hover {
+    transform: scale(1.2);
+    color: #c74327;
+}

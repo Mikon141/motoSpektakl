@@ -1,96 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Moje Konto - Logowanie</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <!-- Zewnętrzny plik CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/account_styles.css' %}">
-</head>
-<body class="flex flex-col min-h-screen">
-    <header style="background-color: var(--button-color); padding: 10px 0;">
-        <div class="container">
-            <a href="/"><h1 class="header-title">MOTOSPEKTAKL</h1></a>
-        </div>
-    </header>
-    <div class="main-image-container"></div>
+{% extends "index.html" %}
 
-    <div class="navigation-buttons">
-        <a href="{% url 'blog' %}">BLOG</a>
-        <a href="{% url 'forum' %}">FORUM</a>
-        <a id="account-link" href="{% url 'account' %}">MOJE KONTO</a>
-    </div>
+{% block title %}
+Moje Konto - Blog Motoryzacyjny
+{% endblock %}
 
-    <!-- Dodanie sekcji dla wiadomości poniżej nawigacji -->
-    <div class="container mt-4">
-        {% if messages %}
-            <div class="messages">
-                {% for message in messages %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
-
+{% block content %}
+<div class="account-content container mt-4">
     {% if user.is_authenticated %}
-        <div class="account-content">
-            <h1>Witaj, {{ user.username }}</h1>
-            <a href="{% url 'edit_profile' %}" class="btn btn-primary mt-3">Edytuj Profil</a>
-            <a href="{% url 'change_password' %}" class="btn btn-primary mt-3">Zmień Hasło</a>
-            <a href="{% url 'logout' %}" class="btn btn-primary mt-3">Wyloguj się</a>
-        
-            {% if user.is_staff or user.is_superuser %}
-                <!-- Poprawiony przycisk z aktualną nazwą -->
-                <a href="{% url 'blog_management' %}" class="btn btn-primary mt-3">Zarządzanie blogiem</a>
-            {% endif %}
-            
-            {% if user.is_superuser %}
-                <a href="{% url 'account_management' %}" class="btn btn-primary mt-3">Zarządzanie użytkownikami</a>
-            {% endif %}
-        </div>
+        <h1>Witaj, {{ user.username }}</h1>
+        <a href="{% url 'edit_profile' %}" class="btn btn-primary mt-3">Edytuj Profil</a>
+        <a href="{% url 'change_password' %}" class="btn btn-primary mt-3">Zmień Hasło</a>
+        <a href="{% url 'logout' %}" class="btn btn-primary mt-3">Wyloguj się</a>
+
+        {% if user.is_staff or user.is_superuser %}
+            <a href="{% url 'blog_management' %}" class="btn btn-primary mt-3">Zarządzanie blogiem</a>
+        {% endif %}
+
+        {% if user.is_superuser %}
+            <a href="{% url 'account_management' %}" class="btn btn-primary mt-3">Zarządzanie użytkownikami</a>
+        {% endif %}
     {% else %}
-        <!-- Treść logowania -->
-        <div class="account-content container mt-4">
-            <h1>Zaloguj się</h1>
-            <form action="{% url 'login' %}" method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="login">Login lub adres e-mail</label>
-                    <input type="text" class="form-control" id="login" placeholder="Wprowadź login lub adres e-mail" name="username">
-                </div>
-                <div class="form-group">
-                    <label for="password">Hasło</label>
-                    <input type="password" class="form-control" id="password" placeholder="Wprowadź hasło" name="password">
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Zaloguj się</button>
-                </div>
-            </form>
+        <h1>Zaloguj się</h1>
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
             <div class="form-group">
-                <a href="{% url 'register' %}" class="btn btn-primary">Zarejestruj się</a>
+                <label for="login">Login lub adres e-mail</label>
+                <input type="text" class="form-control" id="login" placeholder="Wprowadź login lub adres e-mail" name="username">
             </div>
             <div class="form-group">
-                <a href="{% url 'password_reset' %}" class="btn btn-link">Zapomniałem hasła</a>
+                <label for="password">Hasło</label>
+                <input type="password" class="form-control" id="password" placeholder="Wprowadź hasło" name="password">
             </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Zaloguj się</button>
+            </div>
+        </form>
+        <div class="form-group">
+            <a href="{% url 'register' %}" class="btn btn-primary">Zarejestruj się</a>
+        </div>
+        <div class="form-group">
+            <a href="{% url 'password_reset' %}" class="btn btn-link">Zapomniałem hasła</a>
         </div>
     {% endif %}
-
-    <footer class="footer mt-auto py-3 text-center">
-        <div class="container">
-            <span>&copy; 2024 Blog Motoryzacyjny</span>
-        </div>
-    </footer>
-
-    <!-- Bootstrap JS, Popper.js, and jQuery -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.amazonaws.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="{% static 'js/account_actions.js' %}"></script>
-</body>
-</html>
+</div>
+{% endblock %}
