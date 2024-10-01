@@ -18,11 +18,11 @@ from django.core.validators import validate_email
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator
 from django.db.models import Q  # Importowanie narzędzia do wyszukiwania
-from .models import Post, Comment
+from .models import Post, ForumComment
 from .forms import PostForm, CommentForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Post, Comment, Vote
+from .models import Post, ForumComment, ForumThread, ForumVote
 from .forms import RegisterForm, EditProfileForm, EditPasswordForm
 import logging
 
@@ -307,15 +307,15 @@ def blog(request):
 
 def blog_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    comments = post.comments.all()  # Pobieramy wszystkie komentarze dla danego posta
+    comments = post.comments.all()  # Poprawka: użycie `comments` zamiast `post_comments`
     
     # Obsługa dodawania komentarza
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.post = post
             comment.author = request.user
+            comment.post = post  # Przypisanie komentarza do posta
             comment.save()
             return redirect('blog_detail', post_id=post.id)
     else:
@@ -381,13 +381,13 @@ def add_vote(request, post_id, vote_type):
 @user_passes_test(lambda user: user.is_staff or user.is_superuser)  # Tylko admin i moderator mogą mieć dostęp
 def admin_panel(request):
     posts = Post.objects.all()
-    comments = Comment.objects.all()
+    comments = ForumComment.objects.all()
     return render(request, 'admin_panel.html', {'posts': posts, 'comments': comments})
 
 # Widok edytowania komentarza
 @login_required
 def comment_edit(request, comment_id):
-    comment = get_object_or_404(Comment, id=comment_id)
+    comment = get_object_or_404(ForumComment, id=comment_id)
     # Sprawdzenie, czy użytkownik jest autorem komentarza lub adminem
     if request.user != comment.author and not request.user.is_staff:
         return HttpResponse("Nie masz uprawnień do edytowania tego komentarza.", status=403)
@@ -404,7 +404,7 @@ def comment_edit(request, comment_id):
 # Widok usuwania komentarza
 @login_required
 def comment_delete(request, comment_id):
-    comment = get_object_or_404(Comment, id=comment_id)
+    comment = get_object_or_404(ForumComment, id=comment_id)
     # Sprawdzenie, czy użytkownik jest autorem komentarza lub adminem
     if request.user != comment.author and not request.user.is_staff:
         return HttpResponse("Nie masz uprawnień do usunięcia tego komentarza.", status=403)
@@ -419,7 +419,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 @staff_member_required
 def blog_management(request):
     posts = Post.objects.all()  # Pobierz wszystkie posty
-    comments = Comment.objects.all()  # Pobierz wszystkie komentarze
+    comments = ForumComment.objects.all()  # Pobierz wszystkie komentarze
     return render(request, 'blog_management.html', {'posts': posts, 'comments': comments})
 
 

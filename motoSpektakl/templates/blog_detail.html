@@ -41,7 +41,7 @@
         <div class="post-details" style="color:white; font-size: 1.2rem; margin-bottom: 20px;">
             <p><strong>Autor:</strong> {{ post.author.username }}</p>
             <p><strong>Data publikacji:</strong> {{ post.created_at|date:"d M Y" }}</p>
-            <p><strong>Liczba komentarzy:</strong> {{ comments.count }}</p>
+            <p><strong>Liczba komentarzy:</strong> {{ post.post_comments.count }}</p>
         </div>
 
         <!-- Zdjęcie postu -->

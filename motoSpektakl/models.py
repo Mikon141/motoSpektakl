@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+# Blog Models
+
 class Post(models.Model):
     CATEGORY_CHOICES = [
         ('nowości', 'Nowości motoryzacyjne'),
@@ -43,16 +45,19 @@ class Post(models.Model):
             self.dislikes -= 1
             self.save()
 
-class Comment(models.Model):
+class PostComment(models.Model):
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        db_table = 'motoSpektakl_postcomment'
+
     def __str__(self):
         return f"Komentarz {self.author.username} na {self.post.title}"
 
-class Vote(models.Model):
+class PostVote(models.Model):
     VOTE_CHOICES = [
         ('like', 'Fajne'),
         ('dislike', 'Nie fajne')
@@ -67,9 +72,10 @@ class Vote(models.Model):
     def __str__(self):
         return f"{self.user.username} zagłosował na {self.vote_type} dla {self.post.title}"
 
-#FORUM
 
-class Thread(models.Model):
+# Forum Models
+
+class ForumThread(models.Model):
     title = models.CharField(max_length=200)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -78,12 +84,39 @@ class Thread(models.Model):
     def __str__(self):
         return self.title
 
-
-class Comment(models.Model):
-    thread = models.ForeignKey(Thread, related_name='comments', on_delete=models.CASCADE)
+class ForumComment(models.Model):
+    thread = models.ForeignKey(ForumThread, related_name='comments', on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'Comment by {self.author.username} on {self.thread.title}'
+
+class ForumPost(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.CharField(max_length=20)
+    likes = models.PositiveIntegerField(default=0)
+    dislikes = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return self.title
+
+class ForumVote(models.Model):
+    VOTE_TYPES = (
+        ('like', 'Like'),
+        ('dislike', 'Dislike')
+    )
+    vote_type = models.CharField(choices=VOTE_TYPES, max_length=10)
+    post = models.ForeignKey(ForumPost, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('post', 'user')  # Każdy użytkownik może tylko raz zagłosować na dany post
+
+    def __str__(self):
+        return f"{self.user.username} - {self.vote_type} - {self.post.title}"

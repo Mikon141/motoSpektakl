@@ -1,16 +1,14 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.models import User
-from .models import Post
-from django import forms
-from .models import Comment
+from .models import Post, PostComment, ForumThread, ForumVote  # Zaktualizowane modele
 
 # Formularz rejestracji
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True, label="Adres e-mail")
     
     class Meta:
-        model = User  # Poprawka: import modelu User
+        model = User
         fields = ['username', 'email', 'password1', 'password2']
         labels = {
             'username': 'Nazwa użytkownika',
@@ -33,7 +31,7 @@ class EditProfileForm(UserChangeForm):
     vehicle = forms.CharField(max_length=100, required=False, label="Pojazd użytkownika")
 
     class Meta:
-        model = User  # Poprawka: model User
+        model = User
         fields = ['username', 'email', 'profile_picture', 'description', 'vehicle']
         labels = {
             'username': 'Login',
@@ -54,7 +52,7 @@ class EditProfileForm(UserChangeForm):
 # Formularz do zmiany hasła
 class EditPasswordForm(PasswordChangeForm):
     class Meta:
-        model = User  # Poprawka: model User
+        model = User
         fields = ['old_password', 'new_password1', 'new_password2']
 
     def __init__(self, *args, **kwargs):
@@ -66,7 +64,7 @@ class EditPasswordForm(PasswordChangeForm):
 # Formularz do resetowania hasła
 class ResetPasswordForm(SetPasswordForm):
     class Meta:
-        model = User  # Poprawka: model User
+        model = User
         fields = ['new_password1', 'new_password2']
 
     def __init__(self, *args, **kwargs):
@@ -74,6 +72,7 @@ class ResetPasswordForm(SetPasswordForm):
         self.fields['new_password1'].widget.attrs.update({'class': 'form-control'})
         self.fields['new_password2'].widget.attrs.update({'class': 'form-control'})
 
+# Formularz do postów na blogu
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
@@ -81,11 +80,11 @@ class PostForm(forms.ModelForm):
 
 class CommentForm(forms.ModelForm):
     class Meta:
-        model = Comment
+        model = PostComment  # Użyj właściwego modelu do komentarzy pod postami
         fields = ['content']
-        widgets = {
-            'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-        }
-        labels = {
-            'content': 'Twój komentarz',
-        }
+
+# Formularz do wątków na forum
+class ThreadForm(forms.ModelForm):
+    class Meta:
+        model = ForumThread  # Zastąpienie Thread przez ForumThread
+        fields = ['title', 'content']
