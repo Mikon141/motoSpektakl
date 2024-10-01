@@ -75,23 +75,29 @@ class PostVote(models.Model):
 
 # Forum Models
 
+
+# Forum Models
+
+# Model reprezentujący wątek na forum
 class ForumThread(models.Model):
     title = models.CharField(max_length=200)
+    content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    content = models.TextField()
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
 
+# Model reprezentujący komentarze w wątku
 class ForumComment(models.Model):
     thread = models.ForeignKey(ForumThread, related_name='comments', on_delete=models.CASCADE)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Comment by {self.author.username} on {self.thread.title}'
+        return f"Comment by {self.author} on {self.thread}"
 
 class ForumPost(models.Model):
     title = models.CharField(max_length=200)
@@ -120,9 +126,6 @@ class ForumVote(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.vote_type} - {self.post.title}"
-    
-    from django.db import models
-from django.contrib.auth.models import User
 
 # Model reprezentujący wątek na forum
 class ForumThread(models.Model):

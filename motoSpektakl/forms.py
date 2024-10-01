@@ -1,12 +1,12 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.models import User
-from .models import Post, PostComment, ForumThread, ForumVote  # Zaktualizowane modele
+from .models import Post, PostComment, ForumThread, ForumComment  # Zaktualizowane modele
 
 # Formularz rejestracji
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True, label="Adres e-mail")
-    
+
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
@@ -23,6 +23,7 @@ class RegisterForm(UserCreationForm):
         self.fields['email'].widget.attrs.update({'class': 'form-control'})
         self.fields['password1'].widget.attrs.update({'class': 'form-control'})
         self.fields['password2'].widget.attrs.update({'class': 'form-control'})
+
 
 # Formularz do edycji profilu
 class EditProfileForm(UserChangeForm):
@@ -49,6 +50,7 @@ class EditProfileForm(UserChangeForm):
         self.fields['description'].widget.attrs.update({'class': 'form-control'})
         self.fields['vehicle'].widget.attrs.update({'class': 'form-control'})
 
+
 # Formularz do zmiany hasła
 class EditPasswordForm(PasswordChangeForm):
     class Meta:
@@ -61,6 +63,7 @@ class EditPasswordForm(PasswordChangeForm):
         self.fields['new_password1'].widget.attrs.update({'class': 'form-control'})
         self.fields['new_password2'].widget.attrs.update({'class': 'form-control'})
 
+
 # Formularz do resetowania hasła
 class ResetPasswordForm(SetPasswordForm):
     class Meta:
@@ -72,19 +75,48 @@ class ResetPasswordForm(SetPasswordForm):
         self.fields['new_password1'].widget.attrs.update({'class': 'form-control'})
         self.fields['new_password2'].widget.attrs.update({'class': 'form-control'})
 
+
 # Formularz do postów na blogu
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'content']
 
+    def __init__(self, *args, **kwargs):
+        super(PostForm, self).__init__(*args, **kwargs)
+        self.fields['title'].widget.attrs.update({'class': 'form-control'})
+        self.fields['content'].widget.attrs.update({'class': 'form-control', 'rows': 5})
+
+
+# Formularz do komentarzy w postach na blogu
 class CommentForm(forms.ModelForm):
     class Meta:
-        model = PostComment  # Użyj właściwego modelu do komentarzy pod postami
+        model = PostComment  # Formularz do komentarzy w postach na blogu
         fields = ['content']
+
+    def __init__(self, *args, **kwargs):
+        super(CommentForm, self).__init__(*args, **kwargs)
+        self.fields['content'].widget.attrs.update({'class': 'form-control', 'rows': 3})
+
 
 # Formularz do wątków na forum
 class ThreadForm(forms.ModelForm):
     class Meta:
-        model = ForumThread  # Zastąpienie Thread przez ForumThread
+        model = ForumThread
         fields = ['title', 'content']
+
+    def __init__(self, *args, **kwargs):
+        super(ThreadForm, self).__init__(*args, **kwargs)
+        self.fields['title'].widget.attrs.update({'class': 'form-control'})
+        self.fields['content'].widget.attrs.update({'class': 'form-control', 'rows': 5})
+
+
+# Formularz do komentarzy w wątkach forum
+class ForumCommentForm(forms.ModelForm):
+    class Meta:
+        model = ForumComment
+        fields = ['content']
+
+    def __init__(self, *args, **kwargs):
+        super(ForumCommentForm, self).__init__(*args, **kwargs)
+        self.fields['content'].widget.attrs.update({'class': 'form-control', 'rows': 3})

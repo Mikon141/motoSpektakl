@@ -9,14 +9,7 @@ Dodaj nowy wątek - Blog Motoryzacyjny
     <h2>Dodaj nowy wątek</h2>
     <form method="POST" class="mt-4">
         {% csrf_token %}
-        <div class="form-group">
-            <label for="title">Tytuł:</label>
-            <input type="text" class="form-control" id="title" name="title" placeholder="Wpisz tytuł" required>
-        </div>
-        <div class="form-group">
-            <label for="content">Treść:</label>
-            <textarea class="form-control" id="content" name="content" rows="5" placeholder="Napisz treść wątku" required></textarea>
-        </div>
+        {{ form.as_p }} <!-- Poprawne renderowanie formularza -->
         <button type="submit" class="btn btn-primary">Dodaj wątek</button>
         <a href="{% url 'forum' %}" class="btn btn-secondary ml-2">Anuluj</a>
     </form>

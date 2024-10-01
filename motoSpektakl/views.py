@@ -25,6 +25,9 @@ from django.contrib.auth.decorators import login_required
 from .models import Post, ForumComment, ForumThread, ForumVote
 from .forms import RegisterForm, EditProfileForm, EditPasswordForm
 from .models import PostVote, ForumVote
+from .models import ForumThread
+from .forms import ThreadForm  # Nowy formularz, który stworzymy
+
 import logging
 
 # Logger do logowania błędów
@@ -476,44 +479,107 @@ def blog_management(request):
     posts = Post.objects.all()
     return render(request, 'blog_management.html', {'posts': posts})
 
-# motoSpektakl/views.py
 
-# Widok główny forum
-def forum(request):
-    return render(request, 'forum.html')
+@login_required
+def edit_thread(request, thread_id):
+    thread = get_object_or_404(ForumThread, id=thread_id)
+    # Sprawdzenie, czy użytkownik jest autorem wątku
+    if request.user != thread.author:
+        messages.error(request, "Nie masz uprawnień do edycji tego wątku.")
+        return redirect('forum_detail', thread_id=thread_id)
 
-# Widok szczegółów wątku forum
-def forum_detail(request, thread_id):
-    # Tu można dodać logikę do pobierania szczegółów wątku z bazy danych
-    # Na razie zwrócimy tylko prosty placeholder
-    context = {'thread_id': thread_id}
-    return render(request, 'forum_detail.html', context)
+    if request.method == 'POST':
+        form = ThreadForm(request.POST, instance=thread)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Wątek został pomyślnie zaktualizowany.")
+            return redirect('forum_detail', thread_id=thread.id)
+    else:
+        form = ThreadForm(instance=thread)
 
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import ForumThread, ForumComment
-from django.contrib.auth.decorators import login_required
+    return render(request, 'edit_thread.html', {'form': form, 'thread': thread})
 
-# Widok wyświetlający listę wszystkich wątków
+@login_required
+def delete_thread(request, thread_id):
+    thread = get_object_or_404(ForumThread, id=thread_id)
+    # Sprawdzenie, czy użytkownik jest autorem wątku lub administratorem
+    if request.user != thread.author and not request.user.is_staff:
+        messages.error(request, "Nie masz uprawnień do usunięcia tego wątku.")
+        return redirect('forum_detail', thread_id=thread_id)
+
+    if request.method == 'POST':
+        thread.delete()
+        messages.success(request, "Wątek został usunięty.")
+        return redirect('forum')
+
+    return render(request, 'delete_thread.html', {'thread': thread})
+
+
 def forum_home(request):
     threads = ForumThread.objects.all().order_by('-created_at')
     return render(request, 'forum.html', {'threads': threads})
 
-# Widok wyświetlający szczegóły konkretnego wątku
+@login_required
 def forum_detail(request, thread_id):
     thread = get_object_or_404(ForumThread, id=thread_id)
     comments = thread.comments.all()
-    return render(request, 'forum_detail.html', {'thread': thread, 'comments': comments})
+    
+    # Sprawdzenie, czy użytkownik jest autorem wątku lub administratorem
+    can_edit_or_delete = request.user == thread.author or request.user.is_staff
+
+    context = {
+        'thread': thread,
+        'comments': comments,
+        'can_edit_or_delete': can_edit_or_delete
+    }
+    return render(request, 'forum_detail.html', context)
 
 # Widok dodawania nowego wątku (dla zalogowanych użytkowników)
 @login_required
 def add_thread(request):
     if request.method == 'POST':
-        title = request.POST.get('title')
-        content = request.POST.get('content')
-        if title and content:
-            new_thread = ForumThread.objects.create(title=title, content=content, author=request.user)
+        form = ThreadForm(request.POST)
+        if form.is_valid():
+            new_thread = form.save(commit=False)
+            new_thread.author = request.user
+            new_thread.save()
+            messages.success(request, "Nowy wątek został dodany pomyślnie!")
             return redirect('forum_detail', thread_id=new_thread.id)
-    return render(request, 'add_thread.html')
+    else:
+        form = ThreadForm()
+    return render(request, 'add_thread.html', {'form': form})
+
+# Widok edytowania wątku (dla autorów wątku)
+@login_required
+def edit_thread(request, thread_id):
+    thread = get_object_or_404(ForumThread, id=thread_id)
+    if request.user != thread.author:
+        messages.error(request, "Nie masz uprawnień do edytowania tego wątku.")
+        return redirect('forum_detail', thread_id=thread.id)
+
+    if request.method == 'POST':
+        form = ThreadForm(request.POST, instance=thread)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Wątek został zaktualizowany.")
+            return redirect('forum_detail', thread_id=thread.id)
+    else:
+        form = ThreadForm(instance=thread)
+    return render(request, 'edit_thread.html', {'form': form, 'thread': thread})
+
+# Widok usuwania wątku (dla autorów wątku lub adminów)
+@login_required
+def delete_thread(request, thread_id):
+    thread = get_object_or_404(ForumThread, id=thread_id)
+    if request.user != thread.author and not request.user.is_staff:
+        messages.error(request, "Nie masz uprawnień do usunięcia tego wątku.")
+        return redirect('forum_detail', thread_id=thread.id)
+
+    if request.method == 'POST':
+        thread.delete()
+        messages.success(request, "Wątek został usunięty.")
+        return redirect('forum')
+    return render(request, 'delete_thread.html', {'thread': thread})
 
 # Widok dodawania nowego komentarza (dla zalogowanych użytkowników)
 @login_required

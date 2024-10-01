@@ -25,6 +25,8 @@ urlpatterns = [
     path('forum/<int:thread_id>/', views.forum_detail, name='forum_detail'),
     path('forum/add_thread/', views.add_thread, name='add_thread'),
     path('forum/<int:thread_id>/add_comment/', views.add_comment, name='add_comment'),
+    path('forum/<int:thread_id>/edit/', views.edit_thread, name='edit_thread'),
+    path('forum/<int:thread_id>/delete/', views.delete_thread, name='delete_thread'),
 
     # Ścieżki związane z resetowaniem hasła
     path('account/password_reset/', auth_views.PasswordResetView.as_view(template_name='reset_password.html'), name='password_reset'),
