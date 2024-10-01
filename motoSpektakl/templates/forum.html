@@ -7,12 +7,16 @@
 {% block content %}
     <div class="forum-content container mt-4">
         <h1>Witamy na Forum Motoryzacyjnym</h1>
-        <!-- Tutaj będzie lista wątków -->
-        <div class="thread">
-            <h2><a href="{% url 'forum_detail' thread_id=1 %}">Tytuł pierwszego wątku</a></h2>
-            <p>Autor: Jan Kowalski | Data: 2024-06-26</p>
-            <p>Opis wątku...</p>
-        </div>
-        <!-- Dodaj więcej wątków tutaj -->
+        <a href="{% url 'add_thread' %}" class="btn btn-primary">Dodaj nowy wątek</a>
+        <hr>
+        <!-- Lista wątków -->
+        {% for thread in threads %}
+            <div class="thread">
+                <h2><a href="{% url 'forum_detail' thread_id=thread.id %}">{{ thread.title }}</a></h2>
+                <p>Autor: {{ thread.author.username }} | Data: {{ thread.created_at }}</p>
+                <p>{{ thread.content|truncatewords:20 }}</p>
+            </div>
+            <hr>
+        {% endfor %}
     </div>
 {% endblock content %}

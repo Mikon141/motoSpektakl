@@ -6,8 +6,31 @@
 
 {% block content %}
     <div class="container mt-4">
-        <h1>Szczegóły Wątku</h1>
-        <p>Id wątku: {{ thread_id }}</p>
-        <!-- Tu możesz dodać szczegóły wątku, np. treść, odpowiedzi itp. -->
+        <h1>{{ thread.title }}</h1>
+        <p>Autor: {{ thread.author.username }} | Data: {{ thread.created_at }}</p>
+        <p>{{ thread.content }}</p>
+        <hr>
+        <h2>Komentarze</h2>
+        {% for comment in comments %}
+            <div class="comment">
+                <p><strong>{{ comment.author.username }}:</strong> {{ comment.content }}</p>
+                <p><small>Dodano: {{ comment.created_at }}</small></p>
+            </div>
+            <hr>
+        {% endfor %}
+
+        <!-- Formularz dodawania nowego komentarza -->
+        {% if user.is_authenticated %}
+            <form method="post" action="{% url 'add_comment' thread_id=thread.id %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="content">Dodaj komentarz:</label>
+                    <textarea name="content" id="content" class="form-control" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Dodaj komentarz</button>
+            </form>
+        {% else %}
+            <p>Aby dodać komentarz, <a href="{% url 'login' %}">zaloguj się</a>.</p>
+        {% endif %}
     </div>
 {% endblock content %}

@@ -488,3 +488,40 @@ def forum_detail(request, thread_id):
     # Na razie zwrócimy tylko prosty placeholder
     context = {'thread_id': thread_id}
     return render(request, 'forum_detail.html', context)
+
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import ForumThread, ForumComment
+from django.contrib.auth.decorators import login_required
+
+# Widok wyświetlający listę wszystkich wątków
+def forum_home(request):
+    threads = ForumThread.objects.all().order_by('-created_at')
+    return render(request, 'forum.html', {'threads': threads})
+
+# Widok wyświetlający szczegóły konkretnego wątku
+def forum_detail(request, thread_id):
+    thread = get_object_or_404(ForumThread, id=thread_id)
+    comments = thread.comments.all()
+    return render(request, 'forum_detail.html', {'thread': thread, 'comments': comments})
+
+# Widok dodawania nowego wątku (dla zalogowanych użytkowników)
+@login_required
+def add_thread(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        if title and content:
+            new_thread = ForumThread.objects.create(title=title, content=content, author=request.user)
+            return redirect('forum_detail', thread_id=new_thread.id)
+    return render(request, 'add_thread.html')
+
+# Widok dodawania nowego komentarza (dla zalogowanych użytkowników)
+@login_required
+def add_comment(request, thread_id):
+    thread = get_object_or_404(ForumThread, id=thread_id)
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        if content:
+            ForumComment.objects.create(content=content, author=request.user, thread=thread)
+            return redirect('forum_detail', thread_id=thread.id)
+    return redirect('forum_detail', thread_id=thread.id)

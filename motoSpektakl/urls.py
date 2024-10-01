@@ -21,8 +21,10 @@ urlpatterns = [
     path('blog/<int:post_id>/delete/', views.delete_post, name='delete_post'),
 
     # Dodana ścieżka dla forum
-    path('forum/', views.forum, name='forum'),
+    path('forum/', views.forum_home, name='forum'),
     path('forum/<int:thread_id>/', views.forum_detail, name='forum_detail'),
+    path('forum/add_thread/', views.add_thread, name='add_thread'),
+    path('forum/<int:thread_id>/add_comment/', views.add_comment, name='add_comment'),
 
     # Ścieżki związane z resetowaniem hasła
     path('account/password_reset/', auth_views.PasswordResetView.as_view(template_name='reset_password.html'), name='password_reset'),
