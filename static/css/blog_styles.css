@@ -196,4 +196,13 @@ input[type="file"]::-webkit-file-upload-button:hover {
 
         }
 
-        
+        /* Stylizacja zdjęcia profilowego */
+.profile-picture {
+    width: 64px; /* Szerokość zdjęcia */
+    height: 64px; /* Wysokość zdjęcia */
+    border-radius: 50%; /* Zaokrąglone rogi zdjęcia */
+    object-fit: cover; /* Dopasowanie zdjęcia do wymiarów */
+    border: 2px solid #ffffff; /* Obramowanie */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Dodanie cienia */
+    margin-bottom: 10px; /* Margines dolny dla odstępu */
+}

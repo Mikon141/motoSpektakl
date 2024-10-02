@@ -529,3 +529,14 @@ input[type="file"] {
     transform: scale(1.2);
     color: #c74327;
 }
+
+/* Stylizacja zdjęć profilowych */
+.profile-picture {
+    width: 64px; /* Szerokość zdjęcia */
+    height: 64px; /* Wysokość zdjęcia */
+    border-radius: 50%;
+    object-fit: cover; /* Dopasowanie zdjęcia w ramach ustalonych wymiarów */
+    border: 2px solid #ffffff; /* Obramowanie dla lepszej widoczności */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Dodanie cienia */
+    margin: 10px auto; /* Wyśrodkowanie */
+}

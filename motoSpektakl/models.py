@@ -147,3 +147,11 @@ class ForumComment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.author} on {self.thread}"
+    
+# Przykładowa modyfikacja modelu UserProfile
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', default='default_profile.jpg', null=True, blank=True)
+
+    def __str__(self):
+        return self.user.username
