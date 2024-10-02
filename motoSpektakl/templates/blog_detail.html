@@ -16,6 +16,12 @@
             display: block; /* Wyświetlamy obraz jako blokowy element */
             margin: 0 auto; /* Wyśrodkowanie obrazu */
         }
+
+        /* Wyśrodkowanie tytułu */
+        .post-title {
+            text-align: center; /* Wyśrodkowanie tekstu */
+            color: white; /* Kolor tytułu */
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -36,13 +42,8 @@
 
     <!-- Szczegółowy widok postu -->
     <div class="container mt-4">
-        <h1 style="color:white">{{ post.title }}</h1>
-        <!-- Informacje o autorze, dacie publikacji i liczbie komentarzy -->
-        <div class="post-details" style="color:white; font-size: 1.2rem; margin-bottom: 20px;">
-            <p><strong>Autor:</strong> {{ post.author.username }}</p>
-            <p><strong>Data publikacji:</strong> {{ post.created_at|date:"d M Y" }}</p>
-            <p><strong>Liczba komentarzy:</strong> {{ post.post_comments.count }}</p>
-        </div>
+        <!-- Tytuł postu -->
+        <h1 class="post-title">{{ post.title }}</h1>
 
         <!-- Zdjęcie postu -->
         {% if post.image %}
@@ -96,8 +97,22 @@
     </div>
 
     <footer class="footer mt-auto py-3 text-center">
-        <div class="container">
+        <div class="container d-flex justify-content-between align-items-center">
+            <!-- Ikony po lewej stronie -->
+            <div class="social-icons">
+                <a href="https://www.youtube.com" target="_blank" class="social-icon">
+                    <i class="fab fa-youtube"></i>
+                </a>
+            </div>
+            
             <span>&copy; 2024 Blog Motoryzacyjny</span>
+            
+            <!-- Ikony po prawej stronie -->
+            <div class="social-icons">
+                <a href="https://www.instagram.com" target="_blank" class="social-icon">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
         </div>
     </footer>
 
