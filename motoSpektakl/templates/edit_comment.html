@@ -12,6 +12,13 @@
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Zaktualizuj komentarz</button>
     </form>
-    <a href="{% url 'forum_detail' comment.thread.id %}" class="btn btn-secondary mt-3">Anuluj</a>
+
+    {% if comment.thread %}
+        <!-- Link do forum -->
+        <a href="{% url 'forum_detail' comment.thread.id %}" class="btn btn-secondary mt-3">Anuluj</a>
+    {% elif comment.post %}
+        <!-- Link do bloga -->
+        <a href="{% url 'blog_detail' comment.post.id %}" class="btn btn-secondary mt-3">Anuluj</a>
+    {% endif %}
 </div>
 {% endblock %}

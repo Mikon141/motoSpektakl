@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.models import User
-from .models import Post, PostComment, ForumThread, ForumComment  # Zaktualizowane modele
+from .models import Post, BlogComment, ForumThread, ForumComment  # Usuń PostComment
 
 # Formularz rejestracji
 class RegisterForm(UserCreationForm):
@@ -91,7 +91,7 @@ class PostForm(forms.ModelForm):
 # Formularz do komentarzy w postach na blogu
 class CommentForm(forms.ModelForm):
     class Meta:
-        model = PostComment  # Formularz do komentarzy w postach na blogu
+        model = BlogComment  # Używaj BlogComment zamiast PostComment
         fields = ['content']
 
     def __init__(self, *args, **kwargs):

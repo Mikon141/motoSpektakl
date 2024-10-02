@@ -58,6 +58,8 @@ urlpatterns = [
     # Ścieżki edytowania i usuwania komentarzy
     path('comment/edit/<int:comment_id>/', views.comment_edit, name='comment_edit'),
     path('comment/delete/<int:comment_id>/', views.comment_delete, name='comment_delete'),
+    path('blog/<int:post_id>/comment/edit/<int:comment_id>/', views.blog_comment_edit, name='edit_comment'),
+    path('blog/<int:post_id>/comment/delete/<int:comment_id>/', views.blog_comment_delete, name='delete_comment'),
 ]
 
 # Obsługa plików multimedialnych (zdjęcia profilowe)

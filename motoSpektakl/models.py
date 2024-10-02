@@ -18,7 +18,7 @@ class Post(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='nowości')  # Kategoria postu
     created_at = models.DateTimeField(auto_now_add=True)  # Data utworzenia
     updated_at = models.DateTimeField(auto_now=True)  # Data ostatniej aktualizacji
-    
+
     # Pola dla liczników "fajne" i "nie fajne"
     likes = models.PositiveIntegerField(default=0)
     dislikes = models.PositiveIntegerField(default=0)
@@ -45,17 +45,15 @@ class Post(models.Model):
             self.dislikes -= 1
             self.save()
 
-class PostComment(models.Model):
+class BlogComment(models.Model):
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        db_table = 'motoSpektakl_postcomment'
-
     def __str__(self):
-        return f"Komentarz {self.author.username} na {self.post.title}"
+        return f"Komentarz {self.author.username} do posta {self.post.title}"
+
 
 class PostVote(models.Model):
     VOTE_CHOICES = [
@@ -75,10 +73,6 @@ class PostVote(models.Model):
 
 # Forum Models
 
-
-# Forum Models
-
-# Model reprezentujący wątek na forum
 class ForumThread(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
@@ -89,7 +83,6 @@ class ForumThread(models.Model):
     def __str__(self):
         return self.title
 
-# Model reprezentujący komentarze w wątku
 class ForumComment(models.Model):
     thread = models.ForeignKey(ForumThread, related_name='comments', on_delete=models.CASCADE)
     content = models.TextField()
@@ -97,7 +90,7 @@ class ForumComment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Comment by {self.author} on {self.thread}"
+        return f"Komentarz {self.author.username} w wątku {self.thread.title}"
 
 class ForumPost(models.Model):
     title = models.CharField(max_length=200)
@@ -127,28 +120,8 @@ class ForumVote(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.vote_type} - {self.post.title}"
 
-# Model reprezentujący wątek na forum
-class ForumThread(models.Model):
-    title = models.CharField(max_length=200)
-    content = models.TextField()
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return self.title
-
-# Model reprezentujący komentarze w wątku
-class ForumComment(models.Model):
-    thread = models.ForeignKey(ForumThread, related_name='comments', on_delete=models.CASCADE)
-    content = models.TextField()
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Comment by {self.author} on {self.thread}"
-    
-# Przykładowa modyfikacja modelu UserProfile
+# Model profilu użytkownika z polem zdjęcia profilowego
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to='profile_pictures/', default='default_profile.jpg', null=True, blank=True)

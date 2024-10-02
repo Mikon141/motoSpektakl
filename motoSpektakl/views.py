@@ -18,7 +18,7 @@ from django.core.validators import validate_email
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator
 from django.db.models import Q  # Importowanie narzędzia do wyszukiwania
-from .models import Post, ForumComment
+from .models import Post, ForumComment, BlogComment
 from .forms import PostForm, CommentForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -309,10 +309,38 @@ def blog(request):
 
     return render(request, 'blog.html', context)
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import login, authenticate, update_session_auth_hash
+from django.contrib.auth.views import PasswordResetConfirmView
+from django.contrib.auth.models import User, Group
+from django.contrib.auth import views as auth_views
+from django.core.mail import send_mail
+from django.conf import settings
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.tokens import default_token_generator
+from django.http import HttpResponse
+from django.contrib import messages
+from smtplib import SMTPException
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.paginator import Paginator
+from django.db.models import Q  # Importowanie narzędzia do wyszukiwania
+from .models import Post, ForumComment, BlogComment, UserProfile
+from .forms import PostForm, CommentForm
+import logging
+
+# Logger do logowania błędów
+logger = logging.getLogger(__name__)
+
+# Widok szczegółowy postu na blogu
 def blog_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     comments = post.comments.all()  # Poprawka: użycie `comments` zamiast `post_comments`
-    
+
     # Obsługa dodawania komentarza
     if request.method == 'POST':
         form = CommentForm(request.POST)
@@ -325,7 +353,13 @@ def blog_detail(request, post_id):
     else:
         form = CommentForm()
 
-    return render(request, 'blog_detail.html', {'post': post, 'comments': comments, 'form': form})
+    # Upewniamy się, że autor posta ma profil użytkownika
+    try:
+        profile_picture = post.author.userprofile.profile_picture
+    except UserProfile.DoesNotExist:
+        profile_picture = None
+
+    return render(request, 'blog_detail.html', {'post': post, 'comments': comments, 'form': form, 'profile_picture': profile_picture}) 
 
 # Tworzenie nowego posta
 @login_required
@@ -620,6 +654,34 @@ def comment_edit(request, comment_id):
             form.save()
             messages.success(request, "Komentarz został zaktualizowany.")
             return redirect('forum_detail', thread_id=comment.thread.id)
+    else:
+        form = CommentForm(instance=comment)
+    return render(request, 'edit_comment.html', {'form': form, 'comment': comment})
+
+@login_required
+def blog_comment_delete(request, post_id, comment_id):
+    comment = get_object_or_404(BlogComment, id=comment_id, post_id=post_id)
+    if request.user != comment.author and not request.user.is_staff:
+        messages.error(request, "Nie masz uprawnień do usunięcia tego komentarza.")
+        return redirect('blog_detail', post_id=comment.post.id)
+
+    comment.delete()
+    messages.success(request, "Komentarz został pomyślnie usunięty.")
+    return redirect('blog_detail', post_id=post_id)
+
+@login_required
+def blog_comment_edit(request, post_id, comment_id):
+    comment = get_object_or_404(BlogComment, id=comment_id, post_id=post_id)
+    if request.user != comment.author and not request.user.is_staff:
+        messages.error(request, "Nie masz uprawnień do edytowania tego komentarza.")
+        return redirect('blog_detail', post_id=comment.post.id)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Komentarz został zaktualizowany.")
+            return redirect('blog_detail', post_id=post_id)
     else:
         form = CommentForm(instance=comment)
     return render(request, 'edit_comment.html', {'form': form, 'comment': comment})

@@ -72,20 +72,35 @@
         <h4 style="color:white">Komentarze:</h4>
         <div class="mb-4">
             {% for comment in comments %}
-            <div class="comment mb-3 p-3 bg-light d-flex align-items-center">
+            <div class="comment mb-3 p-3 bg-light d-flex align-items-center justify-content-between">
                 <!-- Zdjęcie autora komentarza wyświetlane po lewej stronie -->
-                <div class="mr-3">
-                    {% if comment.author.userprofile.profile_picture %}
-                        <img src="{{ comment.author.userprofile.profile_picture.url }}" class="profile-picture" alt="{{ comment.author.username }}">
-                    {% else %}
-                        <img src="{% static 'images/default_profile.jpg' %}" class="profile-picture" alt="Brak zdjęcia">
-                    {% endif %}
+                <div class="d-flex align-items-center">
+                    <div class="mr-3">
+                        {% if comment.author.userprofile.profile_picture %}
+                            <img src="{{ comment.author.userprofile.profile_picture.url }}" class="profile-picture mr-3" alt="{{ comment.author.username }}">
+                        {% else %}
+                            <img src="{% static 'images/default_profile.jpg' %}" class="profile-picture mr-3" alt="Brak zdjęcia">
+                        {% endif %}
+                    </div>
+                    <div>
+                        <strong>{{ comment.author.username }}</strong> napisał(a):
+                        <p>{{ comment.content }}</p>
+                        <small>{{ comment.created_at }}</small>
+                    </div>
                 </div>
-                <!-- Tekst komentarza po prawej stronie -->
-                <div>
-                    <strong>{{ comment.author.username }}</strong> napisał(a):
-                    <p>{{ comment.content }}</p>
-                    <small>{{ comment.created_at }}</small>
+
+                <!-- Edycja i usuwanie komentarzy -->
+                <div class="ml-3">
+                    {% if user.is_authenticated %}
+                        {% if comment.author == user or user.is_staff %}
+                            <!-- Usuń komentarz (dla właściciela komentarza lub administratora) -->
+                            <a href="{% url 'delete_comment' post_id=post.id comment_id=comment.id %}" class="btn btn-danger btn-sm">Usuń</a>
+                        {% endif %}
+                        {% if comment.author == user %}
+                            <!-- Edytuj komentarz (tylko dla właściciela komentarza) -->
+                            <a href="{% url 'edit_comment' post_id=post.id comment_id=comment.id %}" class="btn btn-secondary btn-sm">Edytuj</a>
+                        {% endif %}
+                    {% endif %}
                 </div>
             </div>
             {% empty %}
