@@ -45,7 +45,7 @@
             {% else %}
                 <img src="{% static 'images/default_profile.jpg' %}" class="profile-picture mb-2" alt="Brak zdjęcia">
             {% endif %}
-            <p class="text-center mb-0"><strong>Autor:</strong> {{ post.author.username }}</p>
+            <p class="text-center mb-0 text-white"><strong>Autor:</strong> {{ post.author.username }}</p>
         </div>
 
         <!-- Treść postu -->
@@ -73,12 +73,15 @@
         <div class="mb-4">
             {% for comment in comments %}
             <div class="comment mb-3 p-3 bg-light d-flex align-items-center">
-                <!-- Zdjęcie autora komentarza -->
-                {% if comment.author.userprofile.profile_picture %}
-                    <img src="{{ comment.author.userprofile.profile_picture.url }}" class="profile-picture mr-3" alt="{{ comment.author.username }}">
-                {% else %}
-                    <img src="{% static 'images/default_profile.jpg' %}" class="profile-picture mr-3" alt="Brak zdjęcia">
-                {% endif %}
+                <!-- Zdjęcie autora komentarza wyświetlane po lewej stronie -->
+                <div class="mr-3">
+                    {% if comment.author.userprofile.profile_picture %}
+                        <img src="{{ comment.author.userprofile.profile_picture.url }}" class="profile-picture" alt="{{ comment.author.username }}">
+                    {% else %}
+                        <img src="{% static 'images/default_profile.jpg' %}" class="profile-picture" alt="Brak zdjęcia">
+                    {% endif %}
+                </div>
+                <!-- Tekst komentarza po prawej stronie -->
                 <div>
                     <strong>{{ comment.author.username }}</strong> napisał(a):
                     <p>{{ comment.content }}</p>
