@@ -9,19 +9,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/blog_styles.css' %}">
+    <!-- FontAwesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Dodatkowe style dla zdjęcia */
-        .img-fluid {
-            max-width: 50%; /* Zmniejszamy obraz do 50% szerokości */
-            display: block; /* Wyświetlamy obraz jako blokowy element */
-            margin: 0 auto; /* Wyśrodkowanie obrazu */
-        }
-
-        /* Wyśrodkowanie tytułu */
-        .post-title {
-            text-align: center; /* Wyśrodkowanie tekstu */
-            color: white; /* Kolor tytułu */
-        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -51,20 +41,22 @@
         {% endif %}
 
         <!-- Treść postu -->
-        <p style="color:white">{{ post.content }}</p>
-
-        <!-- Przycisk do bloga -->
-        <a href="{% url 'blog' %}" class="btn btn-primary">Powrót do bloga</a>
+        <div class="post-content">
+            <p>{{ post.content }}</p>
+        </div>
 
         <!-- Przyciski głosowania -->
         {% if user.is_authenticated %}
-        <div class="vote-buttons mt-4">
+        <div class="vote-buttons mt-4 text-center">
             <a href="{% url 'post_like' post.id %}" class="btn btn-success">Fajne ({{ post.likes }})</a>
             <a href="{% url 'post_dislike' post.id %}" class="btn btn-danger">Nie fajne ({{ post.dislikes }})</a>
         </div>
         {% else %}
-        <p style="color:white">Musisz być zalogowany, aby ocenić post.</p>
+        <p style="color:white; text-align: center;">Musisz być zalogowany, aby ocenić post.</p>
         {% endif %}
+
+        <!-- Przycisk do bloga -->
+        <a href="{% url 'blog' %}" class="btn btn-primary btn-back">Powrót do bloga</a>
     </div>
 
     <!-- Sekcja komentarzy -->
