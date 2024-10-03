@@ -42,33 +42,48 @@
     <div class="container mt-5">
         <h1 class="text-center text-white">Edytuj swój profil</h1>
 
-        <!-- Twój formularz -->
+        <!-- Formularz edycji profilu -->
         <form method="POST" enctype="multipart/form-data" class="form-horizontal">
             {% csrf_token %}
+            
+            <!-- Formularz użytkownika -->
             <div class="form-group">
                 <label for="username" class="text-white">Login:</label>
-                {{ form.username|add_class:"form-control" }}
+                {{ user_form.username|add_class:"form-control" }}
                 <small class="form-text text-muted">Wymagane. Maksymalnie 150 znaków. Dozwolone są litery, cyfry oraz znaki @/./+/-/_.</small>
             </div>
 
             <div class="form-group">
                 <label for="email" class="text-white">Adres e-mail:</label>
-                {{ form.email|add_class:"form-control" }}
+                {{ user_form.email|add_class:"form-control" }}
             </div>
 
-            <div class="form-group">
+            <!-- Formularz profilu użytkownika -->
+            <div class="form-group text-center">
                 <label for="profile_picture" class="text-white">Zdjęcie profilowe:</label>
-                {{ form.profile_picture|add_class:"form-control-file" }}
+                {% if profile_form.profile_picture.value %}
+                    <div>
+                        <img src="{{ profile_form.profile_picture.value.url }}" alt="Profilowe zdjęcie" class="img-thumbnail mb-3" style="width: 150px; height: 150px;">
+                        <br>
+                        <!-- Dodanie przycisku do usuwania zdjęcia -->
+                        <label for="profile_picture-clear" class="text-white">
+                            <input type="checkbox" name="profile_picture-clear" id="profile_picture-clear"> Usuń zdjęcie
+                        </label>
+                    </div>
+                {% else %}
+                    <p class="text-white">Brak zdjęcia profilowego</p>
+                {% endif %}
+                {{ profile_form.profile_picture|add_class:"form-control-file" }}
             </div>
 
             <div class="form-group">
                 <label for="description" class="text-white">Opis użytkownika:</label>
-                {{ form.description|add_class:"form-control" }}
+                {{ profile_form.description|add_class:"form-control" }}
             </div>
 
             <div class="form-group">
                 <label for="vehicle" class="text-white">Pojazd użytkownika:</label>
-                {{ form.vehicle|add_class:"form-control" }}
+                {{ profile_form.vehicle|add_class:"form-control" }}
             </div>
 
             <div class="form-group text-center">
@@ -104,6 +119,6 @@
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.amazonaws.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

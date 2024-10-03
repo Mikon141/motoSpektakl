@@ -23,7 +23,7 @@ from .forms import PostForm, CommentForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Post, ForumComment, ForumThread, ForumVote
-from .forms import RegisterForm, EditProfileForm, EditPasswordForm
+from .forms import RegisterForm, EditProfileForm, EditPasswordForm, UserChangeForm, CustomUserChangeForm
 from .models import PostVote, ForumVote
 from .models import ForumThread
 from .forms import ThreadForm  # Nowy formularz, który stworzymy
@@ -148,21 +148,50 @@ def login_view(request):
 
     return render(request, 'account.html')
 
-# Edycja profilu
+# views.py
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.contrib.auth.models import User
+from .models import UserProfile
+from .forms import EditProfileForm
+from django.contrib.auth.forms import UserChangeForm
+
+# views.py
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import login, authenticate, update_session_auth_hash
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from .models import UserProfile
+from .forms import EditProfileForm, UserChangeForm
+
 @login_required
 def edit_profile(request):
+    user_instance = request.user
+    profile_instance, created = UserProfile.objects.get_or_create(user=user_instance)
+
     if request.method == 'POST':
-        form = EditProfileForm(request.POST, request.FILES, instance=request.user)
-        if form.is_valid():
-            form.save()
+        user_form = CustomUserChangeForm(request.POST, instance=user_instance)
+        profile_form = EditProfileForm(request.POST, request.FILES, instance=profile_instance)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            # Usunięcie zdjęcia profilowego, jeśli pole 'clear' jest zaznaczone
+            if profile_form.cleaned_data.get('profile_picture') is None and request.POST.get('profile_picture-clear'):
+                profile_instance.profile_picture.delete()
+
+            user_form.save()
+            profile_form.save()
             messages.success(request, 'Twój profil został zaktualizowany.')
             return redirect('edit_profile')
         else:
             messages.error(request, 'Wystąpiły błędy w formularzu. Sprawdź swoje dane.')
     else:
-        form = EditProfileForm(instance=request.user)
+        user_form = CustomUserChangeForm(instance=user_instance)
+        profile_form = EditProfileForm(instance=profile_instance)
 
-    return render(request, 'edit_profile.html', {'form': form})
+    return render(request, 'edit_profile.html', {'user_form': user_form, 'profile_form': profile_form})
 
 # Zmiana hasła
 @login_required

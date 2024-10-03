@@ -25,18 +25,38 @@ class RegisterForm(UserCreationForm):
         self.fields['password2'].widget.attrs.update({'class': 'form-control'})
 
 
-# Formularz do edycji profilu
-class EditProfileForm(UserChangeForm):
-    profile_picture = forms.ImageField(required=False, label="Zdjęcie profilowe")
-    description = forms.CharField(widget=forms.Textarea(attrs={'rows': 3}), required=False, label="Opis użytkownika")
-    vehicle = forms.CharField(max_length=100, required=False, label="Pojazd użytkownika")
+from django import forms
+from django.contrib.auth.forms import UserChangeForm
+from django.forms import ClearableFileInput
+from .models import UserProfile
+
+class EditProfileForm(forms.ModelForm):
+    profile_picture = forms.ImageField(
+        required=False,
+        label="Zdjęcie profilowe",
+        widget=ClearableFileInput(attrs={
+            'class': 'form-control-file',
+            'clear_checkbox_label': 'Usuń zdjęcie',
+            'initial_text': 'Aktualne zdjęcie:',
+            'input_text': 'Zmień',
+        })
+    )
+    description = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+        required=False,
+        label="Opis użytkownika"
+    )
+    vehicle = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        label="Pojazd użytkownika"
+    )
 
     class Meta:
-        model = User
-        fields = ['username', 'email', 'profile_picture', 'description', 'vehicle']
+        model = UserProfile
+        fields = ['profile_picture', 'description', 'vehicle']
         labels = {
-            'username': 'Login',
-            'email': 'Adres e-mail',
             'profile_picture': 'Zdjęcie profilowe',
             'description': 'Opis użytkownika',
             'vehicle': 'Pojazd użytkownika',
@@ -44,11 +64,19 @@ class EditProfileForm(UserChangeForm):
 
     def __init__(self, *args, **kwargs):
         super(EditProfileForm, self).__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs.update({'class': 'form-control'})
-        self.fields['email'].widget.attrs.update({'class': 'form-control'})
         self.fields['profile_picture'].widget.attrs.update({'class': 'form-control-file'})
         self.fields['description'].widget.attrs.update({'class': 'form-control'})
         self.fields['vehicle'].widget.attrs.update({'class': 'form-control'})
+
+        from django import forms
+from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.models import User
+
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email']  # Tylko te pola chcemy edytować
+        exclude = ['date_joined', 'last_login']  # Wyklucz niepotrzebne pola
 
 
 # Formularz do zmiany hasła
