@@ -173,26 +173,34 @@ def edit_profile(request):
     profile_instance, created = UserProfile.objects.get_or_create(user=user_instance)
 
     if request.method == 'POST':
+        # Użyj `CustomUserChangeForm` zamiast domyślnego `UserChangeForm`
         user_form = CustomUserChangeForm(request.POST, instance=user_instance)
         profile_form = EditProfileForm(request.POST, request.FILES, instance=profile_instance)
 
         if user_form.is_valid() and profile_form.is_valid():
-            # Usunięcie zdjęcia profilowego, jeśli pole 'clear' jest zaznaczone
-            if profile_form.cleaned_data.get('profile_picture') is None and request.POST.get('profile_picture-clear'):
-                profile_instance.profile_picture.delete()
+            # Debugowanie formularzy
+            print("Dane formularza użytkownika: ", user_form.cleaned_data)
+            print("Dane formularza profilu: ", profile_form.cleaned_data)
 
+            # Zapisanie zmian w profilach użytkownika i UserProfile
             user_form.save()
             profile_form.save()
+            
+            # Debugowanie zapisanego profilu
+            print("Profil po zapisaniu: ", profile_instance.description, profile_instance.vehicle)
+
             messages.success(request, 'Twój profil został zaktualizowany.')
             return redirect('edit_profile')
         else:
+            print("Błędy formularza użytkownika: ", user_form.errors)
+            print("Błędy formularza profilu: ", profile_form.errors)
             messages.error(request, 'Wystąpiły błędy w formularzu. Sprawdź swoje dane.')
     else:
+        # Użyj `CustomUserChangeForm` zamiast `UserChangeForm`
         user_form = CustomUserChangeForm(instance=user_instance)
         profile_form = EditProfileForm(instance=profile_instance)
 
     return render(request, 'edit_profile.html', {'user_form': user_form, 'profile_form': profile_form})
-
 # Zmiana hasła
 @login_required
 def change_password(request):
@@ -365,30 +373,40 @@ import logging
 # Logger do logowania błędów
 logger = logging.getLogger(__name__)
 
-# Widok szczegółowy postu na blogu
 def blog_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    comments = post.comments.all()  # Poprawka: użycie `comments` zamiast `post_comments`
+    comments = post.comments.all()
 
-    # Obsługa dodawania komentarza
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.author = request.user
-            comment.post = post  # Przypisanie komentarza do posta
-            comment.save()
-            return redirect('blog_detail', post_id=post.id)
-    else:
-        form = CommentForm()
-
-    # Upewniamy się, że autor posta ma profil użytkownika
+    # Pobranie profilu autora posta
     try:
-        profile_picture = post.author.userprofile.profile_picture
+        user_profile = post.author.userprofile
+        print(f"User Profile found: {user_profile}")  # Sprawdzenie, czy profil został pobrany
+        print(f"Description: {user_profile.description}")  # Wyświetlenie wartości pola `description`
+        print(f"Vehicle: {user_profile.vehicle}")  # Wyświetlenie wartości pola `vehicle`
     except UserProfile.DoesNotExist:
-        profile_picture = None
+        user_profile = None
+        print("User profile not found.")  # Jeśli profil nie istnieje
 
-    return render(request, 'blog_detail.html', {'post': post, 'comments': comments, 'form': form, 'profile_picture': profile_picture}) 
+    # Debugowanie przekazywanych wartości
+    profile_picture_url = user_profile.profile_picture.url if user_profile and user_profile.profile_picture else None
+    description = user_profile.description if user_profile else 'Brak opisu'
+    vehicle = user_profile.vehicle if user_profile else 'Brak informacji o pojeździe'
+    
+    print(f"Profile Picture URL: {profile_picture_url}")
+    print(f"Description: {description}")
+    print(f"Vehicle: {vehicle}")
+
+    # Przekazanie dodatkowych informacji do kontekstu
+    context = {
+        'post': post,
+        'comments': comments,
+        'form': CommentForm(),
+        'profile_picture': profile_picture_url,
+        'description': description,
+        'vehicle': vehicle,
+    }
+
+    return render(request, 'blog_detail.html', context)
 
 # Tworzenie nowego posta
 @login_required

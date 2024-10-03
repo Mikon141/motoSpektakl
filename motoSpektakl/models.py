@@ -120,11 +120,12 @@ class ForumVote(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.vote_type} - {self.post.title}"
 
-
-# Model profilu użytkownika z polem zdjęcia profilowego
+# models.py
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to='profile_pictures/', default='default_profile.jpg', null=True, blank=True)
+    description = models.TextField(blank=True, null=True)  # Opis użytkownika
+    vehicle = models.CharField(max_length=100, blank=True, null=True)  # Pojazd użytkownika
 
     def __str__(self):
         return self.user.username

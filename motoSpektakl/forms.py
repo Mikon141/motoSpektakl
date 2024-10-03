@@ -68,6 +68,25 @@ class EditProfileForm(forms.ModelForm):
         self.fields['description'].widget.attrs.update({'class': 'form-control'})
         self.fields['vehicle'].widget.attrs.update({'class': 'form-control'})
 
+
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserChangeForm
+
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email']  # Upewnij się, że tylko te pola będą edytowalne
+        labels = {
+            'username': 'Nazwa użytkownika',
+            'email': 'Adres e-mail',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CustomUserChangeForm, self).__init__(*args, **kwargs)
+        # Ukrycie pola `date_joined`, aby nie było brane pod uwagę w formularzu
+        self.fields['date_joined'].widget = forms.HiddenInput()
+        self.fields['date_joined'].required = False
+
         from django import forms
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User

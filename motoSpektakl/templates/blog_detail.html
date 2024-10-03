@@ -40,8 +40,8 @@
 
         <!-- Zdjęcie profilowe autora pod zdjęciem postu -->
         <div class="d-flex flex-column align-items-center mb-4">
-            {% if post.author.userprofile.profile_picture %}
-                <img src="{{ post.author.userprofile.profile_picture.url }}" class="profile-picture mb-2" alt="{{ post.author.username }}">
+            {% if profile_picture %}
+                <img src="{{ profile_picture }}" class="profile-picture mb-2" alt="{{ post.author.username }}">
             {% else %}
                 <img src="{% static 'images/default_profile.jpg' %}" class="profile-picture mb-2" alt="Brak zdjęcia">
             {% endif %}
@@ -86,6 +86,14 @@
                         <strong>{{ comment.author.username }}</strong> napisał(a):
                         <p>{{ comment.content }}</p>
                         <small>{{ comment.created_at }}</small>
+
+                        <!-- Dodanie szczegółów o autorze w komentarzu -->
+                        {% if comment.author.userprofile.description %}
+                            <p><strong>Opis:</strong> {{ comment.author.userprofile.description }}</p>
+                        {% endif %}
+                        {% if comment.author.userprofile.vehicle %}
+                            <p><strong>Pojazd użytkownika:</strong> {{ comment.author.userprofile.vehicle }}</p>
+                        {% endif %}
                     </div>
                 </div>
 

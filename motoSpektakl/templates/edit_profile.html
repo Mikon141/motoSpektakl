@@ -39,6 +39,25 @@
     </div>
     {% endif %}
     
+    <!-- Dodanie sekcji wyświetlania błędów formularza -->
+    <div class="container mt-4">
+        {% if user_form.errors or profile_form.errors %}
+        <div class="alert alert-danger">
+            <strong>Wystąpiły błędy w formularzu. Sprawdź swoje dane.</strong>
+            <ul>
+                <!-- Wyświetl błędy formularza użytkownika -->
+                {% for field, errors in user_form.errors.items %}
+                    <li>{{ field }}: {{ errors }}</li>
+                {% endfor %}
+                <!-- Wyświetl błędy formularza profilu -->
+                {% for field, errors in profile_form.errors.items %}
+                    <li>{{ field }}: {{ errors }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+    
     <div class="container mt-5">
         <h1 class="text-center text-white">Edytuj swój profil</h1>
 
