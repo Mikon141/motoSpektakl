@@ -83,16 +83,21 @@
                         {% endif %}
                     </div>
                     <div>
-                        <strong>{{ comment.author.username }}</strong> napisał(a):
+                        <!-- Wyróżniony tekst autora komentarza -->
+                        <strong style="font-size: 1.2em; color: #0056b3;">{{ comment.author.username }}</strong> napisał(a):
                         <p>{{ comment.content }}</p>
                         <small>{{ comment.created_at }}</small>
 
                         <!-- Dodanie szczegółów o autorze w komentarzu -->
                         {% if comment.author.userprofile.description %}
-                            <p><strong>Opis:</strong> {{ comment.author.userprofile.description }}</p>
+                            <div>
+                                <small><strong>Opis:</strong> {{ comment.author.userprofile.description }}</small>
+                            </div>
                         {% endif %}
                         {% if comment.author.userprofile.vehicle %}
-                            <p><strong>Pojazd użytkownika:</strong> {{ comment.author.userprofile.vehicle }}</p>
+                            <div>
+                                <small><strong>Pojazd użytkownika:</strong> {{ comment.author.userprofile.vehicle }}</small>
+                            </div>
                         {% endif %}
                     </div>
                 </div>
