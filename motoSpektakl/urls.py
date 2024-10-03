@@ -20,7 +20,13 @@ urlpatterns = [
     path('blog/<int:post_id>/edit/', views.edit_post, name='edit_post'),
     path('blog/<int:post_id>/delete/', views.delete_post, name='delete_post'),
 
-    path('forum/', views.forum, name='forum'),
+    # Dodana ścieżka dla forum
+    path('forum/', views.forum_home, name='forum'),
+    path('forum/<int:thread_id>/', views.forum_detail, name='forum_detail'),
+    path('forum/add_thread/', views.add_thread, name='add_thread'),
+    path('forum/<int:thread_id>/add_comment/', views.add_comment, name='add_comment'),
+    path('forum/<int:thread_id>/edit/', views.edit_thread, name='edit_thread'),
+    path('forum/<int:thread_id>/delete/', views.delete_thread, name='delete_thread'),
 
     # Ścieżki związane z resetowaniem hasła
     path('account/password_reset/', auth_views.PasswordResetView.as_view(template_name='reset_password.html'), name='password_reset'),
@@ -52,6 +58,8 @@ urlpatterns = [
     # Ścieżki edytowania i usuwania komentarzy
     path('comment/edit/<int:comment_id>/', views.comment_edit, name='comment_edit'),
     path('comment/delete/<int:comment_id>/', views.comment_delete, name='comment_delete'),
+    path('blog/<int:post_id>/comment/edit/<int:comment_id>/', views.blog_comment_edit, name='edit_comment'),
+    path('blog/<int:post_id>/comment/delete/<int:comment_id>/', views.blog_comment_delete, name='delete_comment'),
 ]
 
 # Obsługa plików multimedialnych (zdjęcia profilowe)

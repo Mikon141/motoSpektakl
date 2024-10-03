@@ -18,12 +18,16 @@ from django.core.validators import validate_email
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.paginator import Paginator
 from django.db.models import Q  # Importowanie narzędzia do wyszukiwania
-from .models import Post, Comment
+from .models import Post, ForumComment, BlogComment
 from .forms import PostForm, CommentForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Post, Comment, Vote
-from .forms import RegisterForm, EditProfileForm, EditPasswordForm
+from .models import Post, ForumComment, ForumThread, ForumVote
+from .forms import RegisterForm, EditProfileForm, EditPasswordForm, UserChangeForm, CustomUserChangeForm
+from .models import PostVote, ForumVote
+from .models import ForumThread
+from .forms import ThreadForm  # Nowy formularz, który stworzymy
+
 import logging
 
 # Logger do logowania błędów
@@ -144,22 +148,59 @@ def login_view(request):
 
     return render(request, 'account.html')
 
-# Edycja profilu
+# views.py
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.contrib.auth.models import User
+from .models import UserProfile
+from .forms import EditProfileForm
+from django.contrib.auth.forms import UserChangeForm
+
+# views.py
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import login, authenticate, update_session_auth_hash
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from .models import UserProfile
+from .forms import EditProfileForm, UserChangeForm
+
 @login_required
 def edit_profile(request):
+    user_instance = request.user
+    profile_instance, created = UserProfile.objects.get_or_create(user=user_instance)
+
     if request.method == 'POST':
-        form = EditProfileForm(request.POST, request.FILES, instance=request.user)
-        if form.is_valid():
-            form.save()
+        # Użyj `CustomUserChangeForm` zamiast domyślnego `UserChangeForm`
+        user_form = CustomUserChangeForm(request.POST, instance=user_instance)
+        profile_form = EditProfileForm(request.POST, request.FILES, instance=profile_instance)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            # Debugowanie formularzy
+            print("Dane formularza użytkownika: ", user_form.cleaned_data)
+            print("Dane formularza profilu: ", profile_form.cleaned_data)
+
+            # Zapisanie zmian w profilach użytkownika i UserProfile
+            user_form.save()
+            profile_form.save()
+            
+            # Debugowanie zapisanego profilu
+            print("Profil po zapisaniu: ", profile_instance.description, profile_instance.vehicle)
+
             messages.success(request, 'Twój profil został zaktualizowany.')
             return redirect('edit_profile')
         else:
+            print("Błędy formularza użytkownika: ", user_form.errors)
+            print("Błędy formularza profilu: ", profile_form.errors)
             messages.error(request, 'Wystąpiły błędy w formularzu. Sprawdź swoje dane.')
     else:
-        form = EditProfileForm(instance=request.user)
+        # Użyj `CustomUserChangeForm` zamiast `UserChangeForm`
+        user_form = CustomUserChangeForm(instance=user_instance)
+        profile_form = EditProfileForm(instance=profile_instance)
 
-    return render(request, 'edit_profile.html', {'form': form})
-
+    return render(request, 'edit_profile.html', {'user_form': user_form, 'profile_form': profile_form})
 # Zmiana hasła
 @login_required
 def change_password(request):
@@ -305,23 +346,67 @@ def blog(request):
 
     return render(request, 'blog.html', context)
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import login, authenticate, update_session_auth_hash
+from django.contrib.auth.views import PasswordResetConfirmView
+from django.contrib.auth.models import User, Group
+from django.contrib.auth import views as auth_views
+from django.core.mail import send_mail
+from django.conf import settings
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.tokens import default_token_generator
+from django.http import HttpResponse
+from django.contrib import messages
+from smtplib import SMTPException
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.paginator import Paginator
+from django.db.models import Q  # Importowanie narzędzia do wyszukiwania
+from .models import Post, ForumComment, BlogComment, UserProfile
+from .forms import PostForm, CommentForm
+import logging
+
+# Logger do logowania błędów
+logger = logging.getLogger(__name__)
+
 def blog_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    comments = post.comments.all()  # Pobieramy wszystkie komentarze dla danego posta
-    
-    # Obsługa dodawania komentarza
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.post = post
-            comment.author = request.user
-            comment.save()
-            return redirect('blog_detail', post_id=post.id)
-    else:
-        form = CommentForm()
+    comments = post.comments.all()
 
-    return render(request, 'blog_detail.html', {'post': post, 'comments': comments, 'form': form})
+    # Pobranie profilu autora posta
+    try:
+        user_profile = post.author.userprofile
+        print(f"User Profile found: {user_profile}")  # Sprawdzenie, czy profil został pobrany
+        print(f"Description: {user_profile.description}")  # Wyświetlenie wartości pola `description`
+        print(f"Vehicle: {user_profile.vehicle}")  # Wyświetlenie wartości pola `vehicle`
+    except UserProfile.DoesNotExist:
+        user_profile = None
+        print("User profile not found.")  # Jeśli profil nie istnieje
+
+    # Debugowanie przekazywanych wartości
+    profile_picture_url = user_profile.profile_picture.url if user_profile and user_profile.profile_picture else None
+    description = user_profile.description if user_profile else 'Brak opisu'
+    vehicle = user_profile.vehicle if user_profile else 'Brak informacji o pojeździe'
+    
+    print(f"Profile Picture URL: {profile_picture_url}")
+    print(f"Description: {description}")
+    print(f"Vehicle: {vehicle}")
+
+    # Przekazanie dodatkowych informacji do kontekstu
+    context = {
+        'post': post,
+        'comments': comments,
+        'form': CommentForm(),
+        'profile_picture': profile_picture_url,
+        'description': description,
+        'vehicle': vehicle,
+    }
+
+    return render(request, 'blog_detail.html', context)
 
 # Tworzenie nowego posta
 @login_required
@@ -352,11 +437,10 @@ def post_dislike(request, post_id):
 @login_required
 def add_vote(request, post_id, vote_type):
     post = get_object_or_404(Post, id=post_id)
-    existing_vote = Vote.objects.filter(post=post, user=request.user).first()
-
+    existing_vote = PostVote.objects.filter(post=post, user=request.user).first()
+    
     # Sprawdzamy, czy użytkownik już zagłosował
     if existing_vote:
-        # Jeśli istnieje głos i użytkownik zagłosował na coś innego, aktualizujemy
         if existing_vote.vote_type != vote_type:
             if vote_type == 'like':
                 post.add_like()
@@ -367,27 +451,26 @@ def add_vote(request, post_id, vote_type):
             existing_vote.vote_type = vote_type
             existing_vote.save()
     else:
-        # Jeśli nie ma istniejącego głosu, dodajemy nowy głos
-        Vote.objects.create(post=post, user=request.user, vote_type=vote_type)
+        PostVote.objects.create(post=post, user=request.user, vote_type=vote_type)
         if vote_type == 'like':
             post.add_like()
         else:
             post.add_dislike()
 
-    return redirect('blog_detail', post_id=post_id)
+    return redirect('blog_detail', post_id=post.id)
 
 # Widok dla panelu administracyjnego (admin_panel)
 @login_required
 @user_passes_test(lambda user: user.is_staff or user.is_superuser)  # Tylko admin i moderator mogą mieć dostęp
 def admin_panel(request):
     posts = Post.objects.all()
-    comments = Comment.objects.all()
+    comments = ForumComment.objects.all()
     return render(request, 'admin_panel.html', {'posts': posts, 'comments': comments})
 
 # Widok edytowania komentarza
 @login_required
 def comment_edit(request, comment_id):
-    comment = get_object_or_404(Comment, id=comment_id)
+    comment = get_object_or_404(ForumComment, id=comment_id)
     # Sprawdzenie, czy użytkownik jest autorem komentarza lub adminem
     if request.user != comment.author and not request.user.is_staff:
         return HttpResponse("Nie masz uprawnień do edytowania tego komentarza.", status=403)
@@ -404,7 +487,7 @@ def comment_edit(request, comment_id):
 # Widok usuwania komentarza
 @login_required
 def comment_delete(request, comment_id):
-    comment = get_object_or_404(Comment, id=comment_id)
+    comment = get_object_or_404(ForumComment, id=comment_id)
     # Sprawdzenie, czy użytkownik jest autorem komentarza lub adminem
     if request.user != comment.author and not request.user.is_staff:
         return HttpResponse("Nie masz uprawnień do usunięcia tego komentarza.", status=403)
@@ -419,7 +502,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 @staff_member_required
 def blog_management(request):
     posts = Post.objects.all()  # Pobierz wszystkie posty
-    comments = Comment.objects.all()  # Pobierz wszystkie komentarze
+    comments = ForumComment.objects.all()  # Pobierz wszystkie komentarze
     return render(request, 'blog_management.html', {'posts': posts, 'comments': comments})
 
 
@@ -476,3 +559,176 @@ from .models import Post
 def blog_management(request):
     posts = Post.objects.all()
     return render(request, 'blog_management.html', {'posts': posts})
+
+
+@login_required
+def edit_thread(request, thread_id):
+    thread = get_object_or_404(ForumThread, id=thread_id)
+    # Sprawdzenie, czy użytkownik jest autorem wątku
+    if request.user != thread.author:
+        messages.error(request, "Nie masz uprawnień do edycji tego wątku.")
+        return redirect('forum_detail', thread_id=thread_id)
+
+    if request.method == 'POST':
+        form = ThreadForm(request.POST, instance=thread)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Wątek został pomyślnie zaktualizowany.")
+            return redirect('forum_detail', thread_id=thread.id)
+    else:
+        form = ThreadForm(instance=thread)
+
+    return render(request, 'edit_thread.html', {'form': form, 'thread': thread})
+
+@login_required
+def delete_thread(request, thread_id):
+    thread = get_object_or_404(ForumThread, id=thread_id)
+    # Sprawdzenie, czy użytkownik jest autorem wątku lub administratorem
+    if request.user != thread.author and not request.user.is_staff:
+        messages.error(request, "Nie masz uprawnień do usunięcia tego wątku.")
+        return redirect('forum_detail', thread_id=thread_id)
+
+    if request.method == 'POST':
+        thread.delete()
+        messages.success(request, "Wątek został usunięty.")
+        return redirect('forum')
+
+    return render(request, 'delete_thread.html', {'thread': thread})
+
+
+def forum_home(request):
+    threads = ForumThread.objects.all().order_by('-created_at')
+    return render(request, 'forum.html', {'threads': threads})
+
+@login_required
+def forum_detail(request, thread_id):
+    thread = get_object_or_404(ForumThread, id=thread_id)
+    comments = thread.comments.all()
+    
+    # Sprawdzenie, czy użytkownik jest autorem wątku lub administratorem
+    can_edit_or_delete = request.user == thread.author or request.user.is_staff
+
+    context = {
+        'thread': thread,
+        'comments': comments,
+        'can_edit_or_delete': can_edit_or_delete
+    }
+    return render(request, 'forum_detail.html', context)
+
+# Widok dodawania nowego wątku (dla zalogowanych użytkowników)
+@login_required
+def add_thread(request):
+    if request.method == 'POST':
+        form = ThreadForm(request.POST)
+        if form.is_valid():
+            new_thread = form.save(commit=False)
+            new_thread.author = request.user
+            new_thread.save()
+            messages.success(request, "Nowy wątek został dodany pomyślnie!")
+            return redirect('forum_detail', thread_id=new_thread.id)
+    else:
+        form = ThreadForm()
+    return render(request, 'add_thread.html', {'form': form})
+
+# Widok edytowania wątku (dla autorów wątku)
+@login_required
+def edit_thread(request, thread_id):
+    thread = get_object_or_404(ForumThread, id=thread_id)
+    if request.user != thread.author:
+        messages.error(request, "Nie masz uprawnień do edytowania tego wątku.")
+        return redirect('forum_detail', thread_id=thread.id)
+
+    if request.method == 'POST':
+        form = ThreadForm(request.POST, instance=thread)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Wątek został zaktualizowany.")
+            return redirect('forum_detail', thread_id=thread.id)
+    else:
+        form = ThreadForm(instance=thread)
+    return render(request, 'edit_thread.html', {'form': form, 'thread': thread})
+
+# Widok usuwania wątku (dla autorów wątku lub adminów)
+@login_required
+def delete_thread(request, thread_id):
+    thread = get_object_or_404(ForumThread, id=thread_id)
+    if request.user != thread.author and not request.user.is_staff:
+        messages.error(request, "Nie masz uprawnień do usunięcia tego wątku.")
+        return redirect('forum_detail', thread_id=thread.id)
+
+    if request.method == 'POST':
+        thread.delete()
+        messages.success(request, "Wątek został usunięty.")
+        return redirect('forum')
+    return render(request, 'delete_thread.html', {'thread': thread})
+
+# Widok dodawania nowego komentarza (dla zalogowanych użytkowników)
+@login_required
+def add_comment(request, thread_id):
+    thread = get_object_or_404(ForumThread, id=thread_id)
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        if content:
+            ForumComment.objects.create(content=content, author=request.user, thread=thread)
+            return redirect('forum_detail', thread_id=thread.id)
+    return redirect('forum_detail', thread_id=thread.id)
+
+
+@login_required
+def comment_delete(request, comment_id):
+    comment = get_object_or_404(ForumComment, id=comment_id)
+    # Sprawdzenie, czy użytkownik jest autorem komentarza lub adminem
+    if request.user != comment.author and not request.user.is_staff:
+        messages.error(request, "Nie masz uprawnień do usunięcia tego komentarza.")
+        return redirect('forum_detail', thread_id=comment.thread.id)
+
+    thread_id = comment.thread.id  # Zapisujemy `thread_id`, ponieważ `comment` zostanie usunięty
+    comment.delete()
+    messages.success(request, "Komentarz został pomyślnie usunięty.")
+    return redirect('forum_detail', thread_id=thread_id)
+
+@login_required
+def comment_edit(request, comment_id):
+    comment = get_object_or_404(ForumComment, id=comment_id)
+    # Sprawdzenie, czy użytkownik jest autorem komentarza lub adminem
+    if request.user != comment.author and not request.user.is_staff:
+        messages.error(request, "Nie masz uprawnień do edytowania tego komentarza.")
+        return redirect('forum_detail', thread_id=comment.thread.id)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Komentarz został zaktualizowany.")
+            return redirect('forum_detail', thread_id=comment.thread.id)
+    else:
+        form = CommentForm(instance=comment)
+    return render(request, 'edit_comment.html', {'form': form, 'comment': comment})
+
+@login_required
+def blog_comment_delete(request, post_id, comment_id):
+    comment = get_object_or_404(BlogComment, id=comment_id, post_id=post_id)
+    if request.user != comment.author and not request.user.is_staff:
+        messages.error(request, "Nie masz uprawnień do usunięcia tego komentarza.")
+        return redirect('blog_detail', post_id=comment.post.id)
+
+    comment.delete()
+    messages.success(request, "Komentarz został pomyślnie usunięty.")
+    return redirect('blog_detail', post_id=post_id)
+
+@login_required
+def blog_comment_edit(request, post_id, comment_id):
+    comment = get_object_or_404(BlogComment, id=comment_id, post_id=post_id)
+    if request.user != comment.author and not request.user.is_staff:
+        messages.error(request, "Nie masz uprawnień do edytowania tego komentarza.")
+        return redirect('blog_detail', post_id=comment.post.id)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Komentarz został zaktualizowany.")
+            return redirect('blog_detail', post_id=post_id)
+    else:
+        form = CommentForm(instance=comment)
+    return render(request, 'edit_comment.html', {'form': form, 'comment': comment})

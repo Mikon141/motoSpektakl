@@ -137,3 +137,72 @@ input[type="file"]::-webkit-file-upload-button:hover {
 .container h5 {
     color: var(--text-color); /* Biały kolor */
 }
+
+/* Stylowanie filtrów dla widoku mobilnego */
+@media (max-width: 576px) {
+    .container .btn-outline-primary {
+        width: 100%;
+        margin-bottom: 10px; /* Dodanie odstępu między przyciskami */
+    }
+    
+    .container .btn-sort {
+        width: 48%; /* Przyciski sortowania zajmują po 48% szerokości */
+        margin-bottom: 10px; /* Dodanie odstępu między przyciskami */
+    }
+}
+
+        /* Dodatkowe style dla zdjęcia */
+        .img-fluid {
+            max-width: 60%; /* Zmniejszamy obraz do 60% szerokości */
+            display: block; /* Wyświetlamy obraz jako blokowy element */
+            margin: 20px auto; /* Wyśrodkowanie obrazu i dodanie marginesu */
+            border-radius: 10px; /* Zaokrąglamy rogi zdjęcia */
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2); /* Dodanie cienia */
+        }
+
+        /* Wyśrodkowanie tytułu */
+        .post-title {
+            text-align: center; /* Wyśrodkowanie tekstu */
+            color: white; /* Kolor tytułu */
+            margin-bottom: 30px; /* Większy margines dolny */
+        }
+
+        /* Stylizacja kontenera z treścią */
+        .post-content {
+            max-width: 80%; /* Zmniejszenie szerokości treści */
+            margin: 20px auto; /* Wyśrodkowanie treści */
+            font-size: 1.1rem; /* Zwiększenie rozmiaru czcionki */
+            line-height: 1.6; /* Ustawienie odstępu między wierszami */
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.05); /* Przezroczyste tło */
+            border-radius: 10px; /* Zaokrąglenie rogów */
+            color: #e0e0e0; /* Kolor czcionki */
+        }
+
+        /* Stylizacja footera */
+        footer.footer {
+            background-color: #222; /* Tło stopki */
+            padding: 20px 0;
+            color: #fff; /* Kolor tekstu */
+            position: relative;
+        }
+
+
+        /* Responsywność dla zdjęcia na urządzeniach mobilnych */
+        @media (max-width: 768px) {
+            .img-fluid {
+                max-width: 90%; /* Ustawienie szerokości zdjęcia na 90% dla urządzeń mobilnych */
+            }
+
+        }
+
+        /* Stylizacja zdjęcia profilowego */
+.profile-picture {
+    width: 64px; /* Szerokość zdjęcia */
+    height: 64px; /* Wysokość zdjęcia */
+    border-radius: 50%; /* Zaokrąglone rogi zdjęcia */
+    object-fit: cover; /* Dopasowanie zdjęcia do wymiarów */
+    border: 2px solid #ffffff; /* Obramowanie */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Dodanie cienia */
+    margin-bottom: 10px; /* Margines dolny dla odstępu */
+}

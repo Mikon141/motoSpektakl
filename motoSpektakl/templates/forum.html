@@ -1,57 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Forum Motoryzacyjne</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <!-- Zewnętrzny plik CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body class="flex flex-col min-h-screen">
-    <header style="background-color: var(--button-color); padding: 10px 0;"> <!-- Zmiana koloru tła nagłówka -->
-        <div class="container">
-            <a href="/"><h1 class="header-title">MOTOSPEKTAKL</h1></a>
-            <!-- Tutaj możesz dodać inne elementy nagłówka, jeśli są potrzebne -->
-        </div>
-    </header>
-    <!-- Sekcja z obrazem -->
-    <div class="main-image-container"></div>
+{% extends 'index.html' %}
 
-    <div class="navigation-buttons">
-        <a href="{% url 'blog' %}">BLOG</a>
-        <a href="{% url 'forum' %}">FORUM</a>
-        <a href="{% url 'account' %}">MOJE KONTO</a>
-    </div>
+{% block title %}
+    Forum Motoryzacyjne
+{% endblock %}
 
-    <!-- Treść forum -->
+{% block content %}
     <div class="forum-content container mt-4">
         <h1>Witamy na Forum Motoryzacyjnym</h1>
-        <!-- Tutaj będzie lista wątków -->
-        <div class="thread">
-            <h2><a href="#">Tytuł pierwszego wątku</a></h2>
-            <p>Autor: Jan Kowalski | Data: 2024-06-26</p>
-            <p>Opis wątku...</p>
-        </div>
-        <!-- Dodaj więcej wątków tutaj -->
+        <a href="{% url 'add_thread' %}" class="btn btn-primary">Dodaj nowy wątek</a>
+        <hr>
+        <!-- Lista wątków -->
+        {% for thread in threads %}
+            <div class="thread">
+                <h2><a href="{% url 'forum_detail' thread_id=thread.id %}">{{ thread.title }}</a></h2>
+                <p>Autor: {{ thread.author.username }} | Data: {{ thread.created_at }}</p>
+                <p>{{ thread.content|truncatewords:20 }}</p>
+            </div>
+            <hr>
+        {% endfor %}
     </div>
-
-    <div class="flex-1">
-        <!-- Must be always empty -->
-    </div>
-
-    <!-- Stopka strony -->
-    <footer class="footer mt-auto py-3 bg-light text-center">
-        <div class="container">
-            <span>&copy; 2024 Blog Motoryzacyjny</span>
-        </div>
-    </footer>
-
-    <!-- Bootstrap JS, Popper.js, and jQuery -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.amazonaws.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-</body>
-</html>
+{% endblock content %}

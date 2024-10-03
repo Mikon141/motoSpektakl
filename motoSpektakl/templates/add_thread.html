@@ -1,0 +1,17 @@
+{% extends 'index.html' %}
+
+{% block title %}
+Dodaj nowy wątek - Blog Motoryzacyjny
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Dodaj nowy wątek</h2>
+    <form method="POST" class="mt-4">
+        {% csrf_token %}
+        {{ form.as_p }} <!-- Poprawne renderowanie formularza -->
+        <button type="submit" class="btn btn-primary">Dodaj wątek</button>
+        <a href="{% url 'forum' %}" class="btn btn-secondary ml-2">Anuluj</a>
+    </form>
+</div>
+{% endblock %}
