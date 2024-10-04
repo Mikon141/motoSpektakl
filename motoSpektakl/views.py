@@ -27,6 +27,7 @@ from .forms import RegisterForm, EditProfileForm, EditPasswordForm, UserChangeFo
 from .models import PostVote, ForumVote
 from .models import ForumThread
 from .forms import ThreadForm  # Nowy formularz, który stworzymy
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 import logging
 
@@ -602,8 +603,22 @@ def delete_thread(request, thread_id):
     return render(request, 'delete_thread.html', {'thread': thread})
 
 
+@login_required
 def forum_home(request):
-    threads = ForumThread.objects.all().order_by('-created_at')
+    threads = ForumThread.objects.all().order_by('-created_at')  # Pobierz wszystkie wątki i posortuj od najnowszych
+
+    # Implementacja paginacji
+    paginator = Paginator(threads, 5)  # Paginacja: 5 wątków na stronę
+    page = request.GET.get('page')  # Pobierz numer strony z parametru GET
+    try:
+        threads = paginator.page(page)
+    except PageNotAnInteger:
+        # Jeśli numer strony nie jest liczbą, wyświetl pierwszą stronę
+        threads = paginator.page(1)
+    except EmptyPage:
+        # Jeśli numer strony jest poza zakresem, wyświetl ostatnią stronę
+        threads = paginator.page(paginator.num_pages)
+
     return render(request, 'forum.html', {'threads': threads})
 
 @login_required
@@ -614,6 +629,10 @@ def forum_detail(request, thread_id):
     # Sprawdzenie, czy użytkownik jest autorem wątku lub administratorem
     can_edit_or_delete = request.user == thread.author or request.user.is_staff
 
+    # Przekazanie dodatkowych informacji dotyczących profilu autora komentarza
+    for comment in comments:
+        comment.author_profile = comment.author.userprofile  # Ładowanie UserProfile dla autora komentarza
+    
     context = {
         'thread': thread,
         'comments': comments,

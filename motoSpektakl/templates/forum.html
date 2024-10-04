@@ -18,5 +18,24 @@
             </div>
             <hr>
         {% endfor %}
+
+        <!-- Nawigacja paginacji -->
+        <div class="pagination">
+            <span class="step-links">
+                {% if threads.has_previous %}
+                    <a href="?page=1">&laquo; Pierwsza</a>
+                    <a href="?page={{ threads.previous_page_number }}">Poprzednia</a>
+                {% endif %}
+
+                <span class="current">
+                    Strona {{ threads.number }} z {{ threads.paginator.num_pages }}
+                </span>
+
+                {% if threads.has_next %}
+                    <a href="?page={{ threads.next_page_number }}">Następna</a>
+                    <a href="?page={{ threads.paginator.num_pages }}">Ostatnia &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
     </div>
 {% endblock content %}
