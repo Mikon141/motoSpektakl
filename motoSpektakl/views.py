@@ -178,6 +178,11 @@ def edit_profile(request):
         profile_form = EditProfileForm(request.POST, request.FILES, instance=profile_instance)
 
         if user_form.is_valid() and profile_form.is_valid():
+            # Sprawdzenie, czy checkbox "Usuń zdjęcie" jest zaznaczony
+            if 'profile_picture-clear' in request.POST:
+                profile_instance.profile_picture.delete()  # Usuń zdjęcie z serwera
+                profile_instance.profile_picture = None  # Ustaw pole na None
+            
             # Debugowanie formularzy
             print("Dane formularza użytkownika: ", user_form.cleaned_data)
             print("Dane formularza profilu: ", profile_form.cleaned_data)
@@ -201,6 +206,7 @@ def edit_profile(request):
         profile_form = EditProfileForm(instance=profile_instance)
 
     return render(request, 'edit_profile.html', {'user_form': user_form, 'profile_form': profile_form})
+
 # Zmiana hasła
 @login_required
 def change_password(request):

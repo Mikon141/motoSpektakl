@@ -27,18 +27,18 @@ class RegisterForm(UserCreationForm):
 
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
-from django.forms import ClearableFileInput
+from django.forms import FileInput
 from .models import UserProfile
 
 class EditProfileForm(forms.ModelForm):
     profile_picture = forms.ImageField(
         required=False,
         label="Zdjęcie profilowe",
-        widget=ClearableFileInput(attrs={
+        widget=FileInput(attrs={
             'class': 'form-control-file',
-            'clear_checkbox_label': 'Usuń zdjęcie',
             'initial_text': 'Aktualne zdjęcie:',
             'input_text': 'Zmień',
+            'clear_checkbox_label': 'Usuń zdjęcie',
         })
     )
     description = forms.CharField(
