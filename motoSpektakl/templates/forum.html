@@ -5,18 +5,53 @@
 {% endblock %}
 
 {% block content %}
-    <div class="forum-content container mt-4">
-        <h1>Witamy na Forum Motoryzacyjnym</h1>
-        <a href="{% url 'add_thread' %}" class="btn btn-primary">Dodaj nowy wątek</a>
+<div class="forum-content container mt-4">
+    <h1>Witamy na Forum Motoryzacyjnym</h1>
+    <a href="{% url 'add_thread' %}" class="btn btn-primary mb-3">Dodaj nowy wątek</a>
+
+    <!-- Wyszukiwarka -->
+    <form method="GET" class="form-inline mb-3">
+        <input type="text" name="search" class="form-control mr-sm-2" placeholder="Wyszukaj wątek..." value="{{ search_query }}">
+        <button type="submit" class="btn btn-outline-success">Szukaj</button>
+    </form>
+
+    <!-- Opcje sortowania -->
+    <form method="GET" class="form-inline mb-3">
+        <select name="sort" class="form-control mr-sm-2" onchange="this.form.submit()">
+            <option value="newest" {% if sort_order == 'newest' %}selected{% endif %}>Najnowsze</option>
+            <option value="oldest" {% if sort_order == 'oldest' %}selected{% endif %}>Najstarsze</option>
+        </select>
+    </form>
+
+    <hr>
+
+    <!-- Lista wątków -->
+    {% for thread in threads %}
+        <div class="thread mb-4">
+            <h2><a href="{% url 'forum_detail' thread_id=thread.id %}">{{ thread.title }}</a></h2>
+            <p>Autor: {{ thread.author.username }} | Data: {{ thread.created_at }}</p>
+            <p>{{ thread.content|truncatewords:20 }}</p>
+        </div>
         <hr>
-        <!-- Lista wątków -->
-        {% for thread in threads %}
-            <div class="thread">
-                <h2><a href="{% url 'forum_detail' thread_id=thread.id %}">{{ thread.title }}</a></h2>
-                <p>Autor: {{ thread.author.username }} | Data: {{ thread.created_at }}</p>
-                <p>{{ thread.content|truncatewords:20 }}</p>
-            </div>
-            <hr>
-        {% endfor %}
+    {% endfor %}
+
+    <!-- Nawigacja paginacji -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if threads.has_previous %}
+                <a href="?page=1">&laquo; Pierwsza</a>
+                <a href="?page={{ threads.previous_page_number }}">Poprzednia</a>
+            {% endif %}
+
+            <span class="current">
+                Strona {{ threads.number }} z {{ threads.paginator.num_pages }}
+            </span>
+
+            {% if threads.has_next %}
+                <a href="?page={{ threads.next_page_number }}">Następna</a>
+                <a href="?page={{ threads.paginator.num_pages }}">Ostatnia &raquo;</a>
+            {% endif %}
+        </span>
     </div>
+</div>
 {% endblock content %}

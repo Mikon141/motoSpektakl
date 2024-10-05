@@ -27,6 +27,7 @@ from .forms import RegisterForm, EditProfileForm, EditPasswordForm, UserChangeFo
 from .models import PostVote, ForumVote
 from .models import ForumThread
 from .forms import ThreadForm  # Nowy formularz, który stworzymy
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 import logging
 
@@ -40,10 +41,6 @@ def index(request):
 # Widok strony konta użytkownika
 def account(request):
     return render(request, 'account.html')
-
-# Widok bloga
-def blog(request):
-    return render(request, 'blog.html')
 
 # Widok forum
 def forum(request):
@@ -323,15 +320,21 @@ def account_management(request):
     users = User.objects.filter(username__icontains=search_query)  # Możliwość filtrowania użytkowników
     return render(request, 'account_management.html', {'users': users})
 
+# Widok bloga
 def blog(request):
     category = request.GET.get('category')  # Pobranie wybranej kategorii z URL
     sort_order = request.GET.get('sort_order')  # Pobranie wybranego porządku sortowania z URL
+    search_query = request.GET.get('search', '')  # Pobranie zapytania wyszukiwania z parametru GET
 
     posts = Post.objects.all()
 
     # Filtrowanie według kategorii, jeśli podano
     if category:
         posts = posts.filter(category=category)
+
+    # Filtrowanie według wyszukiwanego hasła w tytule lub nazwie użytkownika
+    if search_query:
+        posts = posts.filter(Q(title__icontains=search_query) | Q(author__username__icontains=search_query))
 
     # Sortowanie według wybranej opcji
     if sort_order == 'oldest':
@@ -348,6 +351,7 @@ def blog(request):
         'page_obj': page_obj,
         'category': category,
         'sort_order': sort_order,
+        'search_query': search_query,
     }
 
     return render(request, 'blog.html', context)
@@ -601,10 +605,40 @@ def delete_thread(request, thread_id):
 
     return render(request, 'delete_thread.html', {'thread': thread})
 
-
+@login_required
 def forum_home(request):
-    threads = ForumThread.objects.all().order_by('-created_at')
-    return render(request, 'forum.html', {'threads': threads})
+    search_query = request.GET.get('search', '')  # Pobranie zapytania wyszukiwania z parametru GET
+    sort_order = request.GET.get('sort', 'newest')  # Pobranie opcji sortowania z parametru GET
+
+    threads = ForumThread.objects.all()
+
+    # Filtrowanie według zapytania wyszukiwania
+    if search_query:
+        threads = threads.filter(Q(title__icontains=search_query) | Q(content__icontains=search_query))
+
+    # Sortowanie według wybranej opcji
+    if sort_order == 'oldest':
+        threads = threads.order_by('created_at')  # Sortowanie od najstarszych
+    else:
+        threads = threads.order_by('-created_at')  # Sortowanie od najnowszych (domyślnie)
+
+    # Implementacja paginacji (5 wątków na stronę)
+    paginator = Paginator(threads, 5)
+    page = request.GET.get('page')
+    try:
+        threads = paginator.page(page)
+    except PageNotAnInteger:
+        threads = paginator.page(1)
+    except EmptyPage:
+        threads = paginator.page(paginator.num_pages)
+
+    context = {
+        'threads': threads,
+        'search_query': search_query,
+        'sort_order': sort_order,
+    }
+
+    return render(request, 'forum.html', context)
 
 @login_required
 def forum_detail(request, thread_id):
@@ -614,6 +648,10 @@ def forum_detail(request, thread_id):
     # Sprawdzenie, czy użytkownik jest autorem wątku lub administratorem
     can_edit_or_delete = request.user == thread.author or request.user.is_staff
 
+    # Przekazanie dodatkowych informacji dotyczących profilu autora komentarza
+    for comment in comments:
+        comment.author_profile = comment.author.userprofile  # Ładowanie UserProfile dla autora komentarza
+    
     context = {
         'thread': thread,
         'comments': comments,
@@ -738,3 +776,28 @@ def blog_comment_edit(request, post_id, comment_id):
     else:
         form = CommentForm(instance=comment)
     return render(request, 'edit_comment.html', {'form': form, 'comment': comment})
+
+@login_required
+def vote_on_thread(request, thread_id, vote_type):
+    thread = get_object_or_404(ForumThread, id=thread_id)
+    existing_vote = ForumVote.objects.filter(thread=thread, user=request.user).first()
+    
+    # Sprawdzamy, czy użytkownik już zagłosował
+    if existing_vote:
+        if existing_vote.vote_type != vote_type:
+            if vote_type == 'like':
+                thread.add_like()
+                thread.remove_dislike()
+            else:
+                thread.add_dislike()
+                thread.remove_like()
+            existing_vote.vote_type = vote_type
+            existing_vote.save()
+    else:
+        ForumVote.objects.create(thread=thread, user=request.user, vote_type=vote_type)
+        if vote_type == 'like':
+            thread.add_like()
+        else:
+            thread.add_dislike()
+
+    return redirect('forum_detail', thread_id=thread.id)

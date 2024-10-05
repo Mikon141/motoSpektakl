@@ -1,5 +1,11 @@
+<!-- forum_detail.html -->
 {% extends 'index.html' %}
 {% load static %}
+
+<head>
+    <!-- Dodanie pliku forum_styles.css -->
+    <link rel="stylesheet" href="{% static 'css/forum_styles.css' %}">
+</head>
 
 {% block title %}Szczegóły Wątku - {{ thread.title }}{% endblock %}
 
@@ -17,19 +23,39 @@
     {% endif %}
 
     <hr>
-    <h2>Komentarze</h2>
+    
+    <!-- Sekcja głosowania -->
+    <div class="vote-buttons mt-4 text-center">
+        <a href="{% url 'thread_like' thread.id %}" class="btn btn-success">Fajne ({{ thread.likes }})</a>
+        <a href="{% url 'thread_dislike' thread.id %}" class="btn btn-danger">Nie fajne ({{ thread.dislikes }})</a>
+    </div>
+
+    <h2 class="mt-5">Komentarze</h2>
     {% for comment in comments %}
-    <div class="comment mb-4">
-        <p><strong>{{ comment.author.username }}:</strong> {{ comment.content }}</p>
-        <small>Dodano: {{ comment.created_at }}</small>
-        
-        {% if comment.author == request.user or request.user.is_staff %}
-        <!-- Opcje edycji i usunięcia komentarza, widoczne tylko dla autora lub administratora -->
-        <div class="mt-2">
-            <a href="{% url 'comment_edit' comment.id %}" class="btn btn-sm btn-outline-primary">Edytuj</a>
-            <a href="{% url 'comment_delete' comment.id %}" class="btn btn-sm btn-outline-danger">Usuń</a>
+    <div class="comment d-flex align-items-start mb-4">
+        <!-- Zdjęcie profilowe -->
+        <div class="mr-3">
+            <img src="{{ comment.author.userprofile.profile_picture.url }}" alt="Profilowe zdjęcie" class="rounded-circle profile-picture">
         </div>
-        {% endif %}
+
+        <!-- Zawartość komentarza -->
+        <div class="comment-content">
+            <p><strong class="comment-author">{{ comment.author.username }}</strong> napisał(a):</p>
+            <p>{{ comment.content }}</p>
+            <small>Dodano: {{ comment.created_at }}</small>
+            <br>
+            <strong>Opis:</strong> {{ comment.author.userprofile.description }}
+            <br>
+            <strong>Pojazd użytkownika:</strong> {{ comment.author.userprofile.vehicle }}
+
+            {% if comment.author == request.user or request.user.is_staff %}
+            <!-- Opcje edycji i usunięcia komentarza, widoczne tylko dla autora lub administratora -->
+            <div class="mt-2">
+                <a href="{% url 'comment_edit' comment.id %}" class="btn btn-sm btn-outline-primary">Edytuj</a>
+                <a href="{% url 'comment_delete' comment.id %}" class="btn btn-sm btn-outline-danger">Usuń</a>
+            </div>
+            {% endif %}
+        </div>
     </div>
     <hr>
     {% endfor %}
