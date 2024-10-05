@@ -42,10 +42,6 @@ def index(request):
 def account(request):
     return render(request, 'account.html')
 
-# Widok bloga
-def blog(request):
-    return render(request, 'blog.html')
-
 # Widok forum
 def forum(request):
     return render(request, 'forum.html')
@@ -324,15 +320,21 @@ def account_management(request):
     users = User.objects.filter(username__icontains=search_query)  # Możliwość filtrowania użytkowników
     return render(request, 'account_management.html', {'users': users})
 
+# Widok bloga
 def blog(request):
     category = request.GET.get('category')  # Pobranie wybranej kategorii z URL
     sort_order = request.GET.get('sort_order')  # Pobranie wybranego porządku sortowania z URL
+    search_query = request.GET.get('search', '')  # Pobranie zapytania wyszukiwania z parametru GET
 
     posts = Post.objects.all()
 
     # Filtrowanie według kategorii, jeśli podano
     if category:
         posts = posts.filter(category=category)
+
+    # Filtrowanie według wyszukiwanego hasła w tytule lub nazwie użytkownika
+    if search_query:
+        posts = posts.filter(Q(title__icontains=search_query) | Q(author__username__icontains=search_query))
 
     # Sortowanie według wybranej opcji
     if sort_order == 'oldest':
@@ -349,6 +351,7 @@ def blog(request):
         'page_obj': page_obj,
         'category': category,
         'sort_order': sort_order,
+        'search_query': search_query,
     }
 
     return render(request, 'blog.html', context)

@@ -16,10 +16,10 @@
         .author-container {
             display: flex;
             flex-direction: column;
-            align-items: center; /* Wyśrodkowanie w pionie */
+            align-items: center;
             margin-bottom: 15px;
             padding: 10px;
-            background-color: var(--background-color); /* Kolor tła zgodny z motywem */
+            background-color: var(--background-color);
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             max-width: 150px;
@@ -43,21 +43,18 @@
             font-weight: 600;
         }
 
-        /* Stylizacja tytułów postów */
         .post-title {
             font-size: 1.2rem;
             font-weight: bold;
             margin-bottom: 10px;
-            color: black; /* Zmiana koloru tytułu na czarny */
-            text-align: center; /* Wyrównanie tytułu do środka */
+            color: black;
+            text-align: center;
         }
 
-        /* Kontener z treścią */
         .card-body {
-            text-align: center; /* Wyrównanie tekstu w kontenerze do środka */
+            text-align: center;
         }
 
-        /* Stylizacja przycisku */
         .btn-primary {
             display: block;
             width: 80%;
@@ -80,6 +77,14 @@
         <a href="{% url 'account' %}">MOJE KONTO</a>
     </div>
 
+    <!-- Wyszukiwarka -->
+    <div class="container mt-4 text-center">
+        <form method="GET" class="form-inline mb-3">
+            <input type="text" name="search" class="form-control mr-sm-2" placeholder="Wyszukaj po tytule lub autorze..." value="{{ search_query }}">
+            <button type="submit" class="btn btn-outline-success">Szukaj</button>
+        </form>
+    </div>
+
     <!-- Filtry kategorii -->
     <div class="container mt-4 text-center">
         <h5>Filtruj według kategorii:</h5>
@@ -92,8 +97,8 @@
     <!-- Sortowanie postów -->
     <div class="container mt-4 text-center">
         <h5>Sortuj według:</h5>
-        <a href="{% url 'blog' %}?sort_order=oldest{% if category %}&category={{ category }}{% endif %}" class="btn btn-outline-primary btn-sort {% if sort_order == 'oldest' %}active{% endif %}" style="text-transform: capitalize;">Od najstarszych</a>
-        <a href="{% url 'blog' %}?sort_order=newest{% if category %}&category={{ category }}{% endif %}" class="btn btn-outline-primary btn-sort {% if sort_order == 'newest' %}active{% endif %}" style="text-transform: capitalize;">Od najnowszych</a>
+        <a href="{% url 'blog' %}?sort_order=oldest{% if category %}&category={{ category }}{% endif %}&search={{ search_query }}" class="btn btn-outline-primary btn-sort {% if sort_order == 'oldest' %}active{% endif %}" style="text-transform: capitalize;">Od najstarszych</a>
+        <a href="{% url 'blog' %}?sort_order=newest{% if category %}&category={{ category }}{% endif %}&search={{ search_query }}" class="btn btn-outline-primary btn-sort {% if sort_order == 'newest' %}active{% endif %}" style="text-transform: capitalize;">Od najnowszych</a>
     </div>
 
     <!-- Wyświetlanie postów -->
@@ -108,9 +113,7 @@
                         <img class="card-img-top" src="{% static 'images/default_image.png' %}" alt="Brak zdjęcia">
                     {% endif %}
                     <div class="card-body">
-                        <!-- Tytuł postu nad kategorią -->
                         <h3 class="post-title">{{ post.title }}</h3>
-                        <!-- Sekcja autora z obrazem -->
                         <div class="author-container mx-auto">
                             {% if post.author.userprofile.profile_picture %}
                                 <img src="{{ post.author.userprofile.profile_picture.url }}" alt="{{ post.author.username }}">
@@ -119,7 +122,6 @@
                             {% endif %}
                             <p>{{ post.author.username }}</p>
                         </div>
-                        <!-- Dalsze informacje o poście -->
                         <p><strong>Kategoria:</strong> {{ post.get_category_display }}</p>
                         <p><strong>Data publikacji:</strong> {{ post.created_at|date:"d M Y" }}</p>
                         <a href="{% url 'blog_detail' post.id %}" class="btn btn-primary">Czytaj więcej</a>
@@ -127,7 +129,7 @@
                 </div>
             </div>
             {% empty %}
-            <p style="color: white;">Brak postów do wyświetlenia.</p>
+            <p>Brak postów do wyświetlenia.</p>
             {% endfor %}
         </div>
     </div>
@@ -138,7 +140,7 @@
             <ul class="pagination justify-content-center">
                 {% if page_obj.has_previous %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if category %}&category={{ category }}{% endif %}&sort_order={{ sort_order }}" aria-label="Previous">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if category %}&category={{ category }}{% endif %}&sort_order={{ sort_order }}&search={{ search_query }}" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
@@ -146,7 +148,7 @@
                 <li class="page-item disabled"><a class="page-link">Strona {{ page_obj.number }} z {{ page_obj.paginator.num_pages }}</a></li>
                 {% if page_obj.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if category %}&category={{ category }}{% endif %}&sort_order={{ sort_order }}" aria-label="Next">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if category %}&category={{ category }}{% endif %}&sort_order={{ sort_order }}&search={{ search_query }}" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
@@ -157,16 +159,12 @@
 
     <footer class="footer mt-auto py-3 text-center">
         <div class="container d-flex justify-content-between align-items-center">
-            <!-- Ikony po lewej stronie -->
             <div class="social-icons">
                 <a href="https://www.youtube.com" target="_blank" class="social-icon">
                     <i class="fab fa-youtube"></i>
                 </a>
             </div>
-            
             <span>&copy; 2024 Blog Motoryzacyjny</span>
-            
-            <!-- Ikony po prawej stronie -->
             <div class="social-icons">
                 <a href="https://www.instagram.com" target="_blank" class="social-icon">
                     <i class="fab fa-instagram"></i>
@@ -174,9 +172,5 @@
             </div>
         </div>
     </footer>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.amazonaws.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
