@@ -602,24 +602,40 @@ def delete_thread(request, thread_id):
 
     return render(request, 'delete_thread.html', {'thread': thread})
 
-
 @login_required
 def forum_home(request):
-    threads = ForumThread.objects.all().order_by('-created_at')  # Pobierz wszystkie wątki i posortuj od najnowszych
+    search_query = request.GET.get('search', '')  # Pobranie zapytania wyszukiwania z parametru GET
+    sort_order = request.GET.get('sort', 'newest')  # Pobranie opcji sortowania z parametru GET
 
-    # Implementacja paginacji
-    paginator = Paginator(threads, 5)  # Paginacja: 5 wątków na stronę
-    page = request.GET.get('page')  # Pobierz numer strony z parametru GET
+    threads = ForumThread.objects.all()
+
+    # Filtrowanie według zapytania wyszukiwania
+    if search_query:
+        threads = threads.filter(Q(title__icontains=search_query) | Q(content__icontains=search_query))
+
+    # Sortowanie według wybranej opcji
+    if sort_order == 'oldest':
+        threads = threads.order_by('created_at')  # Sortowanie od najstarszych
+    else:
+        threads = threads.order_by('-created_at')  # Sortowanie od najnowszych (domyślnie)
+
+    # Implementacja paginacji (5 wątków na stronę)
+    paginator = Paginator(threads, 5)
+    page = request.GET.get('page')
     try:
         threads = paginator.page(page)
     except PageNotAnInteger:
-        # Jeśli numer strony nie jest liczbą, wyświetl pierwszą stronę
         threads = paginator.page(1)
     except EmptyPage:
-        # Jeśli numer strony jest poza zakresem, wyświetl ostatnią stronę
         threads = paginator.page(paginator.num_pages)
 
-    return render(request, 'forum.html', {'threads': threads})
+    context = {
+        'threads': threads,
+        'search_query': search_query,
+        'sort_order': sort_order,
+    }
+
+    return render(request, 'forum.html', context)
 
 @login_required
 def forum_detail(request, thread_id):
@@ -757,3 +773,28 @@ def blog_comment_edit(request, post_id, comment_id):
     else:
         form = CommentForm(instance=comment)
     return render(request, 'edit_comment.html', {'form': form, 'comment': comment})
+
+@login_required
+def vote_on_thread(request, thread_id, vote_type):
+    thread = get_object_or_404(ForumThread, id=thread_id)
+    existing_vote = ForumVote.objects.filter(thread=thread, user=request.user).first()
+    
+    # Sprawdzamy, czy użytkownik już zagłosował
+    if existing_vote:
+        if existing_vote.vote_type != vote_type:
+            if vote_type == 'like':
+                thread.add_like()
+                thread.remove_dislike()
+            else:
+                thread.add_dislike()
+                thread.remove_like()
+            existing_vote.vote_type = vote_type
+            existing_vote.save()
+    else:
+        ForumVote.objects.create(thread=thread, user=request.user, vote_type=vote_type)
+        if vote_type == 'like':
+            thread.add_like()
+        else:
+            thread.add_dislike()
+
+    return redirect('forum_detail', thread_id=thread.id)

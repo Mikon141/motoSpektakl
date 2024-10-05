@@ -1,3 +1,4 @@
+<!-- forum_detail.html -->
 {% extends 'index.html' %}
 {% load static %}
 
@@ -22,7 +23,14 @@
     {% endif %}
 
     <hr>
-    <h2>Komentarze</h2>
+    
+    <!-- Sekcja głosowania -->
+    <div class="vote-buttons mt-4 text-center">
+        <a href="{% url 'thread_like' thread.id %}" class="btn btn-success">Fajne ({{ thread.likes }})</a>
+        <a href="{% url 'thread_dislike' thread.id %}" class="btn btn-danger">Nie fajne ({{ thread.dislikes }})</a>
+    </div>
+
+    <h2 class="mt-5">Komentarze</h2>
     {% for comment in comments %}
     <div class="comment d-flex align-items-start mb-4">
         <!-- Zdjęcie profilowe -->

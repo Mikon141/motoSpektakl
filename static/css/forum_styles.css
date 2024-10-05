@@ -43,3 +43,12 @@
     background-color: #dc3545;
     color: #fff;
 }
+
+.vote-buttons {
+    margin: 20px 0;
+}
+
+.vote-buttons .btn {
+    width: 150px;
+    margin: 0 10px;
+}
