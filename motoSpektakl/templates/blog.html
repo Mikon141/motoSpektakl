@@ -60,6 +60,31 @@
             width: 80%;
             margin: 10px auto;
         }
+
+        /* Stylizacja wyszukiwarki */
+        .search-container {
+            display: flex;
+            flex-direction: column; /* Układ w kolumnie */
+            align-items: center;
+            margin: 20px auto;
+            width: 300px; /* Szerokość równa przyciskowi "Forum" */
+        }
+
+        .search-container input, 
+        .search-container button {
+            width: 100%; /* Pełna szerokość dla obu elementów */
+            margin-bottom: 10px; /* Odstęp między polem a przyciskiem */
+        }
+
+        .search-container button {
+            background-color: #007bff; /* Kolor przycisku */
+            color: white;
+            border: none;
+        }
+
+        .search-container button:hover {
+            background-color: #0056b3; /* Hover efekt */
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -79,9 +104,9 @@
 
     <!-- Wyszukiwarka -->
     <div class="container mt-4 text-center">
-        <form method="GET" class="form-inline mb-3">
-            <input type="text" name="search" class="form-control mr-sm-2" placeholder="Wyszukaj po tytule lub autorze..." value="{{ search_query }}">
-            <button type="submit" class="btn btn-outline-success">Szukaj</button>
+        <form method="GET" class="search-container">
+            <input type="text" name="search" class="form-control" placeholder="Wyszukaj po tytule lub autorze..." value="{{ search_query }}">
+            <button type="submit" class="btn">Szukaj</button>
         </form>
     </div>
 

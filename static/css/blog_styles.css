@@ -206,3 +206,30 @@ input[type="file"]::-webkit-file-upload-button:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Dodanie cienia */
     margin-bottom: 10px; /* Margines dolny dla odstępu */
 }
+
+/* Stylizacja wyszukiwarki i przycisku */
+.search-container {
+    margin-bottom: 30px;
+}
+
+.search-container .form-inline {
+    max-width: 400px; /* Ustawienie maksymalnej szerokości formularza */
+    margin: 0 auto;
+}
+
+.search-container .form-control {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.search-container .btn-search {
+    width: 100%;
+    background-color: #007bff; /* Dopasowanie koloru do stylu strony */
+    color: white;
+}
+
+.search-container .btn-search:hover {
+    background-color: #0056b3;
+    color: white;
+}
