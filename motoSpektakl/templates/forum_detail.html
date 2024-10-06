@@ -30,48 +30,73 @@
         <a href="{% url 'thread_dislike' thread.id %}" class="btn btn-danger">Nie fajne ({{ thread.dislikes }})</a>
     </div>
 
-    <h2 class="mt-5">Komentarze</h2>
-    {% for comment in comments %}
-    <div class="comment d-flex align-items-start mb-4">
-        <!-- Zdjęcie profilowe -->
-        <div class="mr-3">
-            <img src="{{ comment.author.userprofile.profile_picture.url }}" alt="Profilowe zdjęcie" class="rounded-circle profile-picture">
-        </div>
-
-        <!-- Zawartość komentarza -->
-        <div class="comment-content">
-            <p><strong class="comment-author">{{ comment.author.username }}</strong> napisał(a):</p>
-            <p>{{ comment.content }}</p>
-            <small>Dodano: {{ comment.created_at }}</small>
-            <br>
-            <strong>Opis:</strong> {{ comment.author.userprofile.description }}
-            <br>
-            <strong>Pojazd użytkownika:</strong> {{ comment.author.userprofile.vehicle }}
-
-            {% if comment.author == request.user or request.user.is_staff %}
-            <!-- Opcje edycji i usunięcia komentarza, widoczne tylko dla autora lub administratora -->
-            <div class="mt-2">
-                <a href="{% url 'comment_edit' comment.id %}" class="btn btn-sm btn-outline-primary">Edytuj</a>
-                <a href="{% url 'comment_delete' comment.id %}" class="btn btn-sm btn-outline-danger">Usuń</a>
+    <h2 class="mt-5 text-white">Odpowiedzi</h2>
+    <div class="mb-4">
+        {% for comment in comments %}
+        <div class="comment mb-3 p-3 bg-light d-flex align-items-center justify-content-between">
+            <!-- Zdjęcie autora odpowiedzi wyświetlane po lewej stronie -->
+            <div class="d-flex align-items-center">
+                <div class="mr-3">
+                    {% if comment.author.userprofile.profile_picture %}
+                        <img src="{{ comment.author.userprofile.profile_picture.url }}" class="profile-picture mr-3" alt="{{ comment.author.username }}">
+                    {% else %}
+                        <img src="{% static 'images/default_profile.jpg' %}" class="profile-picture mr-3" alt="Brak zdjęcia">
+                    {% endif %}
+                </div>
+                <div>
+                    <!-- Wyróżniony tekst autora odpowiedzi -->
+                    <strong style="font-size: 1.2em; color: #0056b3;">{{ comment.author.username }}</strong> 
+                    <span style="color: black;">napisał(a):</span> <!-- Dodanie stylu dla "napisał(a):" -->
+                    
+                    <!-- Zawartość komentarza -->
+                    <p style="color: black;">{{ comment.content }}</p> <!-- Ustawienie koloru tekstu na czarny -->
+                    
+                    <!-- Informacje dodatkowe -->
+                    <small style="color: black;">Dodano: {{ comment.created_at }}</small>
+                    <br>
+                    {% if comment.author.userprofile.description %}
+                        <div>
+                            <small style="color: black;"><strong>Opis:</strong> {{ comment.author.userprofile.description }}</small>
+                        </div>
+                    {% endif %}
+                    {% if comment.author.userprofile.vehicle %}
+                        <div>
+                            <small style="color: black;"><strong>Pojazd użytkownika:</strong> {{ comment.author.userprofile.vehicle }}</small>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
-            {% endif %}
-        </div>
-    </div>
-    <hr>
-    {% endfor %}
 
-    <!-- Formularz dodawania komentarza -->
+            <!-- Edycja i usuwanie odpowiedzi -->
+            <div class="ml-3">
+                {% if user.is_authenticated %}
+                    {% if comment.author == user or user.is_staff %}
+                        <!-- Usuń odpowiedź (dla właściciela odpowiedzi lub administratora) -->
+                        <a href="{% url 'comment_delete' comment.id %}" class="btn btn-danger btn-sm">Usuń</a>
+                    {% endif %}
+                    {% if comment.author == user %}
+                        <!-- Edytuj odpowiedź (tylko dla właściciela odpowiedzi) -->
+                        <a href="{% url 'comment_edit' comment.id %}" class="btn btn-secondary btn-sm">Edytuj</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <hr>
+        {% endfor %}
+    </div>
+
+    <!-- Formularz dodawania odpowiedzi -->
     {% if request.user.is_authenticated %}
-    <h3>Dodaj komentarz</h3>
-    <form method="post" action="{% url 'add_comment' thread.id %}">
+    <h3 class="text-white">Dodaj odpowiedź:</h3>
+    <form method="POST" action="{% url 'add_comment' thread.id %}">
         {% csrf_token %}
         <div class="form-group">
-            <textarea name="content" class="form-control" rows="4" placeholder="Dodaj komentarz..."></textarea>
+            <textarea name="content" class="form-control" rows="4" placeholder="Dodaj odpowiedź..."></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Dodaj komentarz</button>
+        <button type="submit" class="btn btn-primary">Dodaj odpowiedź</button>
     </form>
     {% else %}
-    <p>Aby dodać komentarz, <a href="{% url 'login' %}">zaloguj się</a>.</p>
+    <p class="text-white">Musisz być zalogowany, aby dodać odpowiedź. <a href="{% url 'login' %}">Zaloguj się</a>.</p>
     {% endif %}
 </div>
 {% endblock %}
