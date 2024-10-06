@@ -1,27 +1,36 @@
 {% extends 'index.html' %}
+{% load static %} <!-- Dodaj tę linię -->
 
 {% block title %}
     Forum Motoryzacyjne
 {% endblock %}
 
+{% block styles %}
+    <!-- Wczytanie forum_styles.css -->
+    <link rel="stylesheet" href="{% static 'css/forum_styles.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="forum-content container mt-4">
-    <h1>Witamy na Forum Motoryzacyjnym</h1>
-    <a href="{% url 'add_thread' %}" class="btn btn-primary mb-3">Dodaj nowy wątek</a>
-
     <!-- Wyszukiwarka -->
-    <form method="GET" class="form-inline mb-3">
-        <input type="text" name="search" class="form-control mr-sm-2" placeholder="Wyszukaj wątek..." value="{{ search_query }}">
-        <button type="submit" class="btn btn-outline-success">Szukaj</button>
-    </form>
+    <div class="container mt-4 text-center">
+        <form method="GET" class="search-container">
+            <input type="text" name="search" class="form-control" placeholder="Wyszukaj po tytule lub autorze..." value="{{ search_query }}">
+            <button type="submit" class="btn btn-search">Szukaj</button>
+        </form>
+    </div>
 
-    <!-- Opcje sortowania -->
-    <form method="GET" class="form-inline mb-3">
-        <select name="sort" class="form-control mr-sm-2" onchange="this.form.submit()">
-            <option value="newest" {% if sort_order == 'newest' %}selected{% endif %}>Najnowsze</option>
-            <option value="oldest" {% if sort_order == 'oldest' %}selected{% endif %}>Najstarsze</option>
-        </select>
-    </form>
+    <!-- Dodaj nowy wątek (przycisk) -->
+    <div class="text-center">
+        <a href="{% url 'add_thread' %}" class="btn btn-primary mb-3">Dodaj nowy wątek</a>
+    </div>
+
+    <!-- Sortowanie postów -->
+    <div class="container mt-4 text-center">
+        <h5>Sortuj według:</h5>
+        <a href="?sort_order=oldest{% if category %}&category={{ category }}{% endif %}&search={{ search_query }}" class="btn btn-outline-primary btn-sort {% if sort_order == 'oldest' %}active{% endif %}" style="text-transform: capitalize;">Od najstarszych</a>
+        <a href="?sort_order=newest{% if category %}&category={{ category }}{% endif %}&search={{ search_query }}" class="btn btn-outline-primary btn-sort {% if sort_order == 'newest' %}active{% endif %}" style="text-transform: capitalize;">Od najnowszych</a>
+    </div>
 
     <hr>
 
