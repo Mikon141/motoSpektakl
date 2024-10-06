@@ -1,10 +1,11 @@
-<!-- forum_detail.html -->
 {% extends 'index.html' %}
 {% load static %}
 
 <head>
-    <!-- Dodanie pliku forum_styles.css -->
+    <!-- Dodanie pliku forum_styles.css tylko dla forum_detail.html -->
+    {% block styles %}
     <link rel="stylesheet" href="{% static 'css/forum_styles.css' %}">
+    {% endblock %}
 </head>
 
 {% block title %}Szczegóły Wątku - {{ thread.title }}{% endblock %}
@@ -12,66 +13,107 @@
 {% block content %}
 <div class="container mt-4">
     <h1>{{ thread.title }}</h1>
-    <p>Autor: {{ thread.author.username }} | Data: {{ thread.created_at }}</p>
+    <div class="d-flex align-items-center mb-4" style="margin-left: 0px;"> <!-- Przesunięcie sekcji autora bardziej w lewo -->
+        <!-- Zdjęcie autora wątku -->
+        {% if thread.author.userprofile.profile_picture %}
+            <img src="{{ thread.author.userprofile.profile_picture.url }}" class="profile-picture mr-3" alt="{{ thread.author.username }}">
+        {% else %}
+            <img src="{% static 'images/default_profile.jpg' %}" class="profile-picture mr-3" alt="Brak zdjęcia">
+        {% endif %}
+        <!-- Informacje o autorze wątku -->
+        <p class="mb-0"><strong>Autor:</strong> {{ thread.author.username }} | Data: {{ thread.created_at }}</p>
+    </div>
+
     <p>{{ thread.content }}</p>
-    
+
+    <!-- Przyciski edycji i usuwania wątku - widoczne tylko dla autora lub administratora -->
     {% if can_edit_or_delete %}
-    <div class="mt-3">
-        <a href="{% url 'edit_thread' thread.id %}" class="btn btn-primary">Edytuj Wątek</a>
-        <a href="{% url 'delete_thread' thread.id %}" class="btn btn-danger">Usuń Wątek</a>
+    <div class="mt-3 d-flex">
+        <a href="{% url 'edit_thread' thread.id %}" class="btn custom-btn btn-primary mr-2 w-50">Edytuj Wątek</a>
+        <a href="{% url 'delete_thread' thread.id %}" class="btn custom-btn btn-primary w-50">Usuń Wątek</a> <!-- Zmieniony styl na btn-primary -->
     </div>
     {% endif %}
 
     <hr>
     
-    <!-- Sekcja głosowania -->
+    <!-- Sekcja głosowania - widoczna tylko dla zalogowanych użytkowników -->
+    {% if request.user.is_authenticated %}
     <div class="vote-buttons mt-4 text-center">
         <a href="{% url 'thread_like' thread.id %}" class="btn btn-success">Fajne ({{ thread.likes }})</a>
         <a href="{% url 'thread_dislike' thread.id %}" class="btn btn-danger">Nie fajne ({{ thread.dislikes }})</a>
     </div>
+    {% else %}
+    <!-- Informacja dla niezalogowanych użytkowników -->
+    <p class="text-white text-center">Musisz być zalogowany, aby oddać głos. <a href="{% url 'login' %}">Zaloguj się</a>.</p>
+    {% endif %}
 
-    <h2 class="mt-5">Komentarze</h2>
-    {% for comment in comments %}
-    <div class="comment d-flex align-items-start mb-4">
-        <!-- Zdjęcie profilowe -->
-        <div class="mr-3">
-            <img src="{{ comment.author.userprofile.profile_picture.url }}" alt="Profilowe zdjęcie" class="rounded-circle profile-picture">
-        </div>
+    <h2 class="mt-5 text-white">Odpowiedzi</h2>
+    <div class="mb-4">
+        {% for comment in comments %}
+        <div class="comment mb-3 p-3 bg-light d-flex align-items-center justify-content-between">
+            <!-- Zdjęcie autora odpowiedzi wyświetlane po lewej stronie -->
+            <div class="d-flex align-items-center">
+                <div class="mr-3">
+                    {% if comment.author.userprofile.profile_picture %}
+                        <img src="{{ comment.author.userprofile.profile_picture.url }}" class="profile-picture mr-3" alt="{{ comment.author.username }}">
+                    {% else %}
+                        <img src="{% static 'images/default_profile.jpg' %}" class="profile-picture mr-3" alt="Brak zdjęcia">
+                    {% endif %}
+                </div>
+                <div>
+                    <!-- Wyróżniony tekst autora odpowiedzi -->
+                    <strong style="font-size: 1.2em; color: #0056b3;">{{ comment.author.username }}</strong> 
+                    <span style="color: black;">napisał(a):</span>
 
-        <!-- Zawartość komentarza -->
-        <div class="comment-content">
-            <p><strong class="comment-author">{{ comment.author.username }}</strong> napisał(a):</p>
-            <p>{{ comment.content }}</p>
-            <small>Dodano: {{ comment.created_at }}</small>
-            <br>
-            <strong>Opis:</strong> {{ comment.author.userprofile.description }}
-            <br>
-            <strong>Pojazd użytkownika:</strong> {{ comment.author.userprofile.vehicle }}
+                    <!-- Zawartość komentarza -->
+                    <p style="color: black;">{{ comment.content }}</p>
+                    
+                    <!-- Informacje dodatkowe -->
+                    <small style="color: black;">Dodano: {{ comment.created_at }}</small>
+                    <br>
+                    {% if comment.author.userprofile.description %}
+                        <div>
+                            <small style="color: black;"><strong>Opis:</strong> {{ comment.author.userprofile.description }}</small>
+                        </div>
+                    {% endif %}
+                    {% if comment.author.userprofile.vehicle %}
+                        <div>
+                            <small style="color: black;"><strong>Pojazd użytkownika:</strong> {{ comment.author.userprofile.vehicle }}</small>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
 
-            {% if comment.author == request.user or request.user.is_staff %}
-            <!-- Opcje edycji i usunięcia komentarza, widoczne tylko dla autora lub administratora -->
-            <div class="mt-2">
-                <a href="{% url 'comment_edit' comment.id %}" class="btn btn-sm btn-outline-primary">Edytuj</a>
-                <a href="{% url 'comment_delete' comment.id %}" class="btn btn-sm btn-outline-danger">Usuń</a>
+            <!-- Edycja i usuwanie odpowiedzi - widoczne tylko dla autora lub administratora -->
+            {% if user.is_authenticated %}
+            <div class="ml-3">
+                {% if comment.author == user or user.is_staff %}
+                    <!-- Usuń odpowiedź (dla właściciela odpowiedzi lub administratora) -->
+                    <a href="{% url 'comment_delete' comment.id %}" class="btn btn-primary btn-sm">Usuń</a>
+                {% endif %}
+                {% if comment.author == user %}
+                    <!-- Edytuj odpowiedź (tylko dla właściciela odpowiedzi) -->
+                    <a href="{% url 'comment_edit' comment.id %}" class="btn btn-primary btn-sm">Edytuj</a>
+                {% endif %}
             </div>
             {% endif %}
         </div>
+        <hr>
+        {% endfor %}
     </div>
-    <hr>
-    {% endfor %}
 
-    <!-- Formularz dodawania komentarza -->
+    <!-- Formularz dodawania odpowiedzi - widoczny tylko dla zalogowanych użytkowników -->
     {% if request.user.is_authenticated %}
-    <h3>Dodaj komentarz</h3>
-    <form method="post" action="{% url 'add_comment' thread.id %}">
+    <h3 class="text-white">Dodaj odpowiedź:</h3>
+    <form method="POST" action="{% url 'add_comment' thread.id %}">
         {% csrf_token %}
         <div class="form-group">
-            <textarea name="content" class="form-control" rows="4" placeholder="Dodaj komentarz..."></textarea>
+            <textarea name="content" class="form-control" rows="4" placeholder="Dodaj odpowiedź..."></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Dodaj komentarz</button>
+        <button type="submit" class="btn btn-primary">Dodaj odpowiedź</button>
     </form>
     {% else %}
-    <p>Aby dodać komentarz, <a href="{% url 'login' %}">zaloguj się</a>.</p>
+    <p class="text-white">Musisz być zalogowany, aby dodać odpowiedź. <a href="{% url 'login' %}">Zaloguj się</a>.</p>
     {% endif %}
 </div>
 {% endblock %}

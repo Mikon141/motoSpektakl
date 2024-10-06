@@ -67,6 +67,29 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    # Dodane metody do obsługi głosów
+    def add_like(self):
+        """Dodaj jeden punkt do liczby polubień."""
+        self.likes += 1
+        self.save()
+
+    def remove_like(self):
+        """Odejmij jeden punkt od liczby polubień, jeśli to możliwe."""
+        if self.likes > 0:
+            self.likes -= 1
+            self.save()
+
+    def add_dislike(self):
+        """Dodaj jeden punkt do liczby niepolubień."""
+        self.dislikes += 1
+        self.save()
+
+    def remove_dislike(self):
+        """Odejmij jeden punkt od liczby niepolubień, jeśli to możliwe."""
+        if self.dislikes > 0:
+            self.dislikes -= 1
+            self.save()
+
 
 # Model komentarza do posta na blogu
 class BlogComment(models.Model):

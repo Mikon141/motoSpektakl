@@ -7,20 +7,21 @@
     <title>{% block title %}Blog Motoryzacyjny{% endblock %}</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <!-- FontAwesome CSS do ikon -->
+    <!-- FontAwesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Zewnętrzny plik CSS -->
+    <!-- Główne style -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- Dodatkowy blok na style specyficzne dla podstron -->
+    {% block styles %}
+    {% endblock %}
 </head>
 <body class="flex flex-col min-h-screen">
-    <header style="background-color: var(--button-color); padding: 10px 0;"> <!-- Zmiana koloru tła nagłówka -->
+    <header style="background-color: var(--button-color); padding: 10px 0;">
         <div class="container">
             <a href="/"><h1 class="header-title">MOTOSPEKTAKL</h1></a>
-            <!-- Tutaj możesz dodać inne elementy nagłówka, jeśli są potrzebne -->
         </div>
     </header>
-    
-    <!-- Sekcja z obrazem -->
+
     <div class="main-image-container"></div>
 
     <div class="navigation-buttons">
@@ -29,7 +30,6 @@
         <a href="{% url 'account' %}">MOJE KONTO</a>
     </div>
 
-    <!-- Wyświetlanie komunikatów -->
     <div class="container mt-4">
         {% if messages %}
             <div class="messages">
@@ -42,21 +42,16 @@
         {% endif %}
     </div>
 
-    <!-- Miejsce na treść podstron -->
     <div class="blog-content container mt-4">
         {% block content %}
         <h1>Witamy na Blogu Motoryzacyjnym</h1>
-        <!-- Tutaj będzie treść bloga -->
         {% endblock %}
     </div>
 
-    <div class="flex-1">
-        <!-- Must be always empty -->
-    </div>
+    <div class="flex-1"></div>
 
     <footer class="footer mt-auto py-3 text-center">
         <div class="container d-flex justify-content-between align-items-center">
-            <!-- Ikony po lewej stronie -->
             <div class="social-icons">
                 <a href="https://www.youtube.com" target="_blank" class="social-icon">
                     <i class="fab fa-youtube"></i>
@@ -65,7 +60,6 @@
             
             <span>&copy; 2024 Blog Motoryzacyjny</span>
             
-            <!-- Ikony po prawej stronie -->
             <div class="social-icons">
                 <a href="https://www.instagram.com" target="_blank" class="social-icon">
                     <i class="fab fa-instagram"></i>
@@ -74,7 +68,6 @@
         </div>
     </footer>
 
-    <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

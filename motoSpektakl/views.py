@@ -406,11 +406,30 @@ def blog_detail(request, post_id):
     print(f"Description: {description}")
     print(f"Vehicle: {vehicle}")
 
+    # Inicjalizacja formularza komentarza
+    form = CommentForm()
+
+    # Obsługa dodawania nowego komentarza
+    if request.method == 'POST':
+        print("Dane POST: ", request.POST)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            print("Formularz jest poprawny.")
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+            messages.success(request, 'Komentarz został dodany.')
+            return redirect('blog_detail', post_id=post_id)
+        else:
+            print("Formularz jest niepoprawny: ", form.errors)
+            messages.error(request, 'Błąd przy dodawaniu komentarza.')
+
     # Przekazanie dodatkowych informacji do kontekstu
     context = {
         'post': post,
         'comments': comments,
-        'form': CommentForm(),
+        'form': form,  # Przekazanie formularza do kontekstu
         'profile_picture': profile_picture_url,
         'description': description,
         'vehicle': vehicle,
@@ -448,9 +467,9 @@ def post_dislike(request, post_id):
 def add_vote(request, post_id, vote_type):
     post = get_object_or_404(Post, id=post_id)
     existing_vote = PostVote.objects.filter(post=post, user=request.user).first()
-    
-    # Sprawdzamy, czy użytkownik już zagłosował
+
     if existing_vote:
+        # Jeśli użytkownik już zagłosował, zmień typ głosu tylko jeśli jest inny
         if existing_vote.vote_type != vote_type:
             if vote_type == 'like':
                 post.add_like()
@@ -461,6 +480,7 @@ def add_vote(request, post_id, vote_type):
             existing_vote.vote_type = vote_type
             existing_vote.save()
     else:
+        # Dodaj nowy głos
         PostVote.objects.create(post=post, user=request.user, vote_type=vote_type)
         if vote_type == 'like':
             post.add_like()
@@ -468,6 +488,7 @@ def add_vote(request, post_id, vote_type):
             post.add_dislike()
 
     return redirect('blog_detail', post_id=post.id)
+
 
 # Widok dla panelu administracyjnego (admin_panel)
 @login_required
@@ -605,8 +626,8 @@ def delete_thread(request, thread_id):
 
     return render(request, 'delete_thread.html', {'thread': thread})
 
-@login_required
-def forum_home(request):
+# Widok forum dla wszystkich użytkowników
+def forum(request):
     search_query = request.GET.get('search', '')  # Pobranie zapytania wyszukiwania z parametru GET
     sort_order = request.GET.get('sort', 'newest')  # Pobranie opcji sortowania z parametru GET
 
@@ -640,7 +661,6 @@ def forum_home(request):
 
     return render(request, 'forum.html', context)
 
-@login_required
 def forum_detail(request, thread_id):
     thread = get_object_or_404(ForumThread, id=thread_id)
     comments = thread.comments.all()
@@ -777,27 +797,30 @@ def blog_comment_edit(request, post_id, comment_id):
         form = CommentForm(instance=comment)
     return render(request, 'edit_comment.html', {'form': form, 'comment': comment})
 
+# Widok dodawania głosów dla wątków forum - tylko dla zalogowanych użytkowników
 @login_required
 def vote_on_thread(request, thread_id, vote_type):
     thread = get_object_or_404(ForumThread, id=thread_id)
     existing_vote = ForumVote.objects.filter(thread=thread, user=request.user).first()
-    
-    # Sprawdzamy, czy użytkownik już zagłosował
+
     if existing_vote:
         if existing_vote.vote_type != vote_type:
             if vote_type == 'like':
-                thread.add_like()
-                thread.remove_dislike()
+                thread.likes += 1
+                if thread.dislikes > 0:
+                    thread.dislikes -= 1
             else:
-                thread.add_dislike()
-                thread.remove_like()
+                thread.dislikes += 1
+                if thread.likes > 0:
+                    thread.likes -= 1
             existing_vote.vote_type = vote_type
             existing_vote.save()
     else:
         ForumVote.objects.create(thread=thread, user=request.user, vote_type=vote_type)
         if vote_type == 'like':
-            thread.add_like()
+            thread.likes += 1
         else:
-            thread.add_dislike()
+            thread.dislikes += 1
 
+    thread.save()
     return redirect('forum_detail', thread_id=thread.id)
