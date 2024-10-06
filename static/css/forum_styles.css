@@ -287,3 +287,184 @@ form .form-group label {
     display: block;
 }
 
+/* Ustawienie maksymalnej szerokości dla kontenera forum-content */
+div.forum-content {
+    max-width: 600px;
+    margin: 0 auto; /* Wyśrodkowanie kontenera */
+}
+
+/* Stylizacja kontenera wyszukiwarki */
+div.forum-content .search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+div.forum-content .search-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+}
+
+div.forum-content .search-container input.search-input,
+div.forum-content .search-container button.search-button {
+    width: 100%;
+    height: 50px; /* Ustawienie jednakowej wysokości */
+    margin: 5px 0;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+div.forum-content .search-container input.search-input {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+div.forum-content .search-container button.search-button {
+    border: none;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+}
+
+div.forum-content .search-container button.search-button:hover {
+    background-color: #0056b3;
+}
+
+/* Dodatkowe style dla responsywności */
+@media (max-width: 768px) {
+    div.forum-content .search-container form {
+        width: 100%;
+    }
+}
+
+/* Stylizacja przycisku "Dodaj nowy wątek" */
+div.forum-content .btn-primary {
+    max-width: 600px;
+    width: 100%;
+    margin: 20px auto;
+    display: block;
+    background-color: #007bff;
+    color: white;
+    font-weight: 600;
+    border-radius: 5px;
+    padding: 12px 0;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+}
+
+div.forum-content .btn-primary:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+/* Stylizacja przycisków sortowania */
+div.forum-content div.container.mt-4.text-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+div.forum-content div.container.mt-4.text-center h5 {
+    margin-bottom: 10px;
+}
+
+div.forum-content .btn-sort {
+    width: 100%;
+    max-width: 600px;
+    margin: 5px 0;
+    background-color: #007bff;
+    color: white;
+    font-weight: 600;
+    border: none;
+    padding: 12px 0;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+div.forum-content .btn-sort:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+div.forum-content .btn-outline-primary.active {
+    background-color: #0056b3;
+    color: white;
+    border: none;
+}
+
+/* Stylizacja paginacji */
+.pagination {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.pagination .page-item .page-link {
+    color: #007bff;
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 8px 12px;
+}
+
+.pagination .page-item .page-link:hover {
+    color: #ffffff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    cursor: default;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.pagination .page-item.active .page-link {
+    z-index: 1;
+    color: #ffffff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+/* Stylizacja paginacji */
+.pagination {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.pagination .page-item .page-link {
+    color: #007bff;
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 8px 12px;
+}
+
+.pagination .page-item .page-link:hover {
+    color: #ffffff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    cursor: default;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.pagination .page-item.active .page-link {
+    z-index: 1;
+    color: #ffffff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
