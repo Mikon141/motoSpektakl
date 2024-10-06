@@ -626,8 +626,8 @@ def delete_thread(request, thread_id):
 
     return render(request, 'delete_thread.html', {'thread': thread})
 
-@login_required
-def forum_home(request):
+# Widok forum dla wszystkich użytkowników
+def forum(request):
     search_query = request.GET.get('search', '')  # Pobranie zapytania wyszukiwania z parametru GET
     sort_order = request.GET.get('sort', 'newest')  # Pobranie opcji sortowania z parametru GET
 
@@ -661,7 +661,6 @@ def forum_home(request):
 
     return render(request, 'forum.html', context)
 
-@login_required
 def forum_detail(request, thread_id):
     thread = get_object_or_404(ForumThread, id=thread_id)
     comments = thread.comments.all()
@@ -798,14 +797,12 @@ def blog_comment_edit(request, post_id, comment_id):
         form = CommentForm(instance=comment)
     return render(request, 'edit_comment.html', {'form': form, 'comment': comment})
 
-# Widok dodawania głosów dla wątków forum
+# Widok dodawania głosów dla wątków forum - tylko dla zalogowanych użytkowników
 @login_required
 def vote_on_thread(request, thread_id, vote_type):
     thread = get_object_or_404(ForumThread, id=thread_id)
     existing_vote = ForumVote.objects.filter(thread=thread, user=request.user).first()
 
-    # Jeśli w modelu ForumThread nie ma metod add_like, remove_like, add_dislike, remove_dislike,
-    # dodaj je do modelu ForumThread lub zmień sposób modyfikacji liczb likes i dislikes w kodzie poniżej.
     if existing_vote:
         if existing_vote.vote_type != vote_type:
             if vote_type == 'like':
