@@ -12,12 +12,10 @@ div.forum-content .search-container {
     margin: 20px 0;
 }
 
-/* Resetowanie stylów dla input i button */
-div.forum-content .search-container input.form-control,
-div.forum-content .search-container button.btn-search {
+/* Resetowanie stylów dla input */
+div.forum-content .search-container input.form-control {
     margin: 0; /* Usunięcie marginesów */
     padding: 0; /* Usunięcie paddingu */
-    border: 1px solid #ccc; /* Ujednolicenie obramowania */
     font-size: 16px; /* Ujednolicenie rozmiaru czcionki */
     line-height: normal; /* Resetowanie line-height */
     height: 38px; /* Ustawienie jednakowej wysokości */
@@ -29,6 +27,7 @@ div.forum-content .search-container input.form-control {
     flex: 1;
     margin-right: 10px;
     padding: 0 10px; /* Dodanie poziomego paddingu */
+    border: 1px solid #ccc;
     border-radius: 5px;
 }
 
@@ -37,9 +36,13 @@ div.forum-content .search-container button.btn-search {
     width: 120px; /* Szerokość przycisku */
     background-color: #007bff;
     color: white;
+    border: none; /* Usunięcie obramowania */
     border-radius: 5px;
     font-weight: 600;
     cursor: pointer; /* Dodanie kursora wskazującego */
+    height: 38px; /* Ustawienie wysokości */
+    box-sizing: border-box; /* Upewnienie się, że padding i border są wliczane w wysokość */
+    padding: 0 10px; /* Dodanie poziomego paddingu */
 }
 
 /* Poprawka dla vertical-align */
@@ -143,4 +146,31 @@ div.forum-content .btn-outline-primary.active {
         width: 100%;
         margin: 5px 0;
     }
+}
+
+/* Stylizacja przycisków w container .button-container */
+.button-container .btn-primary {
+    max-width: 600px;
+    width: 100%;
+    margin: 10px auto;
+    display: block;
+    background-color: #007bff;
+    color: white;
+    font-weight: 600;
+    border-radius: 5px;
+    padding: 12px 0;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.button-container .btn-primary:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+div.forum-content {
+    max-width: 600px;
+    margin: 0 auto; /* Wyśrodkowanie kontenera */
 }
