@@ -174,3 +174,70 @@ div.forum-content {
     max-width: 600px;
     margin: 0 auto; /* Wyśrodkowanie kontenera */
 }
+
+/* Stylizacja przycisków edytowania i usuwania wątku */
+.custom-btn {
+    height: 40px; /* Wysokość przycisku */
+    width: 150px; /* Szerokość przycisku */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-weight: bold;
+    margin: 0 10px; /* Margines między przyciskami */
+    border-radius: 5px; /* Zaokrąglone rogi */
+    text-transform: capitalize; /* Tylko pierwsza litera duża */
+    color: white !important; /* Biała czcionka */
+}
+
+/* Ustawienie niebieskiego koloru dla przycisków */
+.custom-btn.btn-primary,
+.custom-btn.btn-danger {
+    background-color: #007bff !important; /* Kolor niebieski */
+    border: none;
+}
+
+.custom-btn.btn-primary:hover,
+.custom-btn.btn-danger:hover {
+    background-color: #0056b3 !important; /* Ciemniejszy niebieski kolor na hover */
+}
+
+/* Wyrównanie tekstu w przyciskach, tylko pierwsza litera ma być duża */
+.custom-btn {
+    text-transform: capitalize; /* Tylko pierwsza litera duża */
+}
+
+/* Przesunięcie sekcji autora bardziej w lewo */
+.container .d-flex.align-items-center.mb-4 {
+    margin-left: 0px !important; /* Wyzerowanie marginesu, aby sekcja zaczynała się tam, gdzie tytuł */
+    padding-left: 0px; /* Ustawienie paddingu na 0, aby lepiej pasowało do lewej krawędzi */
+    max-width: 100%; /* Zwiększenie szerokości kontenera */
+    justify-content: flex-start; /* Wyrównanie sekcji do lewej strony */
+    display: flex; /* Zapewnienie, że elementy pozostaną w linii */
+    align-items: center; /* Wyrównanie elementów w pionie */
+}
+
+/* Stylizacja tekstu wewnątrz sekcji autora */
+.container .d-flex.align-items-center.mb-4 p {
+    margin: 0;
+    color: white; /* Kolor tekstu */
+    font-size: 1.1em; /* Powiększenie czcionki */
+}
+
+/* Stylizacja zdjęcia profilowego autora */
+.profile-picture {
+    width: 64px; /* Szerokość zdjęcia */
+    height: 64px; /* Wysokość zdjęcia */
+    border-radius: 50%;
+    object-fit: cover; /* Dopasowanie zdjęcia w ramach ustalonych wymiarów */
+    border: 2px solid #ffffff; /* Obramowanie dla lepszej widoczności */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Dodanie cienia */
+    margin-right: 15px; /* Odstęp między zdjęciem a tekstem */
+}
+
+/* Przesunięcie kontenera informacji o autorze, aby wyśrodkować w lewo */
+.container .d-flex.align-items-center.mb-4 p {
+    margin-left: 0px !important; /* Zerowanie marginesów */
+    margin-right: auto; /* Automatyczny margines po prawej stronie */
+    text-align: left; /* Wyrównanie tekstu do lewej */
+}

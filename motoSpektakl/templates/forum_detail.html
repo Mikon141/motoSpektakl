@@ -3,8 +3,10 @@
 {% load static %}
 
 <head>
-    <!-- Dodanie pliku forum_styles.css -->
+    <!-- Dodanie pliku forum_styles.css tylko dla forum_detail.html -->
+    {% block styles %}
     <link rel="stylesheet" href="{% static 'css/forum_styles.css' %}">
+    {% endblock %}
 </head>
 
 {% block title %}Szczegóły Wątku - {{ thread.title }}{% endblock %}
@@ -12,13 +14,24 @@
 {% block content %}
 <div class="container mt-4">
     <h1>{{ thread.title }}</h1>
-    <p>Autor: {{ thread.author.username }} | Data: {{ thread.created_at }}</p>
+    <div class="d-flex align-items-center mb-4" style="margin-left: 0px;"> <!-- Przesunięcie sekcji autora bardziej w lewo -->
+        <!-- Zdjęcie autora wątku -->
+        {% if thread.author.userprofile.profile_picture %}
+            <img src="{{ thread.author.userprofile.profile_picture.url }}" class="profile-picture mr-3" alt="{{ thread.author.username }}">
+        {% else %}
+            <img src="{% static 'images/default_profile.jpg' %}" class="profile-picture mr-3" alt="Brak zdjęcia">
+        {% endif %}
+        <!-- Informacje o autorze wątku -->
+        <p class="mb-0"><strong>Autor:</strong> {{ thread.author.username }} | Data: {{ thread.created_at }}</p>
+    </div>
+
     <p>{{ thread.content }}</p>
-    
+
+    <!-- Przyciski edycji i usuwania wątku -->
     {% if can_edit_or_delete %}
-    <div class="mt-3">
-        <a href="{% url 'edit_thread' thread.id %}" class="btn btn-primary">Edytuj Wątek</a>
-        <a href="{% url 'delete_thread' thread.id %}" class="btn btn-danger">Usuń Wątek</a>
+    <div class="mt-3 d-flex">
+        <a href="{% url 'edit_thread' thread.id %}" class="btn custom-btn btn-primary mr-2 w-50">Edytuj Wątek</a>
+        <a href="{% url 'delete_thread' thread.id %}" class="btn custom-btn btn-primary w-50">Usuń Wątek</a> <!-- Zmieniony styl na btn-primary -->
     </div>
     {% endif %}
 
@@ -46,10 +59,10 @@
                 <div>
                     <!-- Wyróżniony tekst autora odpowiedzi -->
                     <strong style="font-size: 1.2em; color: #0056b3;">{{ comment.author.username }}</strong> 
-                    <span style="color: black;">napisał(a):</span> <!-- Dodanie stylu dla "napisał(a):" -->
-                    
+                    <span style="color: black;">napisał(a):</span>
+
                     <!-- Zawartość komentarza -->
-                    <p style="color: black;">{{ comment.content }}</p> <!-- Ustawienie koloru tekstu na czarny -->
+                    <p style="color: black;">{{ comment.content }}</p>
                     
                     <!-- Informacje dodatkowe -->
                     <small style="color: black;">Dodano: {{ comment.created_at }}</small>
