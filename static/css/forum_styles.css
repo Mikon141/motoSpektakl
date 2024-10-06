@@ -241,3 +241,49 @@ div.forum-content {
     margin-right: auto; /* Automatyczny margines po prawej stronie */
     text-align: left; /* Wyrównanie tekstu do lewej */
 }
+
+/* Stylizacja przycisków "Zaktualizuj wątek" i "Anuluj" */
+.edit-thread-button, .edit-thread-button-cancel {
+    display: block;
+    width: 100%; /* Ustawienie szerokości przycisków na 100% */
+    max-width: 600px; /* Ograniczenie maksymalnej szerokości */
+    height: 50px; /* Ustawienie wysokości */
+    font-size: 1.1em; /* Większy rozmiar czcionki */
+    margin: 10px auto; /* Wyśrodkowanie przycisków */
+    text-transform: capitalize; /* Ustawienie pierwszej litery na dużą */
+}
+
+/* Styl dla przycisku Zaktualizuj wątek */
+.edit-thread-button {
+    background-color: #007bff !important; /* Niebieski kolor */
+    color: white !important;
+    border: none !important;
+}
+
+.edit-thread-button:hover {
+    background-color: #0056b3 !important; /* Ciemniejszy niebieski na hover */
+}
+
+/* Styl dla przycisku Anuluj */
+.edit-thread-button-cancel {
+    background-color: #6c757d !important; /* Szary kolor */
+    color: white !important;
+    border: none !important;
+}
+
+.edit-thread-button-cancel:hover {
+    background-color: #5a6268 !important; /* Ciemniejszy szary na hover */
+}
+
+/* Dodatkowe poprawki do formularza */
+form.w-50 {
+    max-width: 600px; /* Ustawienie szerokości formularza */
+}
+
+form .form-group label {
+    text-align: left; /* Wyrównanie etykiet do lewej */
+    font-weight: bold;
+    color: white; /* Kolor tekstu */
+    display: block;
+}
+

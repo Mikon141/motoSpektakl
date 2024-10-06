@@ -1,17 +1,36 @@
-<!-- edit_thread.html -->
 {% extends 'index.html' %}
+
 {% load static %}
 
-{% block title %}Edytuj wątek{% endblock %}
+<head>
+    <!-- Dodanie pliku forum_styles.css tylko dla edit_thread.html -->
+    {% block styles %}
+    <link rel="stylesheet" href="{% static 'css/forum_styles.css' %}">
+    {% endblock %}
+</head>
+
+{% block title %}
+Edytuj wątek - Blog Motoryzacyjny
+{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-    <h1>Edytuj wątek</h1>
-    <form method="post">
+    <h2 class="text-center">Edytuj wątek</h2> <!-- Wyśrodkowanie nagłówka -->
+    <form method="POST" class="mt-4">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Zaktualizuj wątek</button>
+        <!-- Zmiana etykiet w formularzu na polskie -->
+        <div class="form-group">
+            <label for="id_title">Tytuł:</label>
+            {{ form.title }}
+        </div>
+        <div class="form-group">
+            <label for="id_content">Treść:</label>
+            {{ form.content }}
+        </div>
+        <div class="button-container">
+            <button type="submit" class="btn btn-primary button-full">Zaktualizuj wątek</button> <!-- Zmiana klasy na btn btn-primary button-full -->
+            <a href="{% url 'forum_detail' thread.id %}" class="btn btn-primary button-full" role="button">Anuluj</a> <!-- Zmiana klasy na btn btn-primary button-full -->
+        </div>
     </form>
-    <a href="{% url 'forum_detail' thread.id %}" class="btn btn-secondary mt-3">Anuluj</a>
 </div>
 {% endblock %}
