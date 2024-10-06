@@ -107,11 +107,11 @@
                     {% if user.is_authenticated %}
                         {% if comment.author == user or user.is_staff %}
                             <!-- Usuń komentarz (dla właściciela komentarza lub administratora) -->
-                            <a href="{% url 'delete_comment' post_id=post.id comment_id=comment.id %}" class="btn btn-danger btn-sm">Usuń</a>
+                            <a href="{% url 'delete_comment' post_id=post.id comment_id=comment.id %}" class="btn btn-primary btn-sm">Usuń</a> <!-- Zmieniony styl na btn-primary -->
                         {% endif %}
                         {% if comment.author == user %}
                             <!-- Edytuj komentarz (tylko dla właściciela komentarza) -->
-                            <a href="{% url 'edit_comment' post_id=post.id comment_id=comment.id %}" class="btn btn-secondary btn-sm">Edytuj</a>
+                            <a href="{% url 'edit_comment' post_id=post.id comment_id=comment.id %}" class="btn btn-primary btn-sm">Edytuj</a> <!-- Zmieniony styl na btn-primary -->
                         {% endif %}
                     {% endif %}
                 </div>

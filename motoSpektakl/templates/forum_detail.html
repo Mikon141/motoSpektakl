@@ -1,4 +1,3 @@
-<!-- forum_detail.html -->
 {% extends 'index.html' %}
 {% load static %}
 
@@ -85,11 +84,11 @@
                 {% if user.is_authenticated %}
                     {% if comment.author == user or user.is_staff %}
                         <!-- Usuń odpowiedź (dla właściciela odpowiedzi lub administratora) -->
-                        <a href="{% url 'comment_delete' comment.id %}" class="btn btn-danger btn-sm">Usuń</a>
+                        <a href="{% url 'comment_delete' comment.id %}" class="btn btn-primary btn-sm">Usuń</a> <!-- Zmieniony styl na btn-primary -->
                     {% endif %}
                     {% if comment.author == user %}
                         <!-- Edytuj odpowiedź (tylko dla właściciela odpowiedzi) -->
-                        <a href="{% url 'comment_edit' comment.id %}" class="btn btn-secondary btn-sm">Edytuj</a>
+                        <a href="{% url 'comment_edit' comment.id %}" class="btn btn-primary btn-sm">Edytuj</a> <!-- Zmieniony styl na btn-primary -->
                     {% endif %}
                 {% endif %}
             </div>
