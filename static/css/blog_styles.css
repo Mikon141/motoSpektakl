@@ -306,3 +306,37 @@ input[type="file"]::-webkit-file-upload-button:hover {
 .search-container button:hover {
     background-color: #0056b3; /* Hover efekt */
 }
+
+/* Poprawa stylów przycisków Edytuj i Usuń */
+.comment .btn-sm {
+    width: auto; /* Automatyczna szerokość przycisków */
+    height: auto; /* Automatyczna wysokość */
+    margin: 5px; /* Dodanie odstępu między przyciskami */
+    white-space: nowrap; /* Zapobieganie łamaniu tekstu */
+}
+
+/* Dostosowanie szerokości przycisku Dodaj komentarz */
+form button[type="submit"].btn {
+    width: 100%; /* Szerokość dopasowana do szerokości formularza */
+}
+
+/* Dostosowanie marginesów w komentarzach */
+.comment {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 10px; /* Zaokrąglone rogi */
+    background-color: #f8f9fa; /* Jaśniejsze tło */
+}
+
+/* Dopasowanie przycisków w komentarzach */
+.comment .btn {
+    width: 100px; /* Stała szerokość przycisków */
+}
+
+/* Dostosowanie wielkości przycisków na mniejszych ekranach */
+@media (max-width: 576px) {
+    .comment .btn {
+        width: 100%; /* Pełna szerokość przycisków */
+        margin-bottom: 5px; /* Dodanie odstępu między przyciskami */
+    }
+}

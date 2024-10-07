@@ -724,17 +724,56 @@ def delete_thread(request, thread_id):
         return redirect('forum')
     return render(request, 'delete_thread.html', {'thread': thread})
 
-# Widok dodawania nowego komentarza (dla zalogowanych użytkowników)
+import bleach
+
+# Definiujemy prostą funkcję do weryfikacji treści komentarza.
+def is_comment_valid(content):
+    # Sprawdź, czy komentarz nie zawiera wulgaryzmów lub niebezpiecznych słów.
+    # Bleach oczyszcza treść komentarza, usuwając niebezpieczne znaczniki HTML.
+    # Możemy dodać więcej reguł, aby blokować określone słowa lub frazy.
+    cleaned_content = bleach.clean(content, tags=[], attributes={}, styles=[], strip=True)
+    
+    # Jeśli treść po czyszczeniu jest pusta lub za krótka, uznajemy to za niepoprawny komentarz.
+    if len(cleaned_content.strip()) < 5:  # Minimum 5 znaków treści (można dostosować wedle potrzeby)
+        return False
+    return True
+
+# Widok dodawania nowego komentarza na forum (dla zalogowanych użytkowników)
 @login_required
 def add_comment(request, thread_id):
     thread = get_object_or_404(ForumThread, id=thread_id)
     if request.method == 'POST':
         content = request.POST.get('content')
-        if content:
+        # Walidacja treści komentarza
+        if content and is_comment_valid(content):
             ForumComment.objects.create(content=content, author=request.user, thread=thread)
-            return redirect('forum_detail', thread_id=thread.id)
+            messages.success(request, 'Komentarz został pomyślnie dodany.')
+        else:
+            messages.error(request, 'Treść komentarza jest nieodpowiednia lub zbyt krótka.')
+        return redirect('forum_detail', thread_id=thread.id)
     return redirect('forum_detail', thread_id=thread.id)
 
+# Widok dodawania nowego komentarza na blogu (dla zalogowanych użytkowników)
+@login_required
+def add_blog_comment(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            content = form.cleaned_data.get('content')
+            # Walidacja treści komentarza
+            if is_comment_valid(content):
+                comment = form.save(commit=False)
+                comment.post = post
+                comment.author = request.user
+                comment.save()
+                messages.success(request, 'Komentarz został dodany.')
+            else:
+                messages.error(request, 'Treść komentarza jest nieodpowiednia lub zbyt krótka.')
+            return redirect('blog_detail', post_id=post.id)
+        else:
+            messages.error(request, 'Formularz jest niepoprawny.')
+    return redirect('blog_detail', post_id=post.id)
 
 @login_required
 def comment_delete(request, comment_id):

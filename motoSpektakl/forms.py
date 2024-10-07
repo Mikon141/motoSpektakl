@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.models import User
 from .models import Post, BlogComment, ForumThread, ForumComment  # Usuń PostComment
-
+import bleach
 # Formularz rejestracji
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True, label="Adres e-mail")
@@ -145,6 +145,24 @@ class CommentForm(forms.ModelForm):
         super(CommentForm, self).__init__(*args, **kwargs)
         self.fields['content'].widget.attrs.update({'class': 'form-control', 'rows': 3})
 
+    # Dodanie weryfikacji treści komentarza
+    def clean_content(self):
+        content = self.cleaned_data.get('content')
+
+        # Prosta weryfikacja za pomocą bleach
+        # Usuwamy niechciane tagi HTML i czyszczimy treść
+        content_cleaned = bleach.clean(content, strip=True)
+
+        # Przykładowe sprawdzenie długości komentarza, aby uniknąć bardzo krótkich treści (opcjonalnie)
+        if len(content_cleaned) < 5:
+            raise forms.ValidationError("Komentarz jest zbyt krótki. Wprowadź pełniejszą treść.")
+
+        # Sprawdzenie na obecność przykładowego słowa, które mogłoby być nieodpowiednie (przykładowo)
+        if "badword" in content_cleaned.lower():  # Przykład, gdzie "badword" to słowo zakazane
+            raise forms.ValidationError("Komentarz zawiera niedozwolone słowa. Proszę usunąć takie słowa i spróbować ponownie.")
+
+        # Zwracamy przetworzony i sprawdzony komentarz
+        return content_cleaned
 
 # Formularz do wątków na forum
 class ThreadForm(forms.ModelForm):
@@ -157,7 +175,6 @@ class ThreadForm(forms.ModelForm):
         self.fields['title'].widget.attrs.update({'class': 'form-control'})
         self.fields['content'].widget.attrs.update({'class': 'form-control', 'rows': 5})
 
-
 # Formularz do komentarzy w wątkach forum
 class ForumCommentForm(forms.ModelForm):
     class Meta:
@@ -167,3 +184,22 @@ class ForumCommentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ForumCommentForm, self).__init__(*args, **kwargs)
         self.fields['content'].widget.attrs.update({'class': 'form-control', 'rows': 3})
+
+    # Dodanie weryfikacji treści komentarza
+    def clean_content(self):
+        content = self.cleaned_data.get('content')
+
+        # Prosta weryfikacja za pomocą bleach
+        # Usuwamy niechciane tagi HTML i czyszczymy treść
+        content_cleaned = bleach.clean(content, strip=True)
+
+        # Przykładowe sprawdzenie długości komentarza, aby uniknąć bardzo krótkich treści (opcjonalnie)
+        if len(content_cleaned) < 5:
+            raise forms.ValidationError("Komentarz jest zbyt krótki. Wprowadź pełniejszą treść.")
+
+        # Sprawdzenie na obecność przykładowego słowa, które mogłoby być nieodpowiednie (przykładowo)
+        if "badword" in content_cleaned.lower():  # Przykład, gdzie "badword" to słowo zakazane
+            raise forms.ValidationError("Komentarz zawiera niedozwolone słowa. Proszę usunąć takie słowa i spróbować ponownie.")
+
+        # Zwracamy przetworzony i sprawdzony komentarz
+        return content_cleaned
