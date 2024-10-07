@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,49 +7,7 @@
     <title>Zarządzanie Blogiem</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <style>
-        /* Stylizacja tabeli i strony */
-        body {
-            background-color: #fff; /* Białe tło */
-            color: #333; /* Kolor tekstu */
-        }
-
-        .container {
-            margin-top: 20px;
-        }
-
-        .table thead th {
-            background-color: #f8f9fa; /* Tło nagłówków tabeli */
-        }
-
-        .table tbody tr:hover {
-            background-color: #f1f1f1; /* Kolor tła podczas najechania */
-        }
-
-        .btn {
-            font-size: 0.875rem;
-            margin: 0 5px;
-        }
-
-        .table td, .table th {
-            vertical-align: middle; /* Wyśrodkowanie tekstu w pionie */
-        }
-
-        .search-bar {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .search-bar input {
-            max-width: 300px;
-        }
-
-        .back-btn {
-            margin-top: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/blog_management_styles.css' %}">
 </head>
 <body>
     <div class="container">
