@@ -4,6 +4,10 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ post.title }} - {{ post.content|truncatewords:20 }}">
+    <meta name="keywords" content="motoryzacja, blog, recenzje pojazdów, porady motoryzacyjne, {{ post.get_category_display }}">
+    <meta name="author" content="{{ post.author.username }}">
+    <meta name="robots" content="index, follow">
     <title>{{ post.title }}</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">

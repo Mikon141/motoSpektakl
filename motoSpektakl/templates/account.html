@@ -4,6 +4,16 @@
 Moje Konto - Blog Motoryzacyjny
 {% endblock %}
 
+<head>
+    <!-- Meta tagi SEO -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Zarządzaj swoim kontem na Blogu Motoryzacyjnym. Edytuj profil, zmień hasło, zarządzaj postami na blogu oraz użytkownikami.">
+    <meta name="keywords" content="konto użytkownika, zarządzanie kontem, edytuj profil, zmień hasło, blog motoryzacyjny">
+    <meta name="author" content="Motospektakl">
+    <meta name="robots" content="index, follow">
+</head>
+
 {% block content %}
 <div class="account-content container mt-4">
     {% if user.is_authenticated %}
