@@ -1,9 +1,21 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm, SetPasswordForm
+from django.forms import FileInput
+from django.contrib.auth.forms import (
+    UserCreationForm,
+    UserChangeForm,
+    PasswordChangeForm,
+    SetPasswordForm,
+)
 from django.contrib.auth.models import User
-from .models import Post, BlogComment, ForumThread, ForumComment  # Usuń PostComment
+from .models import (
+    Post,
+    BlogComment,
+    ForumThread,
+    ForumComment,
+    UserProfile,
+)
 import bleach
-# Formularz rejestracji
+
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True, label="Adres e-mail")
 
@@ -23,12 +35,6 @@ class RegisterForm(UserCreationForm):
         self.fields['email'].widget.attrs.update({'class': 'form-control'})
         self.fields['password1'].widget.attrs.update({'class': 'form-control'})
         self.fields['password2'].widget.attrs.update({'class': 'form-control'})
-
-
-from django import forms
-from django.contrib.auth.forms import UserChangeForm
-from django.forms import FileInput
-from .models import UserProfile
 
 class EditProfileForm(forms.ModelForm):
     profile_picture = forms.ImageField(
@@ -68,14 +74,10 @@ class EditProfileForm(forms.ModelForm):
         self.fields['description'].widget.attrs.update({'class': 'form-control'})
         self.fields['vehicle'].widget.attrs.update({'class': 'form-control'})
 
-
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserChangeForm
-
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = User
-        fields = ['username', 'email']  # Upewnij się, że tylko te pola będą edytowalne
+        fields = ['username', 'email']
         labels = {
             'username': 'Nazwa użytkownika',
             'email': 'Adres e-mail',
@@ -83,22 +85,15 @@ class CustomUserChangeForm(UserChangeForm):
 
     def __init__(self, *args, **kwargs):
         super(CustomUserChangeForm, self).__init__(*args, **kwargs)
-        # Ukrycie pola `date_joined`, aby nie było brane pod uwagę w formularzu
         self.fields['date_joined'].widget = forms.HiddenInput()
         self.fields['date_joined'].required = False
-
-        from django import forms
-from django.contrib.auth.forms import UserChangeForm
-from django.contrib.auth.models import User
 
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = User
-        fields = ['username', 'email']  # Tylko te pola chcemy edytować
-        exclude = ['date_joined', 'last_login']  # Wyklucz niepotrzebne pola
+        fields = ['username', 'email']
+        exclude = ['date_joined', 'last_login']
 
-
-# Formularz do zmiany hasła
 class EditPasswordForm(PasswordChangeForm):
     class Meta:
         model = User
@@ -110,8 +105,6 @@ class EditPasswordForm(PasswordChangeForm):
         self.fields['new_password1'].widget.attrs.update({'class': 'form-control'})
         self.fields['new_password2'].widget.attrs.update({'class': 'form-control'})
 
-
-# Formularz do resetowania hasła
 class ResetPasswordForm(SetPasswordForm):
     class Meta:
         model = User
@@ -122,49 +115,36 @@ class ResetPasswordForm(SetPasswordForm):
         self.fields['new_password1'].widget.attrs.update({'class': 'form-control'})
         self.fields['new_password2'].widget.attrs.update({'class': 'form-control'})
 
-# Formularz do postów na blogu
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'content', 'category', 'image']  # Dodajemy 'category' i 'image' do pól formularza
+        fields = ['title', 'content', 'category', 'image']
 
     def __init__(self, *args, **kwargs):
         super(PostForm, self).__init__(*args, **kwargs)
         self.fields['title'].widget.attrs.update({'class': 'form-control'})
         self.fields['content'].widget.attrs.update({'class': 'form-control', 'rows': 5})
-        self.fields['category'].widget.attrs.update({'class': 'form-control'})  # Stylizacja pola kategorii
-        self.fields['image'].widget.attrs.update({'class': 'form-control-file'})  # Stylizacja pola wyboru pliku
+        self.fields['category'].widget.attrs.update({'class': 'form-control'})
+        self.fields['image'].widget.attrs.update({'class': 'form-control-file'})
 
-# Formularz do komentarzy w postach na blogu
 class CommentForm(forms.ModelForm):
     class Meta:
-        model = BlogComment  # Używaj BlogComment zamiast PostComment
+        model = BlogComment
         fields = ['content']
 
     def __init__(self, *args, **kwargs):
         super(CommentForm, self).__init__(*args, **kwargs)
         self.fields['content'].widget.attrs.update({'class': 'form-control', 'rows': 3})
 
-    # Dodanie weryfikacji treści komentarza
     def clean_content(self):
         content = self.cleaned_data.get('content')
-
-        # Prosta weryfikacja za pomocą bleach
-        # Usuwamy niechciane tagi HTML i czyszczimy treść
         content_cleaned = bleach.clean(content, strip=True)
-
-        # Przykładowe sprawdzenie długości komentarza, aby uniknąć bardzo krótkich treści (opcjonalnie)
-        if len(content_cleaned) < 5:
+        if len(content_cleaned.strip()) < 5:
             raise forms.ValidationError("Komentarz jest zbyt krótki. Wprowadź pełniejszą treść.")
-
-        # Sprawdzenie na obecność przykładowego słowa, które mogłoby być nieodpowiednie (przykładowo)
-        if "badword" in content_cleaned.lower():  # Przykład, gdzie "badword" to słowo zakazane
+        if "badword" in content_cleaned.lower():
             raise forms.ValidationError("Komentarz zawiera niedozwolone słowa. Proszę usunąć takie słowa i spróbować ponownie.")
-
-        # Zwracamy przetworzony i sprawdzony komentarz
         return content_cleaned
 
-# Formularz do wątków na forum
 class ThreadForm(forms.ModelForm):
     class Meta:
         model = ForumThread
@@ -175,7 +155,6 @@ class ThreadForm(forms.ModelForm):
         self.fields['title'].widget.attrs.update({'class': 'form-control'})
         self.fields['content'].widget.attrs.update({'class': 'form-control', 'rows': 5})
 
-# Formularz do komentarzy w wątkach forum
 class ForumCommentForm(forms.ModelForm):
     class Meta:
         model = ForumComment
@@ -185,21 +164,11 @@ class ForumCommentForm(forms.ModelForm):
         super(ForumCommentForm, self).__init__(*args, **kwargs)
         self.fields['content'].widget.attrs.update({'class': 'form-control', 'rows': 3})
 
-    # Dodanie weryfikacji treści komentarza
     def clean_content(self):
         content = self.cleaned_data.get('content')
-
-        # Prosta weryfikacja za pomocą bleach
-        # Usuwamy niechciane tagi HTML i czyszczymy treść
         content_cleaned = bleach.clean(content, strip=True)
-
-        # Przykładowe sprawdzenie długości komentarza, aby uniknąć bardzo krótkich treści (opcjonalnie)
-        if len(content_cleaned) < 5:
+        if len(content_cleaned.strip()) < 5:
             raise forms.ValidationError("Komentarz jest zbyt krótki. Wprowadź pełniejszą treść.")
-
-        # Sprawdzenie na obecność przykładowego słowa, które mogłoby być nieodpowiednie (przykładowo)
-        if "badword" in content_cleaned.lower():  # Przykład, gdzie "badword" to słowo zakazane
+        if "badword" in content_cleaned.lower():
             raise forms.ValidationError("Komentarz zawiera niedozwolone słowa. Proszę usunąć takie słowa i spróbować ponownie.")
-
-        # Zwracamy przetworzony i sprawdzony komentarz
         return content_cleaned

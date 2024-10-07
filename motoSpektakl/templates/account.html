@@ -1,11 +1,10 @@
 {% extends "index.html" %}
 
 {% block title %}
-Moje Konto - Blog Motoryzacyjny
+    Moje Konto - Blog Motoryzacyjny
 {% endblock %}
 
 <head>
-    <!-- Meta tagi SEO -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Zarządzaj swoim kontem na Blogu Motoryzacyjnym. Edytuj profil, zmień hasło, zarządzaj postami na blogu oraz użytkownikami.">
@@ -15,42 +14,42 @@ Moje Konto - Blog Motoryzacyjny
 </head>
 
 {% block content %}
-<div class="account-content container mt-4">
-    {% if user.is_authenticated %}
-        <h1>Witaj, {{ user.username }}</h1>
-        <a href="{% url 'edit_profile' %}" class="btn btn-primary mt-3">Edytuj Profil</a>
-        <a href="{% url 'change_password' %}" class="btn btn-primary mt-3">Zmień Hasło</a>
-        <a href="{% url 'logout' %}" class="btn btn-primary mt-3">Wyloguj się</a>
+    <div class="account-content container mt-4">
+        {% if user.is_authenticated %}
+            <h1>Witaj, {{ user.username }}</h1>
+            <a href="{% url 'edit_profile' %}" class="btn btn-primary mt-3">Edytuj Profil</a>
+            <a href="{% url 'change_password' %}" class="btn btn-primary mt-3">Zmień Hasło</a>
+            <a href="{% url 'logout' %}" class="btn btn-primary mt-3">Wyloguj się</a>
 
-        {% if user.is_staff or user.is_superuser %}
-            <a href="{% url 'blog_management' %}" class="btn btn-primary mt-3">Zarządzanie blogiem</a>
-        {% endif %}
+            {% if user.is_staff or user.is_superuser %}
+                <a href="{% url 'blog_management' %}" class="btn btn-primary mt-3">Zarządzanie blogiem</a>
+            {% endif %}
 
-        {% if user.is_superuser %}
-            <a href="{% url 'account_management' %}" class="btn btn-primary mt-3">Zarządzanie użytkownikami</a>
+            {% if user.is_superuser %}
+                <a href="{% url 'account_management' %}" class="btn btn-primary mt-3">Zarządzanie użytkownikami</a>
+            {% endif %}
+        {% else %}
+            <h1>Zaloguj się</h1>
+            <form action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="login">Login lub adres e-mail</label>
+                    <input type="text" class="form-control" id="login" placeholder="Wprowadź login lub adres e-mail" name="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Hasło</label>
+                    <input type="password" class="form-control" id="password" placeholder="Wprowadź hasło" name="password">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Zaloguj się</button>
+                </div>
+            </form>
+            <div class="form-group">
+                <a href="{% url 'register' %}" class="btn btn-primary">Zarejestruj się</a>
+            </div>
+            <div class="form-group">
+                <a href="{% url 'password_reset' %}" class="btn btn-link">Zapomniałem hasła</a>
+            </div>
         {% endif %}
-    {% else %}
-        <h1>Zaloguj się</h1>
-        <form action="{% url 'login' %}" method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="login">Login lub adres e-mail</label>
-                <input type="text" class="form-control" id="login" placeholder="Wprowadź login lub adres e-mail" name="username">
-            </div>
-            <div class="form-group">
-                <label for="password">Hasło</label>
-                <input type="password" class="form-control" id="password" placeholder="Wprowadź hasło" name="password">
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Zaloguj się</button>
-            </div>
-        </form>
-        <div class="form-group">
-            <a href="{% url 'register' %}" class="btn btn-primary">Zarejestruj się</a>
-        </div>
-        <div class="form-group">
-            <a href="{% url 'password_reset' %}" class="btn btn-link">Zapomniałem hasła</a>
-        </div>
-    {% endif %}
-</div>
+    </div>
 {% endblock %}

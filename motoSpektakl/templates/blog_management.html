@@ -5,25 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zarządzanie Blogiem</title>
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/blog_management_styles.css' %}">
 </head>
 <body>
     <div class="container">
         <h2>Zarządzanie Blogiem</h2>
-
-        <!-- Przycisk dodawania nowego postu -->
         <div class="text-right mb-3">
             <a href="{% url 'add_post' %}" class="btn btn-success">Dodaj nowy post</a>
         </div>
-        
-        <!-- Wyszukiwarka postów -->
         <div class="search-bar">
             <input type="text" class="form-control" placeholder="Wyszukaj posty...">
         </div>
-
-        <!-- Tabela postów -->
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -56,14 +49,10 @@
                 {% endfor %}
             </tbody>
         </table>
-
-        <!-- Przycisk powrotu do konta -->
         <div class="text-center back-btn">
             <a href="{% url 'account' %}" class="btn btn-primary">Powrót do konta</a>
         </div>
     </div>
-
-    <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

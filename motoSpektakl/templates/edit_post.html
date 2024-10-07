@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edytuj Post</title>
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/blog_management_styles.css' %}">
 </head>
@@ -40,16 +39,10 @@
                 <label for="image">Zmień zdjęcie:</label>
                 <input type="file" id="image" name="image" class="form-control">
             </div>
-
-            <!-- Przycisk zapisywania zmian -->
             <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
-
-            <!-- Przycisk anulowania -->
             <a href="{% url 'blog_management' %}" class="back-btn">Anuluj</a>
         </form>
     </div>
-
-    <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

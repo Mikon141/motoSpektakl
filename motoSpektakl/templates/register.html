@@ -2,13 +2,11 @@
 <html lang="pl">
 <head>
     {% load static %}
-    {% load widget_tweaks %} <!-- Ładowanie widget_tweaks do obsługi filtrów formularza -->
+    {% load widget_tweaks %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Moje Konto - Rejestracja</title>
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <!-- Zewnętrzny plik CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body class="flex flex-col min-h-screen">
@@ -17,6 +15,7 @@
             <a href="/"><h1 class="header-title">MOTOSPEKTAKL</h1></a>
         </div>
     </header>
+
     <div class="main-image-container"></div>
     
     <div class="navigation-buttons">
@@ -25,25 +24,22 @@
         <a href="{% url 'account' %}">MOJE KONTO</a>
     </div>
 
-    <!-- Wyświetlanie wiadomości -->
     <div class="container mt-4">
         {% if messages %}
-            <div class="messages">
-                {% for message in messages %}
-                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}" role="alert">
-                        {{ message }}
-                    </div>
-                {% endfor %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}" role="alert">
+                {{ message }}
             </div>
+            {% endfor %}
+        </div>
         {% endif %}
     </div>
 
-    <!-- Formularz rejestracji -->
     <div class="register-container account-content container mt-4">
         <h2>Zarejestruj się</h2>
         <form method="post" action="{% url 'register' %}">
             {% csrf_token %}
-            <!-- Użycie django-widget-tweaks do dodania klas Bootstrap -->
             <div class="form-group">
                 <label for="id_username">Nazwa użytkownika:</label>
                 {{ form.username|add_class:"form-control" }}
@@ -74,7 +70,6 @@
         </div>
     </footer>
 
-    <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.amazonaws.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

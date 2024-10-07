@@ -1,54 +1,48 @@
-/* Ustawienie maksymalnej szerokości dla kontenera forum-content */
 div.forum-content {
     max-width: 600px;
-    margin: 0 auto; /* Wyśrodkowanie kontenera */
+    margin: 0 auto;
 }
 
-/* Stylizacja kontenera wyszukiwarki */
 div.forum-content .search-container {
     display: flex;
-    justify-content: center; /* Wyśrodkowanie elementów w poziomie */
-    align-items: center; /* Wyśrodkowanie elementów w pionie */
+    justify-content: center;
+    align-items: center;
     margin: 20px 0;
 }
 
-/* Resetowanie stylów dla input */
 div.forum-content .search-container input.form-control {
-    margin: 0; /* Usunięcie marginesów */
-    padding: 0; /* Usunięcie paddingu */
-    font-size: 16px; /* Ujednolicenie rozmiaru czcionki */
-    line-height: normal; /* Resetowanie line-height */
-    height: 38px; /* Ustawienie jednakowej wysokości */
-    box-sizing: border-box; /* Upewnienie się, że padding i border są wliczane w wysokość */
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    line-height: normal;
+    height: 38px;
+    box-sizing: border-box;
 }
 
-/* Stylizacja pola input */
 div.forum-content .search-container input.form-control {
     flex: 1;
     margin-right: 10px;
-    padding: 0 10px; /* Dodanie poziomego paddingu */
+    padding: 0 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
-/* Stylizacja przycisku "Szukaj" */
 div.forum-content .search-container button.btn-search {
-    width: 120px; /* Szerokość przycisku */
+    width: 120px;
     background-color: #007bff;
     color: white;
-    border: none; /* Usunięcie obramowania */
+    border: none;
     border-radius: 5px;
     font-weight: 600;
-    cursor: pointer; /* Dodanie kursora wskazującego */
-    height: 38px; /* Ustawienie wysokości */
-    box-sizing: border-box; /* Upewnienie się, że padding i border są wliczane w wysokość */
-    padding: 0 10px; /* Dodanie poziomego paddingu */
+    cursor: pointer;
+    height: 38px;
+    box-sizing: border-box;
+    padding: 0 10px;
 }
 
-/* Poprawka dla vertical-align */
 div.forum-content .search-container input.form-control,
 div.forum-content .search-container button.btn-search {
-    vertical-align: middle; /* Wyrównanie elementów do środka w pionie */
+    vertical-align: middle;
 }
 
 div.forum-content .btn-search:hover {
@@ -56,7 +50,6 @@ div.forum-content .btn-search:hover {
     color: white;
 }
 
-/* Stylizacja przycisku "Dodaj nowy wątek" */
 div.forum-content .btn-primary {
     max-width: 600px;
     width: 100%;
@@ -77,7 +70,6 @@ div.forum-content .btn-primary:hover {
     color: white;
 }
 
-/* Stylizacja przycisków sortowania */
 div.forum-content div.container.mt-4.text-center {
     display: flex;
     flex-direction: column;
@@ -88,7 +80,6 @@ div.forum-content div.container.mt-4.text-center h5 {
     margin-bottom: 10px;
 }
 
-/* Kontener dla przycisków sortowania */
 div.forum-content div.container.mt-4.text-center .btn-sort {
     display: inline-block;
     width: calc(50% - 10px);
@@ -108,14 +99,12 @@ div.forum-content .btn-sort:hover {
     color: white;
 }
 
-/* Stylizacja aktywnego przycisku sortowania */
 div.forum-content .btn-outline-primary.active {
     background-color: #0056b3;
     color: white;
     border: none;
 }
 
-/* Responsywność dla mniejszych ekranów */
 @media (max-width: 768px) {
     div.forum-content {
         max-width: 100%;
@@ -148,7 +137,6 @@ div.forum-content .btn-outline-primary.active {
     }
 }
 
-/* Stylizacja przycisków w container .button-container */
 .button-container .btn-primary {
     max-width: 600px;
     width: 100%;
@@ -170,135 +158,102 @@ div.forum-content .btn-outline-primary.active {
     color: white;
 }
 
-div.forum-content {
-    max-width: 600px;
-    margin: 0 auto; /* Wyśrodkowanie kontenera */
-}
-
-/* Stylizacja przycisków edytowania i usuwania wątku */
 .custom-btn {
-    height: 40px; /* Wysokość przycisku */
-    width: 150px; /* Szerokość przycisku */
+    height: 40px;
+    width: 150px;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     font-weight: bold;
-    margin: 0 10px; /* Margines między przyciskami */
-    border-radius: 5px; /* Zaokrąglone rogi */
-    text-transform: capitalize; /* Tylko pierwsza litera duża */
-    color: white !important; /* Biała czcionka */
+    margin: 0 10px;
+    border-radius: 5px;
+    text-transform: capitalize;
+    color: white !important;
 }
 
-/* Ustawienie niebieskiego koloru dla przycisków */
 .custom-btn.btn-primary,
 .custom-btn.btn-danger {
-    background-color: #007bff !important; /* Kolor niebieski */
+    background-color: #007bff !important;
     border: none;
 }
 
 .custom-btn.btn-primary:hover,
 .custom-btn.btn-danger:hover {
-    background-color: #0056b3 !important; /* Ciemniejszy niebieski kolor na hover */
+    background-color: #0056b3 !important;
 }
 
-/* Wyrównanie tekstu w przyciskach, tylko pierwsza litera ma być duża */
-.custom-btn {
-    text-transform: capitalize; /* Tylko pierwsza litera duża */
-}
-
-/* Przesunięcie sekcji autora bardziej w lewo */
 .container .d-flex.align-items-center.mb-4 {
-    margin-left: 0px !important; /* Wyzerowanie marginesu, aby sekcja zaczynała się tam, gdzie tytuł */
-    padding-left: 0px; /* Ustawienie paddingu na 0, aby lepiej pasowało do lewej krawędzi */
-    max-width: 100%; /* Zwiększenie szerokości kontenera */
-    justify-content: flex-start; /* Wyrównanie sekcji do lewej strony */
-    display: flex; /* Zapewnienie, że elementy pozostaną w linii */
-    align-items: center; /* Wyrównanie elementów w pionie */
+    margin-left: 0px !important;
+    padding-left: 0px;
+    max-width: 100%;
+    justify-content: flex-start;
+    display: flex;
+    align-items: center;
 }
 
-/* Stylizacja tekstu wewnątrz sekcji autora */
 .container .d-flex.align-items-center.mb-4 p {
     margin: 0;
-    color: white; /* Kolor tekstu */
-    font-size: 1.1em; /* Powiększenie czcionki */
+    color: white;
+    font-size: 1.1em;
 }
 
-/* Stylizacja zdjęcia profilowego autora */
 .profile-picture {
-    width: 64px; /* Szerokość zdjęcia */
-    height: 64px; /* Wysokość zdjęcia */
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
-    object-fit: cover; /* Dopasowanie zdjęcia w ramach ustalonych wymiarów */
-    border: 2px solid #ffffff; /* Obramowanie dla lepszej widoczności */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Dodanie cienia */
-    margin-right: 15px; /* Odstęp między zdjęciem a tekstem */
+    object-fit: cover;
+    border: 2px solid #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-right: 15px;
 }
 
-/* Przesunięcie kontenera informacji o autorze, aby wyśrodkować w lewo */
 .container .d-flex.align-items-center.mb-4 p {
-    margin-left: 0px !important; /* Zerowanie marginesów */
-    margin-right: auto; /* Automatyczny margines po prawej stronie */
-    text-align: left; /* Wyrównanie tekstu do lewej */
+    margin-left: 0px !important;
+    margin-right: auto;
+    text-align: left;
 }
 
-/* Stylizacja przycisków "Zaktualizuj wątek" i "Anuluj" */
-.edit-thread-button, .edit-thread-button-cancel {
+.edit-thread-button,
+.edit-thread-button-cancel {
     display: block;
-    width: 100%; /* Ustawienie szerokości przycisków na 100% */
-    max-width: 600px; /* Ograniczenie maksymalnej szerokości */
-    height: 50px; /* Ustawienie wysokości */
-    font-size: 1.1em; /* Większy rozmiar czcionki */
-    margin: 10px auto; /* Wyśrodkowanie przycisków */
-    text-transform: capitalize; /* Ustawienie pierwszej litery na dużą */
+    width: 100%;
+    max-width: 600px;
+    height: 50px;
+    font-size: 1.1em;
+    margin: 10px auto;
+    text-transform: capitalize;
 }
 
-/* Styl dla przycisku Zaktualizuj wątek */
 .edit-thread-button {
-    background-color: #007bff !important; /* Niebieski kolor */
+    background-color: #007bff !important;
     color: white !important;
     border: none !important;
 }
 
 .edit-thread-button:hover {
-    background-color: #0056b3 !important; /* Ciemniejszy niebieski na hover */
+    background-color: #0056b3 !important;
 }
 
-/* Styl dla przycisku Anuluj */
 .edit-thread-button-cancel {
-    background-color: #6c757d !important; /* Szary kolor */
+    background-color: #6c757d !important;
     color: white !important;
     border: none !important;
 }
 
 .edit-thread-button-cancel:hover {
-    background-color: #5a6268 !important; /* Ciemniejszy szary na hover */
+    background-color: #5a6268 !important;
 }
 
-/* Dodatkowe poprawki do formularza */
 form.w-50 {
-    max-width: 600px; /* Ustawienie szerokości formularza */
+    max-width: 600px;
 }
 
 form .form-group label {
-    text-align: left; /* Wyrównanie etykiet do lewej */
+    text-align: left;
     font-weight: bold;
-    color: white; /* Kolor tekstu */
+    color: white;
     display: block;
-}
-
-/* Ustawienie maksymalnej szerokości dla kontenera forum-content */
-div.forum-content {
-    max-width: 600px;
-    margin: 0 auto; /* Wyśrodkowanie kontenera */
-}
-
-/* Stylizacja kontenera wyszukiwarki */
-div.forum-content .search-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px 0;
 }
 
 div.forum-content .search-container form {
@@ -312,7 +267,7 @@ div.forum-content .search-container form {
 div.forum-content .search-container input.search-input,
 div.forum-content .search-container button.search-button {
     width: 100%;
-    height: 50px; /* Ustawienie jednakowej wysokości */
+    height: 50px;
     margin: 5px 0;
     padding: 10px;
     box-sizing: border-box;
@@ -336,14 +291,12 @@ div.forum-content .search-container button.search-button:hover {
     background-color: #0056b3;
 }
 
-/* Dodatkowe style dla responsywności */
 @media (max-width: 768px) {
     div.forum-content .search-container form {
         width: 100%;
     }
 }
 
-/* Stylizacja przycisku "Dodaj nowy wątek" */
 div.forum-content .btn-primary {
     max-width: 600px;
     width: 100%;
@@ -364,7 +317,6 @@ div.forum-content .btn-primary:hover {
     color: white;
 }
 
-/* Stylizacja przycisków sortowania */
 div.forum-content div.container.mt-4.text-center {
     display: flex;
     flex-direction: column;
@@ -400,41 +352,6 @@ div.forum-content .btn-outline-primary.active {
     border: none;
 }
 
-/* Stylizacja paginacji */
-.pagination {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-.pagination .page-item .page-link {
-    color: #007bff;
-    background-color: #ffffff;
-    border: 1px solid #dee2e6;
-    border-radius: 5px;
-    padding: 8px 12px;
-}
-
-.pagination .page-item .page-link:hover {
-    color: #ffffff;
-    background-color: #007bff;
-    border-color: #007bff;
-}
-
-.pagination .page-item.disabled .page-link {
-    color: #6c757d;
-    pointer-events: none;
-    cursor: default;
-    background-color: #e9ecef;
-    border-color: #dee2e6;
-}
-
-.pagination .page-item.active .page-link {
-    z-index: 1;
-    color: #ffffff;
-    background-color: #007bff;
-    border-color: #007bff;
-}
-/* Stylizacja paginacji */
 .pagination {
     margin-top: 20px;
     margin-bottom: 20px;

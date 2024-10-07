@@ -1,50 +1,45 @@
-/* Ustawienia globalne */
 :root {
-    --primary-color: #007bff; /* Kolor podstawowy */
-    --hover-color: #0056b3; /* Kolor przycisków na hover */
-    --text-color: #ffffff; /* Kolor tekstu */
-    --background-color: #263238; /* Kolor tła */
-    --button-width: 400px; /* Szerokość przycisków */
-    --padding: 12px; /* Padding dla elementów */
+    --primary-color: #007bff;
+    --hover-color: #0056b3;
+    --text-color: #ffffff;
+    --background-color: #263238;
+    --button-width: 400px;
+    --padding: 12px;
 }
 
-/* Stylowanie ciała strony */
 body {
     background: var(--background-color);
     font-family: Arial, sans-serif;
     margin: 0;
 }
 
-/* Stylowanie kontenerów */
 .account-content,
 .auth-container,
 .register-container {
-    max-width: var(--button-width); /* Stała szerokość kontenerów */
-    margin: 50px auto; /* Wyśrodkowanie */
+    max-width: var(--button-width);
+    margin: 50px auto;
     padding: 20px;
     background-color: var(--background-color);
     border-radius: 8px;
     color: var(--text-color);
 }
 
-/* Stylowanie inputów */
 .account-content .form-control,
 .auth-container .form-control,
 .register-container .form-control {
-    width: 100%; /* Pełna szerokość */
-    max-width: var(--button-width); /* Stała szerokość */
+    width: 100%;
+    max-width: var(--button-width);
     padding: var(--padding);
-    margin: 15px auto; /* Marginesy */
+    margin: 15px auto;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
-/* Stylowanie przycisków */
 .account-content .btn-primary,
 .auth-container .btn-primary,
 .register-container .btn-primary {
-    width: 100%; /* Pełna szerokość */
-    max-width: var(--button-width); /* Stała szerokość */
+    width: 100%;
+    max-width: var(--button-width);
     padding: var(--padding);
     background-color: var(--primary-color);
     color: var(--text-color);
@@ -52,33 +47,30 @@ body {
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margin: 15px auto; /* Margines */
+    margin: 15px auto;
     display: block;
     text-align: center;
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Hover efekt dla przycisków */
 .account-content .btn-primary:hover,
 .auth-container .btn-primary:hover,
 .register-container .btn-primary:hover {
-    background-color: var(--hover-color); /* Zmiana koloru na hover */
+    background-color: var(--hover-color);
 }
 
-/* Stylowanie dla przycisków .btn-outline-primary */
 .btn-outline-primary {
-    background-color: var(--primary-color); /* Ustawienie domyślnego niebieskiego koloru */
-    color: var(--text-color); /* Biały tekst */
-    border: 1px solid var(--primary-color); /* Dopasowanie obramowania do koloru przycisku */
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: 1px solid var(--primary-color);
 }
 
 .btn-outline-primary:hover {
-    background-color: var(--hover-color); /* Zmiana koloru na hover */
-    border-color: var(--hover-color); /* Dopasowanie obramowania do hovera */
-    color: var(--text-color); /* Utrzymanie białego tekstu */
+    background-color: var(--hover-color);
+    border-color: var(--hover-color);
+    color: var(--text-color);
 }
 
-/* Stylowanie linków */
 .account-content a,
 .auth-container a,
 .register-container a {
@@ -89,7 +81,6 @@ body {
     text-align: center;
 }
 
-/* Stylowanie nagłówków */
 .account-content h1,
 .auth-container h2,
 .register-container h2 {
@@ -99,15 +90,13 @@ body {
     color: var(--text-color);
 }
 
-/* Stylowanie alertów */
 .alert {
-    max-width: var(--button-width); /* Stała szerokość */
+    max-width: var(--button-width);
     margin: 15px auto;
     padding: var(--padding);
     border-radius: 4px;
 }
 
-/* Input typu plik */
 input[type="file"] {
     width: 100%;
     max-width: var(--button-width);
@@ -118,7 +107,6 @@ input[type="file"] {
     border-radius: 4px;
 }
 
-/* Nadpisanie stylu przycisku w input file */
 input[type="file"]::-webkit-file-upload-button {
     padding: var(--padding);
     background-color: var(--primary-color);
@@ -127,93 +115,81 @@ input[type="file"]::-webkit-file-upload-button {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Hover efekt dla przycisku w input file */
 input[type="file"]::-webkit-file-upload-button:hover {
     background-color: var(--hover-color);
-    color: var(--text-color); /* Utrzymanie białego koloru tekstu */
+    color: var(--text-color);
 }
 
-/* Zmiana koloru tekstu nagłówków h5 na biały */
 .container h5 {
-    color: var(--text-color); /* Biały kolor */
+    color: var(--text-color);
 }
 
-/* Stylowanie filtrów dla widoku mobilnego */
 @media (max-width: 576px) {
     .container .btn-outline-primary {
         width: 100%;
-        margin-bottom: 10px; /* Dodanie odstępu między przyciskami */
+        margin-bottom: 10px;
     }
     
     .container .btn-sort {
-        width: 48%; /* Przyciski sortowania zajmują po 48% szerokości */
-        margin-bottom: 10px; /* Dodanie odstępu między przyciskami */
+        width: 48%;
+        margin-bottom: 10px;
     }
 }
 
-        /* Dodatkowe style dla zdjęcia */
-        .img-fluid {
-            max-width: 60%; /* Zmniejszamy obraz do 60% szerokości */
-            display: block; /* Wyświetlamy obraz jako blokowy element */
-            margin: 20px auto; /* Wyśrodkowanie obrazu i dodanie marginesu */
-            border-radius: 10px; /* Zaokrąglamy rogi zdjęcia */
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2); /* Dodanie cienia */
-        }
-
-        /* Wyśrodkowanie tytułu */
-        .post-title {
-            text-align: center; /* Wyśrodkowanie tekstu */
-            color: white; /* Kolor tytułu */
-            margin-bottom: 30px; /* Większy margines dolny */
-        }
-
-        /* Stylizacja kontenera z treścią */
-        .post-content {
-            max-width: 80%; /* Zmniejszenie szerokości treści */
-            margin: 20px auto; /* Wyśrodkowanie treści */
-            font-size: 1.1rem; /* Zwiększenie rozmiaru czcionki */
-            line-height: 1.6; /* Ustawienie odstępu między wierszami */
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.05); /* Przezroczyste tło */
-            border-radius: 10px; /* Zaokrąglenie rogów */
-            color: #e0e0e0; /* Kolor czcionki */
-        }
-
-        /* Stylizacja footera */
-        footer.footer {
-            background-color: #222; /* Tło stopki */
-            padding: 20px 0;
-            color: #fff; /* Kolor tekstu */
-            position: relative;
-        }
-
-
-        /* Responsywność dla zdjęcia na urządzeniach mobilnych */
-        @media (max-width: 768px) {
-            .img-fluid {
-                max-width: 90%; /* Ustawienie szerokości zdjęcia na 90% dla urządzeń mobilnych */
-            }
-
-        }
-
-        /* Stylizacja zdjęcia profilowego */
-.profile-picture {
-    width: 64px; /* Szerokość zdjęcia */
-    height: 64px; /* Wysokość zdjęcia */
-    border-radius: 50%; /* Zaokrąglone rogi zdjęcia */
-    object-fit: cover; /* Dopasowanie zdjęcia do wymiarów */
-    border: 2px solid #ffffff; /* Obramowanie */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Dodanie cienia */
-    margin-bottom: 10px; /* Margines dolny dla odstępu */
+.img-fluid {
+    max-width: 60%;
+    display: block;
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Stylizacja wyszukiwarki i przycisku */
+.post-title {
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+}
+
+.post-content {
+    max-width: 80%;
+    margin: 20px auto;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    color: #e0e0e0;
+}
+
+footer.footer {
+    background-color: #222;
+    padding: 20px 0;
+    color: #fff;
+    position: relative;
+}
+
+@media (max-width: 768px) {
+    .img-fluid {
+        max-width: 90%;
+    }
+}
+
+.profile-picture {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+}
+
 .search-container {
     margin-bottom: 30px;
 }
 
 .search-container .form-inline {
-    max-width: 400px; /* Ustawienie maksymalnej szerokości formularza */
+    max-width: 400px;
     margin: 0 auto;
 }
 
@@ -225,7 +201,7 @@ input[type="file"]::-webkit-file-upload-button:hover {
 
 .search-container .btn-search {
     width: 100%;
-    background-color: #007bff; /* Dopasowanie koloru do stylu strony */
+    background-color: #007bff;
     color: white;
 }
 
@@ -282,61 +258,55 @@ input[type="file"]::-webkit-file-upload-button:hover {
     margin: 10px auto;
 }
 
-/* Stylizacja wyszukiwarki */
 .search-container {
     display: flex;
-    flex-direction: column; /* Układ w kolumnie */
+    flex-direction: column;
     align-items: center;
     margin: 20px auto;
-    width: 300px; /* Szerokość równa przyciskowi "Forum" */
+    width: 300px;
 }
 
 .search-container input, 
 .search-container button {
-    width: 100%; /* Pełna szerokość dla obu elementów */
-    margin-bottom: 10px; /* Odstęp między polem a przyciskiem */
+    width: 100%;
+    margin-bottom: 10px;
 }
 
 .search-container button {
-    background-color: #007bff; /* Kolor przycisku */
+    background-color: #007bff;
     color: white;
     border: none;
 }
 
 .search-container button:hover {
-    background-color: #0056b3; /* Hover efekt */
+    background-color: #0056b3;
 }
 
-/* Poprawa stylów przycisków Edytuj i Usuń */
 .comment .btn-sm {
-    width: auto; /* Automatyczna szerokość przycisków */
-    height: auto; /* Automatyczna wysokość */
-    margin: 5px; /* Dodanie odstępu między przyciskami */
-    white-space: nowrap; /* Zapobieganie łamaniu tekstu */
+    width: auto;
+    height: auto;
+    margin: 5px;
+    white-space: nowrap;
 }
 
-/* Dostosowanie szerokości przycisku Dodaj komentarz */
 form button[type="submit"].btn {
-    width: 100%; /* Szerokość dopasowana do szerokości formularza */
+    width: 100%;
 }
 
-/* Dostosowanie marginesów w komentarzach */
 .comment {
     padding: 15px;
     margin-bottom: 20px;
-    border-radius: 10px; /* Zaokrąglone rogi */
-    background-color: #f8f9fa; /* Jaśniejsze tło */
+    border-radius: 10px;
+    background-color: #f8f9fa;
 }
 
-/* Dopasowanie przycisków w komentarzach */
 .comment .btn {
-    width: 100px; /* Stała szerokość przycisków */
+    width: 100px;
 }
 
-/* Dostosowanie wielkości przycisków na mniejszych ekranach */
 @media (max-width: 576px) {
     .comment .btn {
-        width: 100%; /* Pełna szerokość przycisków */
-        margin-bottom: 5px; /* Dodanie odstępu między przyciskami */
+        width: 100%;
+        margin-bottom: 5px;
     }
 }

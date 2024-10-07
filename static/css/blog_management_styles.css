@@ -1,41 +1,40 @@
-        /* Stylizacja tabeli i strony */
-        body {
-            background-color: #fff; /* Białe tło */
-            color: #333; /* Kolor tekstu */
-        }
+body {
+    background-color: #fff;
+    color: #333;
+}
 
-        .container {
-            margin-top: 20px;
-        }
+.container {
+    margin-top: 20px;
+}
 
-        .table thead th {
-            background-color: #f8f9fa; /* Tło nagłówków tabeli */
-        }
+.table thead th {
+    background-color: #f8f9fa;
+}
 
-        .table tbody tr:hover {
-            background-color: #f1f1f1; /* Kolor tła podczas najechania */
-        }
+.table tbody tr:hover {
+    background-color: #f1f1f1;
+}
 
-        .btn {
-            font-size: 0.875rem;
-            margin: 0 5px;
-        }
+.btn {
+    font-size: 0.875rem;
+    margin: 0 5px;
+}
 
-        .table td, .table th {
-            vertical-align: middle; /* Wyśrodkowanie tekstu w pionie */
-        }
+.table td, .table th {
+    vertical-align: middle;
+}
 
-        .search-bar {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+.search-bar {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-        .search-bar input {
-            max-width: 300px;
-        }
+.search-bar input {
+    max-width: 300px;
+}
 
-        .back-btn {
-            margin-top: 20px;
-        }
+.back-btn {
+    margin-top: 20px;
+}

@@ -1,50 +1,49 @@
 :root {
     --main-color: #505050;
-    --background-color: #263238; /* Dokładny kolor tła z obrazka */
-    --button-color: #e9522f; /* Kolor przycisków i nagłówka */
+    --background-color: #263238;
+    --button-color: #e9522f;
 }
 
 body {
     background: var(--background-color);
-    font-family: Arial, sans-serif; /* Upewniamy się, że czcionka jest jednolita */
+    font-family: Arial, sans-serif;
 }
 
-/* Footer style */
 .footer {
     background-color: var(--button-color) !important;
     color: white;
-    margin-top: 30px; /* Dodanie marginesu do stopki */
+    margin-top: 30px;
 }
 
 .main-image-container {
     width: 100%;
-    height: 30vw; /* Zmniejszenie wysokości kontenera, aby obraz był bardziej kompaktowy */
+    height: 30vw;
     position: relative;
     overflow: hidden;
     background-image: url("../images/main.jpg");
-    background-size: cover; /* Obraz wypełnia cały kontener */
-    background-position: center center; /* Wyśrodkowanie tła */
+    background-size: cover;
+    background-position: center center;
 }
 
 .navigation-buttons {
     display: flex;
     justify-content: space-around;
     background-color: #e9522f;
-    padding: 0; /* Wyłączamy wewnętrzne odstępy */
+    padding: 0;
 }
 
 .navigation-buttons a {
-    flex: 1; /* Każdy przycisk zajmuje równą część szerokości */
+    flex: 1;
     text-align: center;
     color: white;
     text-decoration: none;
     font-weight: bold;
-    padding: 20px 0; /* Odstępy wewnętrzne w pionie */
-    transition: background-color 0.3s ease; /* Płynne przejście dla koloru tła */
+    padding: 20px 0;
+    transition: background-color 0.3s ease;
 }
 
 .navigation-buttons a:hover {
-    background-color: #c74327; /* Ciemniejszy kolor podczas hovera */
+    background-color: #c74327;
     color: white;
 }
 
@@ -59,49 +58,50 @@ body {
 }
 
 .custom-btn {
-    background-color: var(--button-color) !important; /* Zmiana koloru tła przycisków */
-    color: black !important; /* Kolor tekstu */
+    background-color: var(--button-color) !important;
+    color: black !important;
     font-weight: bold;
     text-transform: uppercase;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     border-radius: 0;
-    border-color: var(--button-color) !important; /* Zmiana koloru obramowania przycisków */
-    text-decoration: none !important; /* Usuwamy podkreślenie */
+    border-color: var(--button-color) !important;
+    text-decoration: none !important;
 }
 
-.custom-btn:hover, .custom-btn:focus {
-    background-color: #c74327 !important; /* Ciemniejszy kolor tła przy najechaniu */
+.custom-btn:hover,
+.custom-btn:focus {
+    background-color: #c74327 !important;
     border-color: #c74327 !important;
-    color: black !important; /* Kolor tekstu przy najechaniu */
+    color: black !important;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 }
 
 .header-title {
-    background-color: var(--button-color); /* Zmiana koloru nagłówka */
-    color: white; /* Kolor tekstu */
+    background-color: var(--button-color);
+    color: white;
     padding: .375rem .75rem;
     border-radius: .25rem;
     text-align: center;
     font-weight: bold;
     letter-spacing: 5px;
-    text-decoration: none !important; /* Usuwamy podkreślenie */
-    transition: color 0.3s ease; /* Płynne przejście dla zmiany koloru tekstu */
+    text-decoration: none !important;
+    transition: color 0.3s ease;
 }
 
 .header-title:hover {
-    color: #c74327; /* Przyciemnienie koloru tekstu podczas hovera */
-    text-decoration: none; /* Zapewnienie, że podkreślenie nie pojawi się podczas hovera */
+    color: #c74327;
+    text-decoration: none;
 }
 
 header a {
-    text-decoration: none !important; /* Usunięcie podkreślenia dla wszystkich linków w nagłówku */
-    color: inherit; /* Dziedziczenie koloru z rodzica */
+    text-decoration: none !important;
+    color: inherit;
 }
 
 header a:hover {
-    color: #c74327; /* Przyciemnienie koloru tekstu podczas hovera */
-    text-decoration: none !important; /* Upewnienie się, że podkreślenie nie pojawi się podczas hovera */
+    color: #c74327;
+    text-decoration: none !important;
 }
 
 @media (min-width: 768px) {
@@ -114,7 +114,7 @@ header a:hover {
     .header-title {
         font-size: smaller;
     }
-    
+
     header {
         padding: 5px 0;
     }
@@ -161,31 +161,32 @@ header a:hover {
     min-height: 100vh;
 }
 
-.blog-content, .forum-content, .account-content, .register-container {
+.blog-content,
+.forum-content,
+.account-content,
+.register-container {
     background: var(--background-color);
     padding: 20px;
     border-radius: 8px;
-    color: white; /* Dodajemy kolor tekstu, aby był widoczny na ciemnym tle */
-    margin: 50px auto; /* Dodaje margines wokół, aby elementy nie nachodziły na header ani footer */
-    max-width: 600px; /* Ustalona maksymalna szerokość dla lepszej czytelności na dużych ekranach */
+    color: white;
+    margin: 50px auto;
+    max-width: 600px;
 }
 
-/* Wyśrodkowanie i stylizacja nagłówków */
 .account-content h1,
 .register-container h2 {
     text-align: center;
     color: white;
-    margin: 0 auto 20px; /* Wyśrodkowanie i dodanie dolnego marginesu */
+    margin: 0 auto 20px;
 }
 
-/* Stylizacja form-group i form-control */
 .account-content .form-group,
 .register-container .form-group {
     margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
-    padding-left: 10px;  /* Dodanie lewego paddingu */
-    padding-right: 10px; /* Dodanie prawego paddingu */
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .account-content .form-control,
@@ -195,21 +196,19 @@ header a:hover {
     font-size: 1rem;
     border-radius: 4px;
     border: 1px solid #ccc;
-    box-sizing: border-box; /* Ustawienie box-sizing, aby padding był wliczony w szerokość */
+    box-sizing: border-box;
 }
 
-/* Stylizacja przycisków */
 .account-content .btn-primary,
 .register-container .btn-primary {
-    width: 100%; /* Dopasowanie szerokości przycisków do inputów */
-    max-width: 100%; /* Zapewnienie, że przyciski nie będą większe niż inputy */
-    margin: 10px 0; /* Dodanie marginesu górnego i dolnego */
+    width: 100%;
+    max-width: 100%;
+    margin: 10px 0;
     padding: 0.5rem 0.75rem;
     display: block;
-    box-sizing: border-box; /* Ustawienie box-sizing, aby padding był wliczony w szerokość */
+    box-sizing: border-box;
 }
 
-/* Usunięcie dodatkowych klas z przycisków */
 .btn-primary {
     display: block;
     width: 100%;
@@ -219,22 +218,20 @@ header a:hover {
     padding: 10px 0;
 }
 
-/* Zapewnienie odpowiednich marginesów w widokach mobilnych */
 @media (max-width: 768px) {
     .account-content,
     .register-container {
-        margin: 20px;   /* Margines wokół całej sekcji */
+        margin: 20px;
         padding: 15px;
     }
 }
 
-/* Stylizacja form-group i form-control z równymi paddingami */
 .account-content .form-group,
 .register-container .form-group {
     margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
-    padding: 0 10%;  /* Równy padding z lewej i prawej strony w procentach */
+    padding: 0 10%;
 }
 
 .account-content .form-control,
@@ -247,114 +244,102 @@ header a:hover {
     box-sizing: border-box;
 }
 
-/* Stylizacja przycisków z równymi paddingami */
 .account-content .btn-primary,
 .register-container .btn-primary {
-    width: 100%; /* Dopasowanie szerokości przycisków do inputów */
+    width: 100%;
     margin: 10px 0;
     padding: 0.5rem 0.75rem;
     display: block;
     box-sizing: border-box;
-    padding: 0 10%; /* Równy padding z lewej i prawej strony w procentach */
+    padding: 0 10%;
 }
 
-/* Zapewnienie odpowiednich marginesów w widokach mobilnych */
 @media (max-width: 768px) {
     .account-content,
     .register-container {
-        margin: 20px auto; /* Automatyczne marginesy po bokach */
+        margin: 20px auto;
         padding: 0;
     }
 }
 
-/* Stylizacja nagłówka "Zarejestruj się" */
 .register-container h2 {
     text-align: center;
     color: white;
-    margin: 0 0 20px 0; /* Margines dolny dla odstępu od inputów */
-    font-size: 2rem; /* Rozmiar czcionki */
-    line-height: 1.2; /* Wysokość linii */
+    margin: 0 0 20px 0;
+    font-size: 2rem;
+    line-height: 1.2;
 }
 
-/* Wyśrodkowanie całego kontenera formularza */
 .register-container {
     margin: 0 auto;
     padding: 0 10%;
-    max-width: 600px; /* Ustalona szerokość dla kontenera */
+    max-width: 600px;
 }
 
-/* Stylizacja kontenera formularza rejestracji */
 .register-container {
-    max-width: 600px; /* Maksymalna szerokość formularza na większych ekranach */
-    margin: 0 auto;   /* Wyśrodkowanie formularza */
-    padding: 0 20px;  /* Dodatkowy padding na mniejszych ekranach */
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
-/* Dostosowanie nagłówka */
 .register-container h2 {
     text-align: center;
     color: white;
     margin-bottom: 20px;
 }
 
-/* Stylizacja form-group i form-control */
 .register-container .form-group,
 .account-content .form-group {
     margin-bottom: 1rem;
-    padding-left: 0;  /* Wyłączenie lewego paddingu */
-    padding-right: 0; /* Wyłączenie prawego paddingu */
+    padding-left: 0;
+    padding-right: 0;
 }
 
-/* Skalowanie na większych ekranach */
 @media (min-width: 768px) {
     .register-container {
-        padding: 0; /* Zmniejszenie paddingu na większych ekranach */
+        padding: 0;
     }
 
     .register-container h2 {
-        font-size: 2rem; /* Dopasowanie rozmiaru czcionki nagłówka */
+        font-size: 2rem;
     }
 
     .register-container .form-group {
-        padding-left: 10px;  /* Przywrócenie lewego paddingu na większych ekranach */
-        padding-right: 10px; /* Przywrócenie prawego paddingu na większych ekranach */
+        padding-left: 10px;
+        padding-right: 10px;
     }
 }
 
-/* Stylizacja kontenera logowania na stronie account.html */
 .account-content {
-    max-width: 600px; /* Maksymalna szerokość formularza na większych ekranach */
-    margin: 0 auto;   /* Wyśrodkowanie formularza */
-    padding: 0 20px;  /* Dodatkowy padding na mniejszych ekranach */
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
-/* Stylizacja nagłówka */
 .account-content h1 {
     text-align: center;
     color: white;
     margin-bottom: 20px;
 }
 
-/* Stylizacja form-group i form-control */
 .account-content .form-group {
     margin-bottom: 1rem;
-    padding-left: 0;  /* Wyłączenie lewego paddingu */
-    padding-right: 0; /* Wyłączenie prawego paddingu */
+    padding-left: 0;
+    padding-right: 0;
 }
 
-/* Skalowanie na większych ekranach */
 @media (min-width: 768px) {
     .account-content {
-        padding: 0; /* Zmniejszenie paddingu na większych ekranach */
+        padding: 0;
     }
 
     .account-content h1 {
-        font-size: 2rem; /* Dopasowanie rozmiaru czcionki nagłówka */
+        font-size: 2rem;
     }
 
     .account-content .form-group {
-        padding-left: 10px;  /* Przywrócenie lewego paddingu na większych ekranach */
-        padding-right: 10px; /* Przywrócenie prawego paddingu na większych ekranach */
+        padding-left: 10px;
+        padding-right: 10px;
     }
 }
 
@@ -362,7 +347,7 @@ header a:hover {
     max-width: 400px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #2c3e50; /* Przyciemnione tło, zgodnie ze screenem */
+    background-color: #2c3e50;
     border-radius: 5px;
 }
 
@@ -407,16 +392,15 @@ header a:hover {
 }
 
 .helptext {
-    color: #ccc;  /* Dostosuj kolor do reszty strony */
+    color: #ccc;
     font-size: 0.9em;
 }
 
 .errorlist {
-    color: red;  /* Kolor błędów */
+    color: red;
     font-weight: bold;
 }
 
-/* Przyciski */
 .btn-primary {
     background-color: var(--blue);
     color: white;
@@ -429,16 +413,15 @@ header a:hover {
 }
 
 .btn-primary:hover {
-    background-color: #0062cc; /* Ciemniejszy niebieski */
+    background-color: #0062cc;
 }
 
-/* Dla sekcji przycisków */
 .btn-wrapper {
     margin-bottom: 20px;
 }
 
 input[type="file"]::-webkit-file-upload-button {
-    background-color: #007bff; /* Kolor niebieski, taki jak inne przyciski */
+    background-color: #007bff;
     color: white;
     border: none;
     padding: 10px;
@@ -447,18 +430,18 @@ input[type="file"]::-webkit-file-upload-button {
 }
 
 input[type="file"]::-webkit-file-upload-button:hover {
-    background-color: #0056b3; /* Ciemniejszy niebieski na hover */
+    background-color: #0056b3;
 }
 
 input[type="file"] {
-    color: white; /* Zmiana koloru napisu "Nie wybrano pliku" */
+    color: white;
 }
 
 .auth-container {
     max-width: 400px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #2e3b4e; /* Opcjonalne tło dla formularza */
+    background-color: #2e3b4e;
     border-radius: 8px;
 }
 
@@ -504,7 +487,7 @@ input[type="file"] {
 }
 
 .errorlist {
-    display: none; /* Ukrywamy domyślne błędy wyświetlane pod polami */
+    display: none;
 }
 
 .alert-danger {
@@ -513,6 +496,7 @@ input[type="file"] {
     font-weight: bold;
     margin-top: 10px;
 }
+
 .social-icons {
     display: flex;
     justify-content: space-between;
@@ -530,13 +514,12 @@ input[type="file"] {
     color: #c74327;
 }
 
-/* Stylizacja zdjęć profilowych */
 .profile-picture {
-    width: 64px; /* Szerokość zdjęcia */
-    height: 64px; /* Wysokość zdjęcia */
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
-    object-fit: cover; /* Dopasowanie zdjęcia w ramach ustalonych wymiarów */
-    border: 2px solid #ffffff; /* Obramowanie dla lepszej widoczności */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Dodanie cienia */
-    margin: 10px auto; /* Wyśrodkowanie */
+    object-fit: cover;
+    border: 2px solid #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 10px auto;
 }

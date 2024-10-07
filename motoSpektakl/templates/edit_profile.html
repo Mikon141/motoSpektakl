@@ -6,11 +6,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Edytuj profil</title>
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/account_styles.css' %}">
-    <!-- FontAwesome CSS do ikon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body class="flex flex-col min-h-screen">
@@ -28,7 +26,6 @@
         <a id="account-link" href="{% url 'account' %}">MOJE KONTO</a>
     </div>
 
-    <!-- Obsługa wiadomości -->
     {% if messages %}
     <div class="container mt-4">
         {% for message in messages %}
@@ -39,17 +36,14 @@
     </div>
     {% endif %}
     
-    <!-- Dodanie sekcji wyświetlania błędów formularza -->
     <div class="container mt-4">
         {% if user_form.errors or profile_form.errors %}
         <div class="alert alert-danger">
             <strong>Wystąpiły błędy w formularzu. Sprawdź swoje dane.</strong>
             <ul>
-                <!-- Wyświetl błędy formularza użytkownika -->
                 {% for field, errors in user_form.errors.items %}
                     <li>{{ field }}: {{ errors }}</li>
                 {% endfor %}
-                <!-- Wyświetl błędy formularza profilu -->
                 {% for field, errors in profile_form.errors.items %}
                     <li>{{ field }}: {{ errors }}</li>
                 {% endfor %}
@@ -61,11 +55,8 @@
     <div class="container mt-5">
         <h1 class="text-center text-white">Edytuj swój profil</h1>
 
-        <!-- Formularz edycji profilu -->
         <form method="POST" enctype="multipart/form-data" class="form-horizontal">
             {% csrf_token %}
-            
-            <!-- Formularz użytkownika -->
             <div class="form-group">
                 <label for="username" class="text-white">Login:</label>
                 {{ user_form.username|add_class:"form-control" }}
@@ -77,14 +68,12 @@
                 {{ user_form.email|add_class:"form-control" }}
             </div>
 
-            <!-- Formularz profilu użytkownika -->
             <div class="form-group text-center">
                 <label for="profile_picture" class="text-white">Zdjęcie profilowe:</label>
                 {% if profile_form.profile_picture.value %}
                     <div>
                         <img src="{{ profile_form.profile_picture.value.url }}" alt="Profilowe zdjęcie" class="img-thumbnail mb-3" style="width: 150px; height: 150px;">
                         <br>
-                        <!-- Dodanie przycisku do usuwania zdjęcia -->
                         <label for="profile_picture-clear" class="text-white">
                             <input type="checkbox" name="profile_picture-clear" id="profile_picture-clear"> Usuń zdjęcie
                         </label>
@@ -118,16 +107,12 @@
 
     <footer class="footer mt-auto py-3 text-center">
         <div class="container d-flex justify-content-between align-items-center">
-            <!-- Ikony po lewej stronie -->
             <div class="social-icons">
                 <a href="https://www.youtube.com" target="_blank" class="social-icon">
                     <i class="fab fa-youtube"></i>
                 </a>
             </div>
-            
             <span>&copy; 2024 Blog Motoryzacyjny</span>
-            
-            <!-- Ikony po prawej stronie -->
             <div class="social-icons">
                 <a href="https://www.instagram.com" target="_blank" class="social-icon">
                     <i class="fab fa-instagram"></i>

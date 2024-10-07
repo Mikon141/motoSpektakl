@@ -1,5 +1,5 @@
 body {
-    background-color: #fff; /* Białe tło */
+    background-color: #fff;
     color: #333;
     font-family: Arial, sans-serif;
 }
@@ -24,8 +24,8 @@ h2 {
 }
 
 .btn-primary, .btn-secondary {
-    width: 100%; /* Przycisk na całą szerokość */
-    margin-bottom: 10px; /* Odstęp między przyciskami */
+    width: 100%;
+    margin-bottom: 10px;
 }
 
 .back-btn {

@@ -6,7 +6,6 @@
 {% endblock %}
 
 <head>
-    <!-- Meta tagi SEO -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Forum motoryzacyjne do dyskusji o samochodach, motocyklach, poradach technicznych i recenzjach pojazdów.">
@@ -16,79 +15,73 @@
 </head>
 
 {% block styles %}
-    <!-- Wczytanie forum_styles.css -->
     <link rel="stylesheet" href="{% static 'css/forum_styles.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="forum-content container mt-1"> <!-- Zmniejszenie marginesu górnego -->
-    <!-- Wyszukiwarka -->
-    <div class="search-container">
-        <form method="GET">
-            <input type="text" name="search" class="form-control search-input" placeholder="Wyszukaj po tytule lub autorze..." value="{{ search_query }}">
-            <button type="submit" class="btn btn-primary search-button">Szukaj</button>
-        </form>
-    </div>
-
-    <!-- Dodaj nowy wątek (przycisk) - widoczny tylko dla zalogowanych użytkowników -->
-    {% if user.is_authenticated %}
-    <div class="text-center mt-3">
-        <a href="{% url 'add_thread' %}" class="btn btn-primary mb-3">Dodaj nowy wątek</a>
-    </div>
-    {% endif %}
-
-    <!-- Sortowanie postów -->
-    <div class="container mt-4 text-center">
-        <h5>Sortuj według:</h5>
-        <a href="?sort_order=oldest{% if category %}&category={{ category }}{% endif %}&search={{ search_query }}" class="btn btn-outline-primary btn-sort {% if sort_order == 'oldest' %}active{% endif %}">Od najstarszych</a>
-        <a href="?sort_order=newest{% if category %}&category={{ category }}{% endif %}&search={{ search_query }}" class="btn btn-outline-primary btn-sort {% if sort_order == 'newest' %}active{% endif %}">Od najnowszych</a>
-    </div>
-
-    <hr>
-
-    <!-- Lista wątków -->
-    {% for thread in threads %}
-        <div class="thread mb-4">
-            <h2><a href="{% url 'forum_detail' thread_id=thread.id %}">{{ thread.title }}</a></h2>
-            <p>Autor: {{ thread.author.username }} | Data: {{ thread.created_at }}</p>
-            <p>{{ thread.content|truncatewords:20 }}</p>
+    <div class="forum-content container mt-1">
+        <div class="search-container">
+            <form method="GET">
+                <input type="text" name="search" class="form-control search-input" placeholder="Wyszukaj po tytule lub autorze..." value="{{ search_query }}">
+                <button type="submit" class="btn btn-primary search-button">Szukaj</button>
+            </form>
         </div>
-        <hr>
-    {% endfor %}
 
-    <!-- Nawigacja paginacji -->
-    <div class="container mt-4">
-        <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-                {% if threads.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page=1{% if category %}&category={{ category }}{% endif %}&search={{ search_query }}" aria-label="Pierwsza">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
+        {% if user.is_authenticated %}
+            <div class="text-center mt-3">
+                <a href="{% url 'add_thread' %}" class="btn btn-primary mb-3">Dodaj nowy wątek</a>
+            </div>
+        {% endif %}
+
+        <div class="container mt-4 text-center">
+            <h5>Sortuj według:</h5>
+            <a href="?sort_order=oldest{% if category %}&category={{ category }}{% endif %}&search={{ search_query }}" class="btn btn-outline-primary btn-sort {% if sort_order == 'oldest' %}active{% endif %}">Od najstarszych</a>
+            <a href="?sort_order=newest{% if category %}&category={{ category }}{% endif %}&search={{ search_query }}" class="btn btn-outline-primary btn-sort {% if sort_order == 'newest' %}active{% endif %}">Od najnowszych</a>
+        </div>
+
+        <hr>
+
+        {% for thread in threads %}
+            <div class="thread mb-4">
+                <h2><a href="{% url 'forum_detail' thread_id=thread.id %}">{{ thread.title }}</a></h2>
+                <p>Autor: {{ thread.author.username }} | Data: {{ thread.created_at }}</p>
+                <p>{{ thread.content|truncatewords:20 }}</p>
+            </div>
+            <hr>
+        {% endfor %}
+
+        <div class="container mt-4">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if threads.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1{% if category %}&category={{ category }}{% endif %}&search={{ search_query }}" aria-label="Pierwsza">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ threads.previous_page_number }}{% if category %}&category={{ category }}{% endif %}&search={{ search_query }}" aria-label="Poprzednia">
+                                Poprzednia
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="page-item disabled">
+                        <a class="page-link">Strona {{ threads.number }} z {{ threads.paginator.num_pages }}</a>
                     </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ threads.previous_page_number }}{% if category %}&category={{ category }}{% endif %}&search={{ search_query }}" aria-label="Poprzednia">
-                            Poprzednia
-                        </a>
-                    </li>
-                {% endif %}
-                <li class="page-item disabled">
-                    <a class="page-link">Strona {{ threads.number }} z {{ threads.paginator.num_pages }}</a>
-                </li>
-                {% if threads.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ threads.next_page_number }}{% if category %}&category={{ category }}{% endif %}&search={{ search_query }}" aria-label="Następna">
-                            Następna
-                        </a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ threads.paginator.num_pages }}{% if category %}&category={{ category }}{% endif %}&search={{ search_query }}" aria-label="Ostatnia">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
+                    {% if threads.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ threads.next_page_number }}{% if category %}&category={{ category }}{% endif %}&search={{ search_query }}" aria-label="Następna">
+                                Następna
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ threads.paginator.num_pages }}{% if category %}&category={{ category }}{% endif %}&search={{ search_query }}" aria-label="Ostatnia">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
     </div>
-</div>
 {% endblock content %}

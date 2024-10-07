@@ -9,40 +9,33 @@
     <meta name="author" content="{{ post.author.username }}">
     <meta name="robots" content="index, follow">
     <title>{{ post.title }}</title>
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/blog_styles.css' %}">
-    <!-- FontAwesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body class="flex flex-col min-h-screen">
     <header style="background-color: var(--button-color); padding: 10px 0;">
         <div class="container">
+            
             <a href="/"><h1 class="header-title">MOTOSPEKTAKL</h1></a>
         </div>
     </header>
 
     <div class="main-image-container"></div>
 
-    <!-- Przyciski nawigacyjne -->
     <div class="navigation-buttons">
         <a href="{% url 'blog' %}">BLOG</a>
         <a href="{% url 'forum' %}">FORUM</a>
         <a href="{% url 'account' %}">MOJE KONTO</a>
     </div>
 
-    <!-- Szczegółowy widok postu -->
     <div class="container mt-4">
-        <!-- Tytuł postu -->
         <h1 class="post-title" style="color: white;">{{ post.title }}</h1>
-
-        <!-- Zdjęcie postu -->
         {% if post.image %}
-        <img src="{{ post.image.url }}" class="img-fluid" alt="{{ post.title }}">
+            <img src="{{ post.image.url }}" class="img-fluid" alt="{{ post.title }}">
         {% endif %}
 
-        <!-- Zdjęcie profilowe autora pod zdjęciem postu -->
         <div class="d-flex flex-column align-items-center mb-4">
             {% if profile_picture %}
                 <img src="{{ profile_picture }}" class="profile-picture mb-2" alt="{{ post.author.username }}">
@@ -52,105 +45,89 @@
             <p class="text-center mb-0 text-white"><strong>Autor:</strong> {{ post.author.username }}</p>
         </div>
 
-        <!-- Treść postu -->
         <div class="post-content">
             <p>{{ post.content }}</p>
         </div>
 
-        <!-- Przyciski głosowania -->
         {% if user.is_authenticated %}
-        <div class="vote-buttons mt-4 text-center">
-            <a href="{% url 'post_like' post.id %}" class="btn btn-success">Fajne ({{ post.likes }})</a>
-            <a href="{% url 'post_dislike' post.id %}" class="btn btn-danger">Nie fajne ({{ post.dislikes }})</a>
-        </div>
+            <div class="vote-buttons mt-4 text-center">
+                <a href="{% url 'post_like' post.id %}" class="btn btn-success">Fajne ({{ post.likes }})</a>
+                <a href="{% url 'post_dislike' post.id %}" class="btn btn-danger">Nie fajne ({{ post.dislikes }})</a>
+            </div>
         {% else %}
-        <p style="color:white; text-align: center;">Musisz być zalogowany, aby ocenić post.</p>
+            <p style="color:white; text-align: center;">Musisz być zalogowany, aby ocenić post.</p>
         {% endif %}
 
-        <!-- Przycisk do bloga -->
         <a href="{% url 'blog' %}" class="btn btn-primary btn-back">Powrót do bloga</a>
     </div>
 
-    <!-- Sekcja komentarzy -->
     <div class="container mt-4">
         <h4 style="color:white">Komentarze:</h4>
         <div class="mb-4">
             {% for comment in comments %}
-            <div class="comment mb-3 p-3 bg-light d-flex align-items-center justify-content-between">
-                <!-- Zdjęcie autora komentarza wyświetlane po lewej stronie -->
-                <div class="d-flex align-items-center">
-                    <div class="mr-3">
-                        {% if comment.author.userprofile.profile_picture %}
-                            <img src="{{ comment.author.userprofile.profile_picture.url }}" class="profile-picture mr-3" alt="{{ comment.author.username }}">
-                        {% else %}
-                            <img src="{% static 'images/default_profile.jpg' %}" class="profile-picture mr-3" alt="Brak zdjęcia">
-                        {% endif %}
-                    </div>
-                    <div>
-                        <!-- Wyróżniony tekst autora komentarza -->
-                        <strong style="font-size: 1.2em; color: #0056b3;">{{ comment.author.username }}</strong> napisał(a):
-                        <p>{{ comment.content }}</p>
-                        <small>{{ comment.created_at }}</small>
+                <div class="comment mb-3 p-3 bg-light d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <div class="mr-3">
+                            {% if comment.author.userprofile.profile_picture %}
+                                <img src="{{ comment.author.userprofile.profile_picture.url }}" class="profile-picture mr-3" alt="{{ comment.author.username }}">
+                            {% else %}
+                                <img src="{% static 'images/default_profile.jpg' %}" class="profile-picture mr-3" alt="Brak zdjęcia">
+                            {% endif %}
+                        </div>
+                        <div>
+                            <strong style="font-size: 1.2em; color: #0056b3;">{{ comment.author.username }}</strong> napisał(a):
+                            <p>{{ comment.content }}</p>
+                            <small>{{ comment.created_at }}</small>
 
-                        <!-- Dodanie szczegółów o autorze w komentarzu -->
-                        {% if comment.author.userprofile.description %}
-                            <div>
-                                <small><strong>Opis:</strong> {{ comment.author.userprofile.description }}</small>
-                            </div>
-                        {% endif %}
-                        {% if comment.author.userprofile.vehicle %}
-                            <div>
-                                <small><strong>Pojazd użytkownika:</strong> {{ comment.author.userprofile.vehicle }}</small>
-                            </div>
+                            {% if comment.author.userprofile.description %}
+                                <div>
+                                    <small><strong>Opis:</strong> {{ comment.author.userprofile.description }}</small>
+                                </div>
+                            {% endif %}
+                            {% if comment.author.userprofile.vehicle %}
+                                <div>
+                                    <small><strong>Pojazd użytkownika:</strong> {{ comment.author.userprofile.vehicle }}</small>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="ml-3">
+                        {% if user.is_authenticated %}
+                            {% if comment.author == user or user.is_staff %}
+                                <a href="{% url 'delete_comment' post_id=post.id comment_id=comment.id %}" class="btn btn-primary btn-sm">Usuń</a>
+                            {% endif %}
+                            {% if comment.author == user %}
+                                <a href="{% url 'edit_comment' post_id=post.id comment_id=comment.id %}" class="btn btn-primary btn-sm">Edytuj</a>
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>
-
-                <!-- Edycja i usuwanie komentarzy -->
-                <div class="ml-3">
-                    {% if user.is_authenticated %}
-                        {% if comment.author == user or user.is_staff %}
-                            <!-- Usuń komentarz (dla właściciela komentarza lub administratora) -->
-                            <a href="{% url 'delete_comment' post_id=post.id comment_id=comment.id %}" class="btn btn-primary btn-sm">Usuń</a> <!-- Zmieniony styl na btn-primary -->
-                        {% endif %}
-                        {% if comment.author == user %}
-                            <!-- Edytuj komentarz (tylko dla właściciela komentarza) -->
-                            <a href="{% url 'edit_comment' post_id=post.id comment_id=comment.id %}" class="btn btn-primary btn-sm">Edytuj</a> <!-- Zmieniony styl na btn-primary -->
-                        {% endif %}
-                    {% endif %}
-                </div>
-            </div>
             {% empty %}
-            <p style="color:white">Brak komentarzy. Bądź pierwszym, który skomentuje!</p>
+                <p style="color:white">Brak komentarzy. Bądź pierwszym, który skomentuje!</p>
             {% endfor %}
         </div>
 
-        <!-- Formularz dodawania komentarzy -->
         {% if user.is_authenticated %}
-        <h4 style="color:white">Twój komentarz:</h4>
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.non_field_errors }} <!-- Wyświetla błędy formularza -->
-            {{ form.content }} <!-- Wyświetlamy pole formularza bez etykiety -->
-            <button type="submit" class="btn btn-primary">Dodaj komentarz</button>
-        </form>
+            <h4 style="color:white">Twój komentarz:</h4>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                {{ form.content }}
+                <button type="submit" class="btn btn-primary">Dodaj komentarz</button>
+            </form>
         {% else %}
-        <p style="color:white">Musisz być zalogowany, aby dodać komentarz.</p>
+            <p style="color:white">Musisz być zalogowany, aby dodać komentarz.</p>
         {% endif %}
     </div>
 
     <footer class="footer mt-auto py-3 text-center">
         <div class="container d-flex justify-content-between align-items-center">
-            <!-- Ikony social media -->
             <div class="social-icons">
                 <a href="https://www.youtube.com" target="_blank" class="social-icon">
                     <i class="fab fa-youtube"></i>
                 </a>
             </div>
-            
             <span>&copy; 2024 Blog Motoryzacyjny</span>
-            
-            <!-- Ikony social media -->
             <div class="social-icons">
                 <a href="https://www.instagram.com" target="_blank" class="social-icon">
                     <i class="fab fa-instagram"></i>
