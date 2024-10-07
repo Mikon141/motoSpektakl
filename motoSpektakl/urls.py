@@ -16,9 +16,10 @@ urlpatterns = [
     path('blog/<int:post_id>/like/', views.add_vote, {'vote_type': 'like'}, name='post_like'),
     path('blog/<int:post_id>/dislike/', views.add_vote, {'vote_type': 'dislike'}, name='post_dislike'),
     
-    # Ścieżki edytowania i usuwania postów
+    # Ścieżki edytowania i usuwania i dodawanie postów
     path('blog/<int:post_id>/edit/', views.edit_post, name='edit_post'),
     path('blog/<int:post_id>/delete/', views.delete_post, name='delete_post'),
+    path('blog_management/add_post/', views.add_post, name='add_post'),
 
     # Dodana ścieżka dla forum
     path('forum/', views.forum, name='forum'),  # Zmieniamy na poprawny widok

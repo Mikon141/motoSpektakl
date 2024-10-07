@@ -122,18 +122,18 @@ class ResetPasswordForm(SetPasswordForm):
         self.fields['new_password1'].widget.attrs.update({'class': 'form-control'})
         self.fields['new_password2'].widget.attrs.update({'class': 'form-control'})
 
-
 # Formularz do postów na blogu
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'content']
+        fields = ['title', 'content', 'category', 'image']  # Dodajemy 'category' i 'image' do pól formularza
 
     def __init__(self, *args, **kwargs):
         super(PostForm, self).__init__(*args, **kwargs)
         self.fields['title'].widget.attrs.update({'class': 'form-control'})
         self.fields['content'].widget.attrs.update({'class': 'form-control', 'rows': 5})
-
+        self.fields['category'].widget.attrs.update({'class': 'form-control'})  # Stylizacja pola kategorii
+        self.fields['image'].widget.attrs.update({'class': 'form-control-file'})  # Stylizacja pola wyboru pliku
 
 # Formularz do komentarzy w postach na blogu
 class CommentForm(forms.ModelForm):

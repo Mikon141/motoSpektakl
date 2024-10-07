@@ -277,8 +277,6 @@ def update_user_role(request, user_id):
         user.groups.clear()
         if new_role == 'admin':
             group = Group.objects.get(name='Admin')
-        elif new_role == 'moderator':
-            group = Group.objects.get(name='Moderator')
         else:
             group = Group.objects.get(name='User')
         
@@ -308,7 +306,7 @@ def toggle_user_activation(request, user_id):
 
 # Utworzenie grup, jeśli jeszcze nie istnieją
 def create_default_groups():
-    group_names = ['Admin', 'Moderator', 'User']
+    group_names = ['Admin', 'User']
     for group_name in group_names:
         Group.objects.get_or_create(name=group_name)
 
@@ -492,7 +490,7 @@ def add_vote(request, post_id, vote_type):
 
 # Widok dla panelu administracyjnego (admin_panel)
 @login_required
-@user_passes_test(lambda user: user.is_staff or user.is_superuser)  # Tylko admin i moderator mogą mieć dostęp
+@user_passes_test(lambda user: user.is_staff or user.is_superuser)  # Tylko admin
 def admin_panel(request):
     posts = Post.objects.all()
     comments = ForumComment.objects.all()
@@ -824,3 +822,19 @@ def vote_on_thread(request, thread_id, vote_type):
 
     thread.save()
     return redirect('forum_detail', thread_id=thread.id)
+
+    # Widok dodawania nowego posta z panelu zarządzania
+@login_required
+@user_passes_test(lambda user: user.is_staff or user.is_superuser)  # Tylko admin może dodawać posty z panelu
+def add_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user  # Przypisanie autora postu
+            post.save()
+            messages.success(request, 'Post został pomyślnie dodany!')
+            return redirect('blog_management')  # Przekierowanie do panelu zarządzania po dodaniu postu
+    else:
+        form = PostForm()
+    return render(request, 'add_post.html', {'form': form})
