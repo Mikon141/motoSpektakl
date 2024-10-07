@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from ckeditor.fields import RichTextField
 
 class ForumThread(models.Model):
     title = models.CharField(max_length=200)
@@ -45,7 +46,7 @@ class Post(models.Model):
         ('historie', 'Moje prywatne historie'),
     ]
     title = models.CharField(max_length=200)
-    content = models.TextField()
+    content = RichTextField()
     image = models.ImageField(upload_to='images/', null=True, blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='nowości')

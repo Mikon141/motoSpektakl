@@ -46,7 +46,7 @@
         </div>
 
         <div class="post-content">
-            <p>{{ post.content }}</p>
+            <p>{{ post.content|safe }}</p>
         </div>
 
         {% if user.is_authenticated %}
