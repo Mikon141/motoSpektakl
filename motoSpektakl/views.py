@@ -490,7 +490,7 @@ def add_thread(request):
     return render(request, 'add_thread.html', {'form': form})
 
 def is_comment_valid(content):
-    cleaned_content = bleach.clean(content, tags=[], attributes={}, styles=[], strip=True)
+    cleaned_content = bleach.clean(content, tags=[], attributes={}, strip=True)
     if len(cleaned_content.strip()) < 5:
         return False
     return True
