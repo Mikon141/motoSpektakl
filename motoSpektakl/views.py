@@ -177,8 +177,11 @@ def change_password(request):
             for field, errors in form.errors.items():
                 if 'old_password' in field:
                     messages.error(request, 'Stare hasło jest nieprawidłowe.')
+                else:
+                    messages.error(request, 'Wystąpiły błędy w formularzu: {}'.format(errors))
     else:
         form = EditPasswordForm(request.user)
+
     return render(request, 'change_password.html', {'form': form})
 
 class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
@@ -399,10 +402,9 @@ def edit_post(request, post_id):
         form = PostForm(request.POST, request.FILES, instance=post)
         
         if form.is_valid():
-            # Sprawdzenie, czy użytkownik zaznaczył checkbox usuwający zdjęcie
             if 'clear_image' in request.POST:
-                post.image.delete()  # Usunięcie zdjęcia
-                post.image = None  # Ustawienie pola na None
+                post.image.delete()
+                post.image = None
                 
             form.save()
             messages.success(request, 'Post został zaktualizowany.')
@@ -450,27 +452,33 @@ def delete_thread(request, thread_id):
 
 def forum(request):
     search_query = request.GET.get('search', '')
-    sort_order = request.GET.get('sort', 'newest')
+    sort_order = request.GET.get('sort_order', 'newest')
     threads = ForumThread.objects.all()
+
     if search_query:
         threads = threads.filter(Q(title__icontains=search_query) | Q(content__icontains=search_query))
+
     if sort_order == 'oldest':
         threads = threads.order_by('created_at')
     else:
         threads = threads.order_by('-created_at')
+
     paginator = Paginator(threads, 5)
     page = request.GET.get('page')
+    
     try:
         threads = paginator.page(page)
     except PageNotAnInteger:
         threads = paginator.page(1)
     except EmptyPage:
         threads = paginator.page(paginator.num_pages)
+
     context = {
         'threads': threads,
         'search_query': search_query,
         'sort_order': sort_order,
     }
+
     return render(request, 'forum.html', context)
 
 def forum_detail(request, thread_id):
