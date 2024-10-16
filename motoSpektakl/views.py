@@ -505,7 +505,6 @@ def add_comment(request, thread_id):
             messages.success(request, 'Komentarz został pomyślnie dodany.')
         else:
             messages.error(request, 'Treść komentarza jest nieodpowiednia lub zbyt krótka.')
-        return redirect('forum_detail', thread_id=thread.id)
     return redirect('forum_detail', thread_id=thread.id)
 
 @login_required
@@ -523,7 +522,6 @@ def add_blog_comment(request, post_id):
                 messages.success(request, 'Komentarz został dodany.')
             else:
                 messages.error(request, 'Treść komentarza jest nieodpowiednia lub zbyt krótka.')
-            return redirect('blog_detail', post_id=post.id)
         else:
             messages.error(request, 'Formularz jest niepoprawny.')
     return redirect('blog_detail', post_id=post.id)
