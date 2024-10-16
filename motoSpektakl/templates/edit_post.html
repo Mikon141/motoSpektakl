@@ -33,6 +33,10 @@
                 <label for="image">Obecne zdjęcie:</label><br>
                 {% if post.image %}
                     <img src="{{ post.image.url }}" alt="Zdjęcie postu" class="img-fluid mb-3" style="max-width: 100%;">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="clear-image" name="clear_image">
+                        <label class="form-check-label" for="clear-image">Usuń obecne zdjęcie</label>
+                    </div>
                 {% else %}
                     <p>Brak zdjęcia</p>
                 {% endif %}

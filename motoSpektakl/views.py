@@ -394,13 +394,24 @@ def blog_management(request):
 @staff_member_required
 def edit_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
+    
     if request.method == 'POST':
-        form = PostForm(request.POST, instance=post)
+        form = PostForm(request.POST, request.FILES, instance=post)
+        
         if form.is_valid():
+            # Sprawdzenie, czy użytkownik zaznaczył checkbox usuwający zdjęcie
+            if 'clear_image' in request.POST:
+                post.image.delete()  # Usunięcie zdjęcia
+                post.image = None  # Ustawienie pola na None
+                
             form.save()
+            messages.success(request, 'Post został zaktualizowany.')
             return redirect('blog_detail', post_id=post.id)
+        else:
+            messages.error(request, 'Formularz zawiera błędy.')
     else:
         form = PostForm(instance=post)
+
     return render(request, 'edit_post.html', {'form': form, 'post': post})
 
 @staff_member_required
