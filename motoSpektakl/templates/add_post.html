@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodaj Nowy Post</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Dodaj Nowy Post</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="title">Tytuł:</label>
+                {{ form.title }}
+            </div>
+            <div class="form-group">
+                <label for="content">Treść:</label>
+                {{ form.content }}
+            </div>
+            <div class="form-group">
+                <label for="category">Kategoria:</label>
+                {{ form.category }}
+            </div>
+            <div class="form-group">
+                <label for="image">Obraz:</label>
+                {{ form.image }}
+            </div>
+            <button type="submit" class="btn btn-success">Dodaj Post</button>
+        </form>
+        <a href="{% url 'blog_management' %}" class="btn btn-secondary mt-3">Powrót</a>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

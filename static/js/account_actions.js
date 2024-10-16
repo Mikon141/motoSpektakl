@@ -1,9 +1,14 @@
-// Funkcja sprawdzająca status logowania i zmieniająca odnośnik
 function checkLoginStatus() {
     const accountLink = document.getElementById('account-link');
-    // Możesz zaktualizować ten link, jeśli istnieje odpowiednia logika po zalogowaniu
-    // np. zmiana linku w zależności od widoku konta.
+    const isLoggedIn = accountLink.getAttribute('data-is-logged-in') === 'true';
+
+    if (isLoggedIn) {
+        accountLink.href = '/account/';
+        accountLink.textContent = 'Moje Konto';
+    } else {
+        accountLink.href = '/login/';
+        accountLink.textContent = 'Zaloguj się';
+    }
 }
 
-// Uruchomienie funkcji po załadowaniu DOM
 document.addEventListener('DOMContentLoaded', checkLoginStatus);

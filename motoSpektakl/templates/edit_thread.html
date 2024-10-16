@@ -1,9 +1,7 @@
 {% extends 'index.html' %}
-
 {% load static %}
 
 <head>
-    <!-- Dodanie pliku forum_styles.css tylko dla edit_thread.html -->
     {% block styles %}
     <link rel="stylesheet" href="{% static 'css/forum_styles.css' %}">
     {% endblock %}
@@ -15,10 +13,9 @@ Edytuj wątek - Blog Motoryzacyjny
 
 {% block content %}
 <div class="container mt-5">
-    <h2 class="text-center">Edytuj wątek</h2> <!-- Wyśrodkowanie nagłówka -->
+    <h2 class="text-center">Edytuj wątek</h2>
     <form method="POST" class="mt-4">
         {% csrf_token %}
-        <!-- Zmiana etykiet w formularzu na polskie -->
         <div class="form-group">
             <label for="id_title">Tytuł:</label>
             {{ form.title }}
@@ -28,8 +25,8 @@ Edytuj wątek - Blog Motoryzacyjny
             {{ form.content }}
         </div>
         <div class="button-container">
-            <button type="submit" class="btn btn-primary button-full">Zaktualizuj wątek</button> <!-- Zmiana klasy na btn btn-primary button-full -->
-            <a href="{% url 'forum_detail' thread.id %}" class="btn btn-primary button-full" role="button">Anuluj</a> <!-- Zmiana klasy na btn btn-primary button-full -->
+            <button type="submit" class="btn btn-primary button-full">Zaktualizuj wątek</button>
+            <a href="{% url 'forum_detail' thread.id %}" class="btn btn-primary button-full" role="button">Anuluj</a>
         </div>
     </form>
 </div>

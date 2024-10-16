@@ -5,14 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Zarządzanie użytkownikami</title>
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container mt-5">
         <h1>Zarządzanie użytkownikami</h1>
 
-        <!-- Formularz wyszukiwania użytkowników -->
         <form method="GET" action="{% url 'account_management' %}">
             <input type="text" name="search" placeholder="Wyszukaj użytkowników..." class="form-control mb-3">
         </form>
@@ -23,7 +21,7 @@
                     <th>ID</th>
                     <th>Login</th>
                     <th>E-mail</th>
-                    <th>Rola</th> <!-- Nowa kolumna -->
+                    <th>Rola</th>
                     <th>Administrator</th>
                     <th>Aktywne konto</th>
                     <th>Akcje</th>
@@ -31,34 +29,29 @@
             </thead>
             <tbody>
                 {% for user in users %}
-                <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>
-                        {% if user.is_superuser %}
-                            Administrator
-                        {% elif user.groups.all.0.name == "Moderator" %}
-                            Moderator
-                        {% else %}
-                            Użytkownik
-                        {% endif %}
-                    </td> <!-- Wyświetlanie roli użytkownika -->
-                    <td>{{ user.is_superuser }}</td>
-                    <td>{{ user.is_active }}</td>
-                    <td>
-                        <!-- Zmiana ról -->
-                        <a href="{% url 'update_user_role' user.id %}" class="btn btn-secondary">Zmień rolę</a>
-
-                        <!-- Blokowanie/Odblokowywanie konta -->
-                        <a href="{% url 'toggle_user_activation' user.id %}" class="btn btn-info">
-                            {% if user.is_active %} Zablokuj {% else %} Odblokuj {% endif %}
-                        </a>
-
-                        <!-- Usuwanie użytkownika -->
-                        <a href="#" onclick="if(confirm('Czy na pewno chcesz usunąć tego użytkownika?')){window.location.href='{% url 'delete_user' user.id %}'}" class="btn btn-danger">Usuń</a>
-                    </td>
-                </tr>
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            {% if user.is_superuser %}
+                                Administrator
+                            {% elif user.groups.all.0.name == "Moderator" %}
+                                Moderator
+                            {% else %}
+                                Użytkownik
+                            {% endif %}
+                        </td>
+                        <td>{{ user.is_superuser }}</td>
+                        <td>{{ user.is_active }}</td>
+                        <td>
+                            <a href="{% url 'update_user_role' user.id %}" class="btn btn-secondary">Zmień rolę</a>
+                            <a href="{% url 'toggle_user_activation' user.id %}" class="btn btn-info">
+                                {% if user.is_active %} Zablokuj {% else %} Odblokuj {% endif %}
+                            </a>
+                            <a href="#" onclick="if(confirm('Czy na pewno chcesz usunąć tego użytkownika?')){window.location.href='{% url 'delete_user' user.id %}'}" class="btn btn-danger">Usuń</a>
+                        </td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>

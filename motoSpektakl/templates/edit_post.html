@@ -1,58 +1,12 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edytuj Post</title>
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #fff; /* Białe tło */
-            color: #333;
-            font-family: Arial, sans-serif;
-        }
-
-        .container {
-            margin-top: 40px;
-            max-width: 600px;
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            font-size: 1rem;
-            margin: 5px;
-        }
-
-        .btn-primary, .btn-secondary {
-            width: 100%; /* Przycisk na całą szerokość */
-            margin-bottom: 10px; /* Odstęp między przyciskami */
-        }
-
-        .back-btn {
-            display: block;
-            width: 100%;
-            text-align: center;
-            color: #fff;
-            background-color: #6c757d;
-            border: none;
-            padding: 10px;
-            margin-top: 20px;
-            text-decoration: none;
-        }
-
-        .back-btn:hover {
-            background-color: #5a6268;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/blog_management_styles.css' %}">
 </head>
 <body>
     <div class="container">
@@ -79,22 +33,20 @@
                 <label for="image">Obecne zdjęcie:</label><br>
                 {% if post.image %}
                     <img src="{{ post.image.url }}" alt="Zdjęcie postu" class="img-fluid mb-3" style="max-width: 100%;">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="clear-image" name="clear_image">
+                        <label class="form-check-label" for="clear-image">Usuń obecne zdjęcie</label>
+                    </div>
                 {% else %}
                     <p>Brak zdjęcia</p>
                 {% endif %}
                 <label for="image">Zmień zdjęcie:</label>
                 <input type="file" id="image" name="image" class="form-control">
             </div>
-
-            <!-- Przycisk zapisywania zmian -->
             <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
-
-            <!-- Przycisk anulowania -->
             <a href="{% url 'blog_management' %}" class="back-btn">Anuluj</a>
         </form>
     </div>
-
-    <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
